@@ -44,6 +44,18 @@ namespace ToDoListApplication.Tests
                 yield return new TestCaseData(
                     new ToDoList
                     {
+                        PrimaryPurpose = "Learn to cook",
+                        ToDoEntries = new List<ToDoEntry>
+                        {
+                            new ToDoEntry {OrdinalNumber = 1, Title = "Stage #1", Description = "Buy ingrtdients", DueDate = new DateTime(2022, 2, 1) },
+                            new ToDoEntry {OrdinalNumber = 2, Title = "Stage #2", Description = "Cook anything", DueDate = new DateTime(2022, 2, 2) },
+                            new ToDoEntry {OrdinalNumber = 3, Title = "Final stage #3", Description = "Repeat Stage #1 and Stage #2", DueDate = new DateTime(2022, 2, 3) }
+                        }
+                    });
+
+                yield return new TestCaseData(
+                    new ToDoList
+                    {
                         PrimaryPurpose = "Become a web-frontend developer",
                         ToDoEntries = new List<ToDoEntry>
                         {
