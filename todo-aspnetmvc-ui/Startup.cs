@@ -5,10 +5,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using todo_domain_entities;
+using todo_aspnetmvc_ui.Models.Repo;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using todo_aspnetmvc_ui.Models.Data;
 
 namespace todo_aspnetmvc_ui
 {
@@ -29,6 +31,8 @@ namespace todo_aspnetmvc_ui
                 opts.UseSqlServer(
                     Configuration["ConnectionStrings:ToDoListDbConnection"]);
             });
+
+            services.AddScoped<IToDoRepository, EFToDoListRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,10 +57,16 @@ namespace todo_aspnetmvc_ui
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllerRoute("pagination",
+                    "ToDoLists/Page{todoListPage}",
+                    new { Controller = "Home", action = "Index" });
+
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            SeedData.EnsurePopulated(app);
         }
     }
 }

@@ -32,7 +32,7 @@ namespace todo_domain_entities.Test
             context.AddRange(
                 new ToDoList
                 {
-                    PrimaryPurpose = "Finish EPAM courses",
+                    MainTitle = "Finish EPAM courses",
                     ToDoEntries = new List<ToDoEntry>
                     {
                         new ToDoEntry {OrdinalNumber = 1, Title = "Task #1", Description = "Learn C# Basics", DueDate = new DateTime(2022, 10, 1) },
@@ -43,7 +43,7 @@ namespace todo_domain_entities.Test
 
                 new ToDoList
                 {
-                    PrimaryPurpose = "Get IELTS certificate",
+                    MainTitle = "Get IELTS certificate",
                     ToDoEntries = new List<ToDoEntry>
                     {
                             new ToDoEntry {OrdinalNumber = 1, Title = "Task #1", Description = "Prepare to exam", DueDate = new DateTime(2022, 6, 1) },
@@ -54,7 +54,7 @@ namespace todo_domain_entities.Test
 
                 new ToDoList
                 {
-                    PrimaryPurpose = "Begin new life",
+                    MainTitle = "Begin new life",
                     ToDoEntries = new List<ToDoEntry>
                     {
                             new ToDoEntry {OrdinalNumber = 1, Title = "Task #1", Description = "Move to CA", DueDate = new DateTime(2022, 2, 1) },
@@ -121,7 +121,7 @@ namespace todo_domain_entities.Test
         public void RemoveToDoList_PassedValidObject_SuccessfulExecution()
         {
             // Arrange
-            var existingInstance = _efToDoListRepository.ToDoLists.First(list => list.PrimaryPurpose == "Become a superhero");
+            var existingInstance = _efToDoListRepository.ToDoLists.First(list => list.MainTitle == "Become a superhero");
             var todoListItemsCount = _efToDoListRepository.ToDoLists.Count();
 
             // Act

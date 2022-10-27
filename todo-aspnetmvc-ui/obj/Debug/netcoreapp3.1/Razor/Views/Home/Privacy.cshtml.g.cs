@@ -26,8 +26,22 @@ using todo_aspnetmvc_ui.Models;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 3 "C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\Views\_ViewImports.cshtml"
+using todo_aspnetmvc_ui.Models.ViewModels;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 4 "C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\Views\_ViewImports.cshtml"
+using todo_domain_entities;
+
+#line default
+#line hidden
+#nullable disable
     [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"d8ddb6bffa5a9b264bf8f89038bf03c234083fd3", @"/Views/Home/Privacy.cshtml")]
-    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"4ed0a2cbe97e0643fd4628ac1a33faf9719cd485", @"/Views/_ViewImports.cshtml")]
+    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"c741f233b3cff62190b1e860a76f6eeadb16aaed", @"/Views/_ViewImports.cshtml")]
     public class Views_Home_Privacy : global::Microsoft.AspNetCore.Mvc.Razor.RazorPage<dynamic>
     {
         #pragma warning disable 1998

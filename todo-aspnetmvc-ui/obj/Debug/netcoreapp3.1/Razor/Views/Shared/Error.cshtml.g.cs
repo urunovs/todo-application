@@ -26,8 +26,22 @@ using todo_aspnetmvc_ui.Models;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 3 "C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\Views\_ViewImports.cshtml"
+using todo_aspnetmvc_ui.Models.ViewModels;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 4 "C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\Views\_ViewImports.cshtml"
+using todo_domain_entities;
+
+#line default
+#line hidden
+#nullable disable
     [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"d6a5625cc8fb4476f348b0fe9041c550465d8bf9", @"/Views/Shared/Error.cshtml")]
-    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"4ed0a2cbe97e0643fd4628ac1a33faf9719cd485", @"/Views/_ViewImports.cshtml")]
+    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"c741f233b3cff62190b1e860a76f6eeadb16aaed", @"/Views/_ViewImports.cshtml")]
     public class Views_Shared_Error : global::Microsoft.AspNetCore.Mvc.Razor.RazorPage<ErrorViewModel>
     {
         #pragma warning disable 1998

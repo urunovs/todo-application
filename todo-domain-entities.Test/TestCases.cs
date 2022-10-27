@@ -23,7 +23,7 @@ namespace ToDoListApplication.Tests
                 yield return new TestCaseData(
                     new ToDoList
                     {
-                        PrimaryPurpose = "Learn to cook",
+                        MainTitle = "Learn to cook",
                         ToDoEntries = new List<ToDoEntry> //OrdinalNumber of ToDoEntry items is not initializing
                         {
                             new ToDoEntry { Title = "Stage #1", Description = "Buy ingrtdients", DueDate = new DateTime(2022, 2, 1) },
@@ -44,7 +44,7 @@ namespace ToDoListApplication.Tests
                 yield return new TestCaseData(
                     new ToDoList
                     {
-                        PrimaryPurpose = "Learn to cook",
+                        MainTitle = "Learn to cook",
                         ToDoEntries = new List<ToDoEntry>
                         {
                             new ToDoEntry {OrdinalNumber = 1, Title = "Stage #1", Description = "Buy ingrtdients", DueDate = new DateTime(2022, 2, 1) },
@@ -56,7 +56,7 @@ namespace ToDoListApplication.Tests
                 yield return new TestCaseData(
                     new ToDoList
                     {
-                        PrimaryPurpose = "Become a web-frontend developer",
+                        MainTitle = "Become a web-frontend developer",
                         ToDoEntries = new List<ToDoEntry>
                         {
                             new ToDoEntry { OrdinalNumber = 1, Title = "Task #1", Description = "Learn HTML and CSS", DueDate = new DateTime(2022, 10, 1) },
@@ -67,7 +67,7 @@ namespace ToDoListApplication.Tests
                 yield return new TestCaseData(
                     new ToDoList
                     {
-                        PrimaryPurpose = "Become a superhero"
+                        MainTitle = "Become a superhero"
                     });
             }
         }
@@ -85,7 +85,7 @@ namespace ToDoListApplication.Tests
                     new ToDoList
                     {
                         Id = -1,
-                        PrimaryPurpose = "Get IELTS certificate"
+                        MainTitle = "Get IELTS certificate"
                     });
             }
         }
@@ -102,7 +102,7 @@ namespace ToDoListApplication.Tests
                 yield return new TestCaseData(
                     new ToDoList
                     {
-                        PrimaryPurpose = "Begin new life",
+                        MainTitle = "Begin new life",
                         ToDoEntries = new List<ToDoEntry>
                         {
                             new ToDoEntry {OrdinalNumber = 1, Title = "Task #1", Description = "Move to CA", DueDate = new DateTime(2022, 2, 1) },
@@ -116,7 +116,7 @@ namespace ToDoListApplication.Tests
                     null,
                     new ToDoList
                     {
-                        PrimaryPurpose = "Begin new life",
+                        MainTitle = "Begin new life",
                         ToDoEntries = new List<ToDoEntry>
                         {
                             new ToDoEntry {OrdinalNumber = 1, Title = "Task #1", Description = "Move to CA", DueDate = new DateTime(2022, 2, 1) },
@@ -129,7 +129,7 @@ namespace ToDoListApplication.Tests
                     new ToDoList
                     {
                         Id = 3,
-                        PrimaryPurpose = "Begin new life",
+                        MainTitle = "Begin new life",
                         ToDoEntries = new List<ToDoEntry>
                         {
                             new ToDoEntry {OrdinalNumber = 1, Title = "Task #1", Description = "Move to CA", DueDate = new DateTime(2022, 2, 1) },
@@ -139,7 +139,7 @@ namespace ToDoListApplication.Tests
                     },
                     new ToDoList
                     {
-                        PrimaryPurpose = "Begin new life",
+                        MainTitle = "Begin new life",
                         ToDoEntries = new List<ToDoEntry>
                         {
                             new ToDoEntry { Title = "Task #1", Description = "Move to CA", DueDate = new DateTime(2022, 2, 1) },
@@ -161,7 +161,7 @@ namespace ToDoListApplication.Tests
                     2,
                     new ToDoList
                     {
-                        PrimaryPurpose = "Get skills of development", // Updated data
+                        MainTitle = "Get skills of development", // Updated data
                         ToDoEntries = new List<ToDoEntry>
                         {
                             new ToDoEntry { OrdinalNumber = 1, Title = "Task #1", Description = "Learn C# Basics", DueDate = new DateTime(2022, 10, 1) },
@@ -174,7 +174,7 @@ namespace ToDoListApplication.Tests
                     3,
                     new ToDoList
                     {
-                        PrimaryPurpose = "Get IELTS certificate",
+                        MainTitle = "Get IELTS certificate",
                         ToDoEntries = new List<ToDoEntry>
                         {
                             new ToDoEntry { OrdinalNumber = 1, Title = "Task #1", Description = "Prepare to exam", DueDate = new DateTime(2022, 6, 1) },

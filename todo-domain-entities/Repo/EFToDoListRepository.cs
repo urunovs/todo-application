@@ -13,13 +13,12 @@ namespace todo_domain_entities
     {
         private readonly AppDbContext appDbContext;
 
-        public IQueryable<ToDoList> ToDoLists { get; private set; }
+        public IQueryable<ToDoList> ToDoLists => appDbContext.ToDoLists;
 
 
         public EFToDoListRepository(AppDbContext appDbContext)
         {
             this.appDbContext = appDbContext;
-            ToDoLists = appDbContext.ToDoLists;
         }
 
         public void Dispose()
@@ -40,8 +39,6 @@ namespace todo_domain_entities
             toDoList = appDbContext.ToDoLists.Add(toDoList).Entity;
             appDbContext.SaveChanges();
 
-            ToDoLists = appDbContext.ToDoLists;
-
             return toDoList;
         }
 
@@ -55,7 +52,6 @@ namespace todo_domain_entities
             appDbContext.ToDoEntries.RemoveRange(toDoList.ToDoEntries);
             appDbContext.ToDoLists.Remove(toDoList);
             appDbContext.SaveChanges();
-            ToDoLists = appDbContext.ToDoLists;
         }
 
         public ToDoList ModifyToDoList(ToDoList toDoListToUpdate, ToDoList updatedView)
@@ -71,13 +67,11 @@ namespace todo_domain_entities
 
             AddToDoEntriesToList(updatedView.ToDoEntries, toDoListToUpdate);
 
-            if (toDoListToUpdate.PrimaryPurpose != updatedView.PrimaryPurpose)
+            if (toDoListToUpdate.MainTitle != updatedView.MainTitle)
             {
-                toDoListToUpdate.PrimaryPurpose = updatedView.PrimaryPurpose;
+                toDoListToUpdate.MainTitle = updatedView.MainTitle;
                 appDbContext.SaveChanges();
             }
-
-            ToDoLists = appDbContext.ToDoLists;
 
             return toDoListToUpdate;
         }
@@ -112,7 +106,6 @@ namespace todo_domain_entities
                 appDbContext.ToDoEntries.AddRange(entriesToAdd);
                 toDoList.ToDoEntries = toDoEntries;
                 appDbContext.SaveChanges();
-                ToDoLists = appDbContext.ToDoLists;
             }
         }
 
@@ -141,7 +134,6 @@ namespace todo_domain_entities
                                       .ToDoEntries.Add(toDoEntryToUpdate);
 
                 toDoEntryToUpdate.ToDoList = updatedView.ToDoList;
-                ToDoLists = appDbContext.ToDoLists;
             }
 
             appDbContext.SaveChanges();
@@ -169,8 +161,6 @@ namespace todo_domain_entities
             appDbContext.ToDoEntries.RemoveRange(appDbContext.ToDoEntries);
             appDbContext.ToDoLists.RemoveRange(appDbContext.ToDoLists);
             appDbContext.SaveChanges();
-
-            ToDoLists = appDbContext.ToDoLists;
         }
 
         public ToDoList ClearToDoList(ToDoList toDoList)

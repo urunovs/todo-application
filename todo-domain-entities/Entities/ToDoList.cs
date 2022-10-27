@@ -15,7 +15,8 @@ namespace todo_domain_entities
         public int Id { get; set; }
 
         [Required]
-        public string PrimaryPurpose { get; set; }
+        public string MainTitle { get; set; }
+
         public virtual List<ToDoEntry> ToDoEntries { get; set; } = new List<ToDoEntry>();
 
         [NotMapped]
@@ -48,9 +49,9 @@ namespace todo_domain_entities
         {
             var errors = new List<ValidationResult>();
 
-            if(string.IsNullOrEmpty(PrimaryPurpose))
+            if(string.IsNullOrEmpty(MainTitle))
             {
-                errors.Add(new ValidationResult("PrimaryPurpose in not set"));
+                errors.Add(new ValidationResult("MainTitle in not set"));
             }
 
             for(var i = 0; i < ToDoEntries.Count-1; ++i)
@@ -67,7 +68,7 @@ namespace todo_domain_entities
 
         public bool IsTheSame(ToDoList item)
         {
-            if (!string.Equals(PrimaryPurpose, item.PrimaryPurpose))
+            if (!string.Equals(MainTitle, item.MainTitle))
                 return false;
 
             if (!ToDoEntries.SequenceEqual(item.ToDoEntries))

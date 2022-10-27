@@ -1,8 +1,21 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model ToDoListsViewModel
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="accordion" id="accordionExample">
+    @foreach (var todoList in Model.ToDoLists)
+    {
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="heading@(todoList.Id)">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#name@(todoList.Id)" aria-expanded="true" aria-controls="name@(todoList.Id)">
+                    @todoList.MainTitle | @todoList.Status
+                </button>
+            </h2>
+            <div id="name@(todoList.Id)" class="accordion-collapse collapse show" aria-labelledby="heading@(todoList.Id)">
+                <div class="accordion-body">
+                    <partial name="ToDoItemsInfo" model="todoList.ToDoEntries" />
+                </div>
+            </div>
+        </div>
+    }
 </div>
+
+<div page-model="@Model.PagingInfo" page-action="Index"></div>

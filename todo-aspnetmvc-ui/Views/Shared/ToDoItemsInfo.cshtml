@@ -1,0 +1,17 @@
+﻿
+@model List<ToDoEntry>
+<div>
+        @{ var orderedToDoItems = Model.OrderBy(entry => entry.OrdinalNumber); }
+
+        @foreach (var todoItem in orderedToDoItems)
+	    {
+            <h4>
+                @todoItem.OrdinalNumber |
+                Title: @todoItem.Title |
+                Desc.: @todoItem.Description |
+                Due date: @todoItem.DueDate |
+                Status: @todoItem.Status
+            </h4>
+            <br/>
+	    }
+    </div>

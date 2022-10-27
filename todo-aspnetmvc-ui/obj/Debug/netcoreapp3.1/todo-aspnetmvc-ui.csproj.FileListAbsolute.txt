@@ -80,3 +80,5 @@ C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcor
 C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcoreapp3.1\todo-aspnetmvc-ui.genruntimeconfig.cache
 C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\bin\Debug\netcoreapp3.1\Castle.Core.dll
 C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Proxies.dll
+C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcoreapp3.1\Razor\Views\Shared\ToDoItemsInfo.cshtml.g.cs
+C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\bin\Debug\netcoreapp3.1\libman.json
