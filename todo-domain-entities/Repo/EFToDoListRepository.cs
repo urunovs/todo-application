@@ -70,7 +70,7 @@ namespace todo_domain_entities
                 toDoListToUpdate.MainTitle = updatedView.MainTitle;
             }
 
-            if(toDoListToUpdate.IsVisible!= updatedView.IsVisible)
+            if (toDoListToUpdate.IsVisible != updatedView.IsVisible)
             {
                 toDoListToUpdate.IsVisible = updatedView.IsVisible;
             }
@@ -78,6 +78,43 @@ namespace todo_domain_entities
             appDbContext.SaveChanges();
 
             return toDoListToUpdate;
+        }
+
+        public void AddToDoItemToList(ToDoEntry toDoEntry, ToDoList toDoList)
+        {
+            if (toDoEntry == null)
+            {
+                throw new ArgumentException("ToDoEntry is null", nameof(toDoEntry));
+            }
+
+            ValidateItem(toDoEntry);
+
+            toDoList = appDbContext.ToDoLists.FirstOrDefault(list => list.Equals(toDoList));
+
+            if (toDoList == null)
+            {
+                throw new ArgumentException("No such ToDoList", nameof(toDoList));
+            }
+
+            var sameOrdinalNumberItem = toDoList.ToDoEntries.FirstOrDefault(item =>
+                                            item.OrdinalNumber == toDoEntry.OrdinalNumber);
+
+            if (sameOrdinalNumberItem != null)
+            {
+                var index = toDoList.ToDoEntries.IndexOf(sameOrdinalNumberItem);
+
+                toDoList.ToDoEntries.Insert(index, toDoEntry);
+
+                for (var i = index + 1; i < toDoList.ToDoEntries.Count; ++i)
+                {
+                    ++toDoList.ToDoEntries[i].OrdinalNumber;
+                    ++appDbContext.ToDoEntries.First(item => item.Equals(toDoList.ToDoEntries[i])).OrdinalNumber;
+                }
+            }
+
+            toDoEntry.ToDoList = toDoList;
+            appDbContext.ToDoEntries.Add(toDoEntry);
+            appDbContext.SaveChanges();
         }
 
         public void AddToDoEntriesToList(List<ToDoEntry> toDoEntries, ToDoList toDoList)
@@ -204,7 +241,7 @@ namespace todo_domain_entities
 
         private void ValidateItem(IValidatableObject item)
         {
-            if(item == null)
+            if (item == null)
             {
                 throw new ArgumentException($"{nameof(item)} is null", nameof(item));
             }
