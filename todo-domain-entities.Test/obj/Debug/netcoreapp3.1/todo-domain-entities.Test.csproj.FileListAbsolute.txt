@@ -1,9 +1,4 @@
 C:\Users\Serious\source\repos\ToDoApplication\todo-domain-entities.Test\bin\Debug\netcoreapp3.1\CoverletSourceRootsMapping
-C:\Users\Serious\source\repos\ToDoApplication\todo-domain-entities.Test\obj\Debug\netcoreapp3.1\todo-domain-entities.Test.csproj.AssemblyReference.cache
-C:\Users\Serious\source\repos\ToDoApplication\todo-domain-entities.Test\obj\Debug\netcoreapp3.1\todo-domain-entities.Test.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\Serious\source\repos\ToDoApplication\todo-domain-entities.Test\obj\Debug\netcoreapp3.1\todo-domain-entities.Test.AssemblyInfoInputs.cache
-C:\Users\Serious\source\repos\ToDoApplication\todo-domain-entities.Test\obj\Debug\netcoreapp3.1\todo-domain-entities.Test.AssemblyInfo.cs
-C:\Users\Serious\source\repos\ToDoApplication\todo-domain-entities.Test\obj\Debug\netcoreapp3.1\todo-domain-entities.Test.csproj.CoreCompileInputs.cache
 C:\Users\Serious\source\repos\ToDoApplication\todo-domain-entities.Test\bin\Debug\netcoreapp3.1\testhost.dll
 C:\Users\Serious\source\repos\ToDoApplication\todo-domain-entities.Test\bin\Debug\netcoreapp3.1\testhost.exe
 C:\Users\Serious\source\repos\ToDoApplication\todo-domain-entities.Test\bin\Debug\netcoreapp3.1\Microsoft.TestPlatform.PlatformAbstractions.dll
@@ -24,6 +19,7 @@ C:\Users\Serious\source\repos\ToDoApplication\todo-domain-entities.Test\bin\Debu
 C:\Users\Serious\source\repos\ToDoApplication\todo-domain-entities.Test\bin\Debug\netcoreapp3.1\Microsoft.DotNet.PlatformAbstractions.dll
 C:\Users\Serious\source\repos\ToDoApplication\todo-domain-entities.Test\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.dll
 C:\Users\Serious\source\repos\ToDoApplication\todo-domain-entities.Test\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Abstractions.dll
+C:\Users\Serious\source\repos\ToDoApplication\todo-domain-entities.Test\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Proxies.dll
 C:\Users\Serious\source\repos\ToDoApplication\todo-domain-entities.Test\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Relational.dll
 C:\Users\Serious\source\repos\ToDoApplication\todo-domain-entities.Test\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Sqlite.dll
 C:\Users\Serious\source\repos\ToDoApplication\todo-domain-entities.Test\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Caching.Abstractions.dll
@@ -138,8 +134,12 @@ C:\Users\Serious\source\repos\ToDoApplication\todo-domain-entities.Test\bin\Debu
 C:\Users\Serious\source\repos\ToDoApplication\todo-domain-entities.Test\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Diagnostics.EventLog.dll
 C:\Users\Serious\source\repos\ToDoApplication\todo-domain-entities.Test\bin\Debug\netcoreapp3.1\todo-domain-entities.dll
 C:\Users\Serious\source\repos\ToDoApplication\todo-domain-entities.Test\bin\Debug\netcoreapp3.1\todo-domain-entities.pdb
+C:\Users\Serious\source\repos\ToDoApplication\todo-domain-entities.Test\obj\Debug\netcoreapp3.1\todo-domain-entities.Test.csproj.AssemblyReference.cache
+C:\Users\Serious\source\repos\ToDoApplication\todo-domain-entities.Test\obj\Debug\netcoreapp3.1\todo-domain-entities.Test.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Serious\source\repos\ToDoApplication\todo-domain-entities.Test\obj\Debug\netcoreapp3.1\todo-domain-entities.Test.AssemblyInfoInputs.cache
+C:\Users\Serious\source\repos\ToDoApplication\todo-domain-entities.Test\obj\Debug\netcoreapp3.1\todo-domain-entities.Test.AssemblyInfo.cs
+C:\Users\Serious\source\repos\ToDoApplication\todo-domain-entities.Test\obj\Debug\netcoreapp3.1\todo-domain-entities.Test.csproj.CoreCompileInputs.cache
 C:\Users\Serious\source\repos\ToDoApplication\todo-domain-entities.Test\obj\Debug\netcoreapp3.1\todo-domain-entities.Test.csproj.CopyComplete
 C:\Users\Serious\source\repos\ToDoApplication\todo-domain-entities.Test\obj\Debug\netcoreapp3.1\todo-domain-entities.Test.dll
 C:\Users\Serious\source\repos\ToDoApplication\todo-domain-entities.Test\obj\Debug\netcoreapp3.1\todo-domain-entities.Test.pdb
 C:\Users\Serious\source\repos\ToDoApplication\todo-domain-entities.Test\obj\Debug\netcoreapp3.1\todo-domain-entities.Test.genruntimeconfig.cache
-C:\Users\Serious\source\repos\ToDoApplication\todo-domain-entities.Test\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Proxies.dll

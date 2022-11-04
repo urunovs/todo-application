@@ -10,5 +10,14 @@ namespace todo_aspnetmvc_ui.Models.ViewModels
     {
         public IEnumerable<ToDoList> ToDoLists { get; set; }
         public PagingInfo PagingInfo { get; set; }
+
+        public int CompletedToDoListsCount
+        { 
+            get
+            {
+                return ToDoLists.Count(list => list.ToDoEntries
+                                .All(entry => entry.Status == ToDoStatus.Completed));
+            } 
+        }
     }
 }

@@ -65,13 +65,17 @@ namespace todo_domain_entities
                 throw new ArgumentException("No such ToDoList", nameof(toDoListToUpdate));
             }
 
-            AddToDoEntriesToList(updatedView.ToDoEntries, toDoListToUpdate);
-
             if (toDoListToUpdate.MainTitle != updatedView.MainTitle)
             {
                 toDoListToUpdate.MainTitle = updatedView.MainTitle;
-                appDbContext.SaveChanges();
             }
+
+            if(toDoListToUpdate.IsVisible!= updatedView.IsVisible)
+            {
+                toDoListToUpdate.IsVisible = updatedView.IsVisible;
+            }
+
+            appDbContext.SaveChanges();
 
             return toDoListToUpdate;
         }

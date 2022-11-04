@@ -33,6 +33,8 @@ namespace todo_aspnetmvc_ui
             });
 
             services.AddScoped<IToDoRepository, EFToDoListRepository>();
+            services.AddDistributedMemoryCache();
+            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,20 +52,29 @@ namespace todo_aspnetmvc_ui
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseSession();
             app.UseRouting();
-
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute("pagination",
-                    "ToDoLists/Page{todoListPage}",
+                endpoints.MapControllerRoute("catpage",
+                    "{category}/Page{todoListPage:int}",
                     new { Controller = "Home", action = "Index" });
 
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute("page", 
+                    "Page{todoListPage:int}",
+                    new { Controller = "Home", action = "Index", todoListPage = 1 });
+
+                endpoints.MapControllerRoute("category", 
+                    "{category}",
+                    new { Controller = "Home", action = "Index", todoListPage = 1 });
+
+                /*endpoints.MapControllerRoute("pagination",
+                    "ToDoLists/Page{todoListPage}",
+                    new { Controller = "Home", action = "Index" });*/
+
+                endpoints.MapDefaultControllerRoute();
             });
 
             SeedData.EnsurePopulated(app);

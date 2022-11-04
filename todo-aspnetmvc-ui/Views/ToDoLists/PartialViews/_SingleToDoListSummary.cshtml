@@ -1,0 +1,30 @@
+﻿@model ToDoList
+
+@{
+    var totalTasksCount = Model.ToDoEntries.Count();
+    var completedTasksCount = @Model.ToDoEntries.Count(entry => entry.Status == ToDoStatus.Completed);
+    var tasksInProgressCount = @Model.ToDoEntries.Count(entry => entry.Status == ToDoStatus.InProgress);
+    var notStartedTasksCount = @Model.ToDoEntries.Count(entry => entry.Status == ToDoStatus.NotStarted);
+    var completionPercentage = totalTasksCount == 0 ? 0 : completedTasksCount / totalTasksCount;
+}
+
+<div class="nav flex-column nav-pills" id="v-pills-tab" role="textbox" aria-orientation="vertical">
+    <h1>Summary of @Model.MainTitle ToDo list</h1>
+    <span>Completion: @completionPercentage</span>
+    <br />
+    <h2>Total tasks count: @totalTasksCount</h2>
+    @if (completedTasksCount != 0)
+    {
+        <span>Completed: @completedTasksCount</span>
+    }
+
+    @if (tasksInProgressCount != 0)
+    {
+        <span>In progress: @tasksInProgressCount</span>
+    }
+
+    @if (notStartedTasksCount != 0)
+    {
+        <span>Not started: @notStartedTasksCount</span>
+    }
+</div>

@@ -13,10 +13,13 @@ using todo_aspnetmvc_ui.Models.ViewModels;
 namespace todo_aspnetmvc_ui.Infrastructure
 {
     // You may need to install the Microsoft.AspNetCore.Razor.Runtime package into your project
-    [HtmlTargetElement("div", Attributes = "page-model")]
+    [HtmlTargetElement("nav", Attributes = "page-model")]
     public class PageLinkTagHelper : TagHelper
     {
         private readonly IUrlHelperFactory _urlHelperFactory;
+
+        [HtmlAttributeName(DictionaryAttributePrefix = "page-url-")]
+        public Dictionary<string, object> PageUrlValues { get; set; } = new Dictionary<string, object>();
 
         public PageLinkTagHelper(IUrlHelperFactory helperFactory)
         {
@@ -38,24 +41,46 @@ namespace todo_aspnetmvc_ui.Infrastructure
             IUrlHelper urlHelper = _urlHelperFactory.GetUrlHelper(ViewContext);
 
             TagBuilder result = new TagBuilder("div");
+            TagBuilder ulTag = new TagBuilder("ul");
+
+            ulTag.AddCssClass("pagination pagination-sm");
 
             for (int i = 1; i <= PageModel.TotalPages; i++)
             {
-                TagBuilder tag = new TagBuilder("a");
+                TagBuilder liTag = new TagBuilder("li");
+                TagBuilder innerTag;
 
-                tag.Attributes["href"] = urlHelper.Action(PageAction, new { todoListPage = i });
+                PageUrlValues["todoListPage"] = i;
 
                 if (PageClassesEnabled)
                 {
-                    tag.AddCssClass(PageClass);
-                    tag.AddCssClass(i == PageModel.CurrentPage
-                        ? PageClassSelected : PageClassNormal);
+                    if(i == PageModel.CurrentPage)
+                    {
+                        innerTag = new TagBuilder("span");
+                        innerTag.AddCssClass(PageClass);
+                        liTag.AddCssClass(PageClassSelected);
+                        liTag.Attributes["aria-current"] = "page";                                                
+                    }
+                    else
+                    {
+                        innerTag = new TagBuilder("a");
+                        innerTag.Attributes["href"] = urlHelper.Action(PageAction, PageUrlValues);
+                        innerTag.AddCssClass(PageClass);
+                        liTag.AddCssClass(PageClassNormal);
+                    }
+                }
+                else
+                {
+                    innerTag = new TagBuilder("a");
+                    innerTag.Attributes["href"] = urlHelper.Action(PageAction, PageUrlValues);
                 }
 
-                tag.InnerHtml.Append(i.ToString());
-                result.InnerHtml.AppendHtml(tag);
+                innerTag.InnerHtml.Append(i.ToString());
+                liTag.InnerHtml.AppendHtml(innerTag);
+                ulTag.InnerHtml.AppendHtml(liTag);
             }
 
+            result.InnerHtml.AppendHtml(ulTag);
             output.Content.AppendHtml(result.InnerHtml);
         }
     }

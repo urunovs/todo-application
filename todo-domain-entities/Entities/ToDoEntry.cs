@@ -24,10 +24,10 @@ namespace todo_domain_entities
 
         [Required]
         public string Title { get; set; }
+
         public string Description { get; set; }
 
-        [Required]
-        public DateTime DueDate { get; set; }
+        public DateTime? DueDate { get; set; } = null;
 
         [Required]
         public ToDoStatus Status { get; set; } = ToDoStatus.NotStarted;
@@ -37,7 +37,7 @@ namespace todo_domain_entities
 
         public override bool Equals(object obj)
         {
-            return ((ToDoEntry)obj).Id == this.Id;
+            return ((ToDoEntry)obj)?.Id == this.Id;
         }
 
         public override int GetHashCode()
@@ -69,6 +69,11 @@ namespace todo_domain_entities
 
         public bool IsTheSame(ToDoEntry item)
         {
+            if(item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
             if (!string.Equals(Title, item.Title))
                 return false;
 

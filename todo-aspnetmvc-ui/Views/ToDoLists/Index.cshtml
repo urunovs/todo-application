@@ -1,0 +1,65 @@
+﻿@{
+    Layout = "_ToDoListsLayout";
+}
+
+@model ToDoListsViewModel
+
+<div class="row m-1 p-1">
+    <div id="todosummary" class="col-3">
+        @{
+            var completionPercentage = Model.CompletedToDoListsCount != 0
+                                       ? Model.CompletedToDoListsCount / Model.ToDoLists.Count() * 100
+                                       : 0;
+        }
+
+        <div class="nav flex-column nav-pills" id="v-pills-tab" role="textbox" aria-orientation="vertical">
+            <h1>Summary of ToDo lists</h1>
+            <span>Total completion: @completionPercentage %</span>
+            <br />
+            <h2>Total ToDo lists count: @Model.ToDoLists.Count()</h2>
+            @if (Model.CompletedToDoListsCount != 0)
+            {
+                <span>Completed: @Model.CompletedToDoListsCount</span>
+            }
+        </div>
+        <br />
+    </div>
+    <div class="col-9">
+        <div class="col-3 col-md-5">
+            <form method="post" asp-action="CreateToDoList" asp-controller="ToDoLists">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="newTodoListTitle" placeholder="ToDo list title" aria-label="ToDo list title">
+                    <input type="submit" class="btn btn-success" value="Create" />
+                </div>
+            </form>
+        </div>
+
+        <div class="accordion mb-0" id="todoListsPaging">
+            @foreach (var todoList in Model.ToDoLists)
+            {
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading@(todoList.Id)">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#name@(todoList.Id)" aria-expanded="false" aria-controls="name@(todoList.Id)">
+                            @todoList.MainTitle | @todoList.Status
+                        </button>
+                    </h2>
+                    <div id="name@(todoList.Id)" class="accordion-collapse collapse" aria-labelledby="heading@(todoList.Id)">
+                        <div class="accordion-body">
+                            <partial name="PartialViews/_ToDoItemsInfo" model="todoList.ToDoEntries" />
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <br />
+        @if (Model.PagingInfo.TotalPages > 1)
+        {
+            <nav page-model="@Model.PagingInfo" page-action="Index" page-classes-enabled="true"
+                 page-class="page-link" page-class-normal="page-item" page-class-selected="page-item active"
+                 aria-label="...">
+            </nav>
+        }
+    </div>
+</div>
+
+

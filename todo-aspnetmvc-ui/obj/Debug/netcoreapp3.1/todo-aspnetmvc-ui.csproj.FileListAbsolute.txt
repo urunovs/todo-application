@@ -1,5 +1,6 @@
 C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\bin\Debug\netcoreapp3.1\appsettings.Development.json
 C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\bin\Debug\netcoreapp3.1\appsettings.json
+C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\bin\Debug\netcoreapp3.1\libman.json
 C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\bin\Debug\netcoreapp3.1\todo-aspnetmvc-ui.exe
 C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\bin\Debug\netcoreapp3.1\todo-aspnetmvc-ui.deps.json
 C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\bin\Debug\netcoreapp3.1\todo-aspnetmvc-ui.runtimeconfig.json
@@ -8,9 +9,11 @@ C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\bin\Debug\netcor
 C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\bin\Debug\netcoreapp3.1\todo-aspnetmvc-ui.pdb
 C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\bin\Debug\netcoreapp3.1\todo-aspnetmvc-ui.Views.dll
 C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\bin\Debug\netcoreapp3.1\todo-aspnetmvc-ui.Views.pdb
+C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\bin\Debug\netcoreapp3.1\Castle.Core.dll
 C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\bin\Debug\netcoreapp3.1\Microsoft.Data.SqlClient.dll
 C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.dll
 C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Abstractions.dll
+C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Proxies.dll
 C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Relational.dll
 C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.SqlServer.dll
 C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Caching.Abstractions.dll
@@ -66,9 +69,13 @@ C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcor
 C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcoreapp3.1\todo-aspnetmvc-ui.RazorCoreGenerate.cache
 C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcoreapp3.1\Razor\Views\Home\Index.cshtml.g.cs
 C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcoreapp3.1\Razor\Views\Home\Privacy.cshtml.g.cs
+C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcoreapp3.1\Razor\Views\Shared\Components\ToDoItemsNavigationMenu\Default.cshtml.g.cs
 C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcoreapp3.1\Razor\Views\Shared\Error.cshtml.g.cs
 C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Layout.cshtml.g.cs
+C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_ToDoListsLayout.cshtml.g.cs
+C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_TopNavigationMenu.cshtml.g.cs
 C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_ValidationScriptsPartial.cshtml.g.cs
+C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcoreapp3.1\Razor\Views\ToDoLists\Index.cshtml.g.cs
 C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcoreapp3.1\Razor\Views\_ViewImports.cshtml.g.cs
 C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcoreapp3.1\Razor\Views\_ViewStart.cshtml.g.cs
 C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcoreapp3.1\todo-aspnetmvc-ui.RazorTargetAssemblyInfo.cache
@@ -78,7 +85,8 @@ C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcor
 C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcoreapp3.1\todo-aspnetmvc-ui.dll
 C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcoreapp3.1\todo-aspnetmvc-ui.pdb
 C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcoreapp3.1\todo-aspnetmvc-ui.genruntimeconfig.cache
-C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\bin\Debug\netcoreapp3.1\Castle.Core.dll
-C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\bin\Debug\netcoreapp3.1\Microsoft.EntityFrameworkCore.Proxies.dll
-C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcoreapp3.1\Razor\Views\Shared\ToDoItemsInfo.cshtml.g.cs
-C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\bin\Debug\netcoreapp3.1\libman.json
+C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcoreapp3.1\Razor\Views\ToDoLists\CreateToDoList.cshtml.g.cs
+C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcoreapp3.1\Razor\Views\Shared\PartialViews\_ToDoItemsInfo.cshtml.g.cs
+C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcoreapp3.1\Razor\Views\ToDoLists\PartialViews\_SingleToDoListSummary.cshtml.g.cs
+C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcoreapp3.1\Razor\Views\ToDoLists\PartialViews\_ToDoEntryCreateForm.cshtml.g.cs
+C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcoreapp3.1\Razor\Views\ToDoLists\AddToDoItem.cshtml.g.cs

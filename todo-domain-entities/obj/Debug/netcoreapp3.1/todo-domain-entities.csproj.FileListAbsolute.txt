@@ -7,4 +7,3 @@ C:\Users\Serious\source\repos\ToDoApplication\todo-domain-entities\obj\Debug\net
 C:\Users\Serious\source\repos\ToDoApplication\todo-domain-entities\obj\Debug\netcoreapp3.1\todo-domain-entities.csproj.CoreCompileInputs.cache
 C:\Users\Serious\source\repos\ToDoApplication\todo-domain-entities\obj\Debug\netcoreapp3.1\todo-domain-entities.dll
 C:\Users\Serious\source\repos\ToDoApplication\todo-domain-entities\obj\Debug\netcoreapp3.1\todo-domain-entities.pdb
-C:\Users\Serious\source\repos\ToDoApplication\todo-domain-entities\obj\Debug\netcoreapp3.1\todo-domain-entities.csproj.AssemblyReference.cache

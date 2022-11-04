@@ -1,0 +1,39 @@
+﻿@model IEnumerable<ToDoEntry>
+
+@{
+    var orderedToDoItems = Model.OrderBy(entry => entry.OrdinalNumber);
+}
+
+<div>
+    @if (Model.Count() != 0)
+    {
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Due date</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Description</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var todoItem in orderedToDoItems)
+                {
+                    <tr>
+                        <th scope="row">@todoItem.OrdinalNumber</th>
+                        <td>@todoItem.Title</td>
+                        <td>@todoItem.DueDate</td>
+                        <td>@todoItem.Status</td>
+                        <td>@todoItem.Description</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="fs-4 fw-lighter text-center">List is empty.</p>
+    }
+</div>

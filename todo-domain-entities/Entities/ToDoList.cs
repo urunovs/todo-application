@@ -35,9 +35,11 @@ namespace todo_domain_entities
             }
         }
 
+        public bool IsVisible { get; set; } = true;
+
         public override bool Equals(object obj)
         {
-            return ((ToDoList)obj).Id == this.Id;
+            return ((ToDoList)obj)?.Id == this.Id;
         }
 
         public override int GetHashCode()
@@ -68,6 +70,11 @@ namespace todo_domain_entities
 
         public bool IsTheSame(ToDoList item)
         {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
             if (!string.Equals(MainTitle, item.MainTitle))
                 return false;
 
