@@ -41,7 +41,7 @@ using todo_domain_entities;
 #line hidden
 #nullable disable
     [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"bb086179002a905c9009f82a015d57ff33ff8bce", @"/Views/Shared/Components/ToDoItemsNavigationMenu/Default.cshtml")]
-    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"c741f233b3cff62190b1e860a76f6eeadb16aaed", @"/Views/_ViewImports.cshtml")]
+    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"32eaac334aae67aaee672ac193d84f38c9cc302e", @"/Views/_ViewImports.cshtml")]
     public class Views_Shared_Components_ToDoItemsNavigationMenu_Default : global::Microsoft.AspNetCore.Mvc.Razor.RazorPage<IEnumerable<string>>
     {
         #pragma warning disable 1998

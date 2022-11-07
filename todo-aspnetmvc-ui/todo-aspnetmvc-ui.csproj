@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Infrastructure\Class.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="microsoft.entityframeworkcore" Version="5.0.17" />
     <PackageReference Include="microsoft.entityframeworkcore.sqlserver" Version="5.0.17" />
   </ItemGroup>

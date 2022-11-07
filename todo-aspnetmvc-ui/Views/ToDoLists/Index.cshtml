@@ -16,7 +16,7 @@
             <h1>Summary of ToDo lists</h1>
             <span>Total completion: @completionPercentage %</span>
             <br />
-            <h2>Total ToDo lists count: @Model.ToDoLists.Count()</h2>
+            <h2>Total ToDo lists count: @Model.TotalToDoListsCount</h2>
             @if (Model.CompletedToDoListsCount != 0)
             {
                 <span>Completed: @Model.CompletedToDoListsCount</span>
@@ -45,6 +45,7 @@
                     </h2>
                     <div id="name@(todoList.Id)" class="accordion-collapse collapse" aria-labelledby="heading@(todoList.Id)">
                         <div class="accordion-body">
+                            <a asp-action="OpenToDoList" asp-route-todoListId="@todoList.Id">Edit</a>
                             <partial name="PartialViews/_ToDoItemsInfo" model="todoList.ToDoEntries" />
                         </div>
                     </div>
@@ -54,10 +55,10 @@
         <br />
         @if (Model.PagingInfo.TotalPages > 1)
         {
-            <nav page-model="@Model.PagingInfo" page-action="Index" page-classes-enabled="true"
+            <pagenav page-model="@Model.PagingInfo" page-action="Index" page-classes-enabled="true"
                  page-class="page-link" page-class-normal="page-item" page-class-selected="page-item active"
                  aria-label="...">
-            </nav>
+            </pagenav>
         }
     </div>
 </div>

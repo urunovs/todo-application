@@ -1,0 +1,27 @@
+﻿@model ToDoList
+
+
+<div class="modal fade" id="edit@(Model.Id)" tabindex="-1" aria-labelledby="todoListTitleLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="todoListTitleLabel">Edit ToDo list title</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="list-title" class="col-form-label">Title:</label>
+                    <input asp-for="MainTitle" type="text" class="form-control" id="list-title" value="@Model.MainTitle">
+                </div>
+                <div class="mb-3">
+                    <input asp-for="IsVisible" type="checkbox" class="form-check-input" id="visiblityCheck">
+                    <label class="form-check-label" for="visiblityCheck">Make visible on general list</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <input class="btn btn-primary" type="submit" value="Apply">
+            </div>
+        </div>
+    </div>
+</div>

@@ -80,7 +80,7 @@ namespace todo_domain_entities
             return toDoListToUpdate;
         }
 
-        public void AddToDoItemToList(ToDoEntry toDoEntry, ToDoList toDoList)
+        public ToDoEntry AddToDoItemToList(ToDoEntry toDoEntry, ToDoList toDoList)
         {
             if (toDoEntry == null)
             {
@@ -115,6 +115,8 @@ namespace todo_domain_entities
             toDoEntry.ToDoList = toDoList;
             appDbContext.ToDoEntries.Add(toDoEntry);
             appDbContext.SaveChanges();
+
+            return toDoEntry;
         }
 
         public void AddToDoEntriesToList(List<ToDoEntry> toDoEntries, ToDoList toDoList)
@@ -161,11 +163,42 @@ namespace todo_domain_entities
                 throw new ArgumentException("No such ToDoEntry", nameof(toDoEntryToUpdate));
             }
 
-            toDoEntryToUpdate.OrdinalNumber = updatedView.OrdinalNumber;
             toDoEntryToUpdate.Title = updatedView.Title;
             toDoEntryToUpdate.Description = updatedView.Description;
             toDoEntryToUpdate.DueDate = updatedView.DueDate;
             toDoEntryToUpdate.Status = updatedView.Status;
+
+            if (toDoEntryToUpdate.OrdinalNumber != updatedView.OrdinalNumber)
+            {
+
+                // Shifting OrdinalNumber of items
+                if (toDoEntryToUpdate.OrdinalNumber > updatedView.OrdinalNumber)
+                {
+                    var prevItems = toDoEntryToUpdate.ToDoList.ToDoEntries
+                                        .Where(item => item.OrdinalNumber >= updatedView.OrdinalNumber
+                                                    && item.OrdinalNumber < toDoEntryToUpdate.OrdinalNumber)
+                                        .OrderBy(item => item.OrdinalNumber);
+
+                    foreach (var item in prevItems)
+                    {
+                        ++item.OrdinalNumber;
+                    }
+                }
+                else
+                {
+                    var nextItems = toDoEntryToUpdate.ToDoList.ToDoEntries
+                                        .Where(item => item.OrdinalNumber > toDoEntryToUpdate.OrdinalNumber
+                                                    && item.OrdinalNumber <= updatedView.OrdinalNumber)
+                                        .OrderBy(item => item.OrdinalNumber).ToList();
+
+                    foreach (var item in nextItems)
+                    {
+                        --item.OrdinalNumber;
+                    }
+                }
+                
+                toDoEntryToUpdate.OrdinalNumber = updatedView.OrdinalNumber;
+            }
 
             if (!toDoEntryToUpdate.ToDoList.Equals(updatedView.ToDoList))
             {

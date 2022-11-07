@@ -13,7 +13,7 @@ using todo_aspnetmvc_ui.Models.ViewModels;
 namespace todo_aspnetmvc_ui.Infrastructure
 {
     // You may need to install the Microsoft.AspNetCore.Razor.Runtime package into your project
-    [HtmlTargetElement("nav", Attributes = "page-model")]
+    [HtmlTargetElement("pagenav", Attributes = "page-model")]
     public class PageLinkTagHelper : TagHelper
     {
         private readonly IUrlHelperFactory _urlHelperFactory;

@@ -39,27 +39,19 @@ namespace todo_aspnetmvc_ui.Controllers
                     CurrentPage = todoListPage,
                     ItemsPerPage = PageSize,
                     TotalItems = _toDoRepository.ToDoLists.Count()
-                }
+                },
+                CompletedToDoListsCount = _toDoRepository.ToDoLists.Count(
+                                            list => list.ToDoEntries.All(
+                                                item => item.Status == ToDoStatus.Completed)),
+                TotalToDoListsCount = _toDoRepository.ToDoLists.Count()
             });
         }
 
 
-        // GET: ToDoListsController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-
         [HttpGet]
-        public ActionResult CreateToDoList()
+        public ActionResult CreateToDoList(ToDoList toDoList)
         {
-            var todoCreationViewModel = new ToDoListCreationViewModel
-            {
-                ToDoList = HttpContext.Session.GetJson<ToDoList>("ToDoList")
-            };
-
-            return View(todoCreationViewModel);
+            return View(_toDoRepository.ToDoLists.FirstOrDefault(list => list.Id == toDoList.Id));
         }
 
 
@@ -68,14 +60,16 @@ namespace todo_aspnetmvc_ui.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateToDoList(string newTodoListTitle)
         {
-            var todoCreationViewModel = new ToDoListCreationViewModel
+            try
             {
-                ToDoList = new ToDoList { MainTitle = newTodoListTitle }
-            };
+                var listId = _toDoRepository.AddToDoList(new ToDoList { MainTitle = newTodoListTitle }).Id;
 
-            HttpContext.Session.SetJson("ToDoList", todoCreationViewModel.ToDoList);
-
-            return View(todoCreationViewModel);
+                return RedirectToAction(nameof(OpenToDoList), new { toDoListId = listId });
+            }
+            catch
+            {
+                return View();
+            }
         }
 
 
@@ -85,11 +79,9 @@ namespace todo_aspnetmvc_ui.Controllers
         {
             try
             {
-                var bufferedToDoList = HttpContext.Session.GetJson<ToDoList>("ToDoList");
-                bufferedToDoList.ToDoEntries.Add(toDoItem);
-                HttpContext.Session.SetJson("ToDoList", bufferedToDoList);
+                toDoItem = _toDoRepository.AddToDoItemToList(toDoItem, toDoItem.ToDoList);
 
-                return RedirectToAction(nameof(CreateToDoList));
+                return RedirectToAction(nameof(OpenToDoList), toDoItem.ToDoList.Id);
             }
             catch
             {
@@ -97,11 +89,69 @@ namespace todo_aspnetmvc_ui.Controllers
             }
         }
 
+        // POST: ToDoListsController/DeleteToDoList/5
+        [HttpPost]
+        public ActionResult DeleteToDoList(ToDoList toDoList)
+        {
+            try
+            {
+                _toDoRepository.RemoveToDoList(_toDoRepository.ToDoLists.FirstOrDefault(
+                                                list => list.Id == toDoList.Id));
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // POST: ToDoListsController/EditToDoListTitle/obj
+        [HttpPost]
+        public ActionResult EditToDoListTitle(ToDoList toDoList)
+        {
+            try
+            {
+                var listToUpdate = _toDoRepository.ToDoLists.FirstOrDefault(list => list.Id == toDoList.Id);
+
+                _toDoRepository.ModifyToDoList(listToUpdate, toDoList);
+
+                return RedirectToAction(nameof(OpenToDoList), new { toDoListId = toDoList.Id });
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        // POST: ToDoListsController/EditToDoListTitle/obj
+        [HttpPost]
+        public ActionResult EditToDoItem(ToDoEntry toDoItem, int todoListId)
+        {
+            try
+            {
+                toDoItem.ToDoList = _toDoRepository.ToDoLists.FirstOrDefault(list => list.Id == todoListId);
+                _toDoRepository.ModifyToDoEntry(toDoItem, toDoItem);
+
+                return RedirectToAction(nameof(OpenToDoList), new { toDoListId = toDoItem.ToDoList.Id });
+            }
+            catch
+            {
+                return View();
+            }
+        }
 
         // GET: ToDoListsController/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult OpenToDoList(int toDoListId)
         {
-            return View();
+            try
+            {
+                return View(_toDoRepository.ToDoLists.FirstOrDefault(list => list.Id == toDoListId));
+            }
+            catch
+            {
+                return View();
+            }
         }
 
 
@@ -121,11 +171,7 @@ namespace todo_aspnetmvc_ui.Controllers
         }
 
 
-        // GET: ToDoListsController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
+
 
 
         // POST: ToDoListsController/Delete/5

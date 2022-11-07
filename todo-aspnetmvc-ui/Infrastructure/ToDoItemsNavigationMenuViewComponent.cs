@@ -32,9 +32,15 @@ namespace todo_aspnetmvc_ui.Infrastructure
 
         public IViewComponentResult Invoke()
         {
+            var categories = Enum.GetNames(typeof(ToDoItemsCategory));
             ViewBag.SelectedCategory = RouteData?.Values["category"];
 
-            return View(Enum.GetNames(typeof(ToDoItemsCategory)));
+            if(ViewBag.SelectedCategory == null)
+            {
+                ViewBag.SelectedCategory = categories.First();
+            }    
+
+            return View(categories);
         }
     }
 }

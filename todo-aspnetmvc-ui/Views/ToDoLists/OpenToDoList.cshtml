@@ -1,0 +1,57 @@
+﻿@{
+    Layout = "_ToDoListsLayout";
+}
+
+@model ToDoList
+
+@{
+    var newToDoItem = new ToDoEntry { ToDoList = Model };
+}
+
+<div class="row m-1 p-1">
+    <div id="todolistCreation" class="col-3">
+
+        <div class="nav flex-column nav-pills" id="v-pills-tab" role="textbox" aria-orientation="vertical">
+            <span>Here some useful text</span>
+        </div>
+        <br />
+    </div>
+    <div class="col-9">
+        <div class="row col-auto align-items-center">
+            <div class="col-auto">
+                <h3 for="inputToDoListTitle" class="form-label">ToDo: @Model.MainTitle</h3>
+            </div>
+            <div class="col-auto">
+                <form asp-controller="ToDoLists" asp-action="EditToDoListTitle" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edit@(Model.Id)">
+                        Edit
+                    </button>
+                    <partial name="Components/Modals/_EditToDoListTitle" model="@Model" />
+                </form>
+            </div>
+            <div class="col-auto">
+                <form asp-controller="ToDoLists" asp-action="DeleteToDoList" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#removeTodoListModal">
+                        Remove
+                    </button>
+                    <dlg id="removeTodoListModal" title="Remove ToDo list">
+                        Are you sure to want to completely remove this ToDo list?
+                    </dlg>
+                </form>
+            </div>
+        </div>
+        <hr class="hr" />
+        <div class="mb-3 form-check">
+            <partial name="PartialViews/_ToDoItemsInfo" model="@Model.ToDoEntries" />
+        </div>
+        <hr class="hr" />
+        <partial name="PartialViews/_ToDoEntryCreateForm" model="@newToDoItem" />
+        <hr class="hr" />
+        <a class="btn btn-primary" href="Index">Finish -></a>
+
+    </div>
+</div>
+
+

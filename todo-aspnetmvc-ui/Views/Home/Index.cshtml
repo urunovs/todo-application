@@ -1,11 +1,20 @@
 ﻿@model ToDoItemsViewModel
 
-<partial name="PartialViews/_ToDoItemsInfo" model="@Model.ToDoItems" />
+@{
+    var groupedToDoItems = Model.ToDoItems.GroupBy(item => item.ToDoList);
+}
+
+@foreach (var list in groupedToDoItems)
+{
+    <h5>@list.Key.MainTitle</h5>
+    <partial name="PartialViews/_ToDoItemsInfo" model="@list" />
+    <br />
+}
 
 @if (Model.PagingInfo.TotalPages > 1)
 {
-    <nav page-model="@Model.PagingInfo" page-action="Index" page-classes-enabled="true"
+    <pagenav page-model="@Model.PagingInfo" page-action="Index" page-classes-enabled="true"
          page-class="page-link" page-class-normal="page-item" page-class-selected="page-item active"
          page-url-category="@Model.CurrentCategory" aria-label="...">
-    </nav>
+    </pagenav>
 }

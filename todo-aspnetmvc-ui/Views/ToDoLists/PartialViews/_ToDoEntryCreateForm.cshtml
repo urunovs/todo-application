@@ -10,6 +10,7 @@
 }
 
 <form method="post" asp-controller="ToDoLists" asp-action="AddToDoItem">
+    <input type="hidden" asp-for="ToDoList.Id" />
     <div class="row g-3 align-items-end">
         <div class="col-auto">
             <label for="ordinalNumberList" class="form-label">O/n</label>

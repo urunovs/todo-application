@@ -85,8 +85,10 @@ C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcor
 C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcoreapp3.1\todo-aspnetmvc-ui.dll
 C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcoreapp3.1\todo-aspnetmvc-ui.pdb
 C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcoreapp3.1\todo-aspnetmvc-ui.genruntimeconfig.cache
-C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcoreapp3.1\Razor\Views\ToDoLists\CreateToDoList.cshtml.g.cs
 C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcoreapp3.1\Razor\Views\Shared\PartialViews\_ToDoItemsInfo.cshtml.g.cs
 C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcoreapp3.1\Razor\Views\ToDoLists\PartialViews\_SingleToDoListSummary.cshtml.g.cs
 C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcoreapp3.1\Razor\Views\ToDoLists\PartialViews\_ToDoEntryCreateForm.cshtml.g.cs
 C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcoreapp3.1\Razor\Views\ToDoLists\AddToDoItem.cshtml.g.cs
+C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcoreapp3.1\Razor\Views\Shared\Components\Modals\_EditToDoListTitle.cshtml.g.cs
+C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcoreapp3.1\Razor\Views\ToDoLists\OpenToDoList.cshtml.g.cs
+C:\Users\Serious\source\repos\ToDoApplication\todo-aspnetmvc-ui\obj\Debug\netcoreapp3.1\Razor\Views\Shared\Components\Modals\_EditToDoItem.cshtml.g.cs

@@ -13,6 +13,7 @@ namespace todo_aspnetmvc_ui.Models.Repo
         public ToDoList AddToDoList(ToDoList toDoList);
         public void RemoveToDoList(ToDoList toDoList);
         public ToDoList ModifyToDoList(ToDoList toDoListToUpdate, ToDoList updatedView);
+        public ToDoEntry AddToDoItemToList(ToDoEntry toDoEntry, ToDoList toDoList);
         public void AddToDoEntriesToList(List<ToDoEntry> toDoEntries, ToDoList toDoList);
         public ToDoList ClearToDoList(ToDoList toDoList);
         public ToDoEntry ModifyToDoEntry(ToDoEntry toDoEntryToUpdate, ToDoEntry updatedView);

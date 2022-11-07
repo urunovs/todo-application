@@ -18,7 +18,7 @@ namespace todo_aspnetmvc_ui.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IToDoRepository _toDoRepository;
         private readonly Dictionary<ToDoItemsCategory, Func<ToDoEntry, bool>> _todoItemsSelector;
-        public const int PageSize = 3;
+        public const int PageSize = 6;
 
         public HomeController(ILogger<HomeController> logger, IToDoRepository repository)
         {
@@ -27,18 +27,28 @@ namespace todo_aspnetmvc_ui.Controllers
 
             _todoItemsSelector = new Dictionary<ToDoItemsCategory, Func<ToDoEntry, bool>>
             {
-                { ToDoItemsCategory.DueDateToday, (entry) => entry.DueDate.Value.Date == DateTime.Today },
-                { ToDoItemsCategory.DueDateTomorrow, (entry) => entry.DueDate.Value.Date == DateTime.Today.AddDays(1) },
-                { ToDoItemsCategory.DueDateOverdue, (entry) => entry.DueDate.Value.Date > DateTime.Today },
-                { ToDoItemsCategory.DueDateThisMonth, (entry) => { return entry.DueDate.Value.Date.Month == DateTime.Today.Month &&
-                                                                    entry.DueDate.Value.Date.Year == DateTime.Today.Year; } }
+                { ToDoItemsCategory.DueDateToday, (entry) => entry.Status != ToDoStatus.Completed
+                                                          && entry.DueDate.Value.Date == DateTime.Today },
+
+                { ToDoItemsCategory.DueDateTomorrow, (entry) => entry.Status != ToDoStatus.Completed
+                                                            &&  entry.DueDate.Value.Date == DateTime.Today.AddDays(1) },
+
+                { ToDoItemsCategory.DueDateOverdue, (entry) => entry.Status != ToDoStatus.Completed
+                                                            && entry.DueDate.Value.Date < DateTime.Today },
+
+                { ToDoItemsCategory.DueDateThisMonth, (entry) => entry.Status != ToDoStatus.Completed
+                                                              && entry.DueDate.Value.Date.Month == DateTime.Today.Month
+                                                              && entry.DueDate.Value.Date.Year == DateTime.Today.Year }
             };
         }
 
         public ViewResult Index(string category = "DueDateToday", int todoListPage = 1)
-            => View(new ToDoItemsViewModel
+        {
+            var itemsByCategory = GetToDoItemsBySelectedCategory(category);
+
+            return View(new ToDoItemsViewModel
             {
-                ToDoItems = GetToDoItemsBySelectedCategory(category)
+                ToDoItems = itemsByCategory
                     .OrderBy(list => list.Id)
                     .Skip((todoListPage - 1) * PageSize)
                     .Take(PageSize),
@@ -46,10 +56,12 @@ namespace todo_aspnetmvc_ui.Controllers
                 {
                     CurrentPage = todoListPage,
                     ItemsPerPage = PageSize,
-                    TotalItems = _toDoRepository.ToDoLists.Count()
+                    TotalItems = itemsByCategory.Count()
                 },
                 CurrentCategory = category
             });
+        }
+
 
         public IActionResult Privacy()
         {
@@ -68,8 +80,7 @@ namespace todo_aspnetmvc_ui.Controllers
 
             var todoItemsToView = _toDoRepository.ToDoLists
                 .SelectMany(list => list.ToDoEntries)
-                .Where(_todoItemsSelector[selectedCategory])
-                .OrderBy(entry => entry.Id);
+                .Where(_todoItemsSelector[selectedCategory]);
 
             return todoItemsToView;
         }
