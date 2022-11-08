@@ -15,7 +15,7 @@ namespace todo_domain_entities.Test
     {
         private readonly DbConnection _connection;
         private readonly DbContextOptions<AppDbContext> _contextOptions;
-        private EFToDoListRepository _efToDoListRepository;
+        private ToDoEFCoreServices _efToDoListRepository;
 
         public EFToDoListRepositoryTest()
         {
@@ -70,7 +70,7 @@ namespace todo_domain_entities.Test
         public void Init()
         {
             // Base arrange
-            _efToDoListRepository = new EFToDoListRepository(new AppDbContext(_contextOptions));
+            _efToDoListRepository = new ToDoEFCoreServices(new AppDbContext(_contextOptions));
         }
 
         [TearDown]

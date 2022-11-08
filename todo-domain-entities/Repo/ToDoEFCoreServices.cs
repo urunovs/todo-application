@@ -7,16 +7,16 @@ using todo_aspnetmvc_ui.Models.Repo;
 namespace todo_domain_entities
 {
     /// <summary>
-    /// EFToDoListRepository that providing some actions with T0D0 lists in DB.
+    /// ToDoEFCoreServices that providing some actions with T0D0 lists in DB.
     /// </summary>
-    public class EFToDoListRepository : IToDoRepository, IDisposable
+    public class ToDoEFCoreServices : IToDoServices, IDisposable
     {
         private readonly AppDbContext appDbContext;
 
         public IQueryable<ToDoList> ToDoLists => appDbContext.ToDoLists;
 
 
-        public EFToDoListRepository(AppDbContext appDbContext)
+        public ToDoEFCoreServices(AppDbContext appDbContext)
         {
             this.appDbContext = appDbContext;
         }

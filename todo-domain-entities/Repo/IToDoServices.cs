@@ -6,7 +6,7 @@ using todo_domain_entities;
 
 namespace todo_aspnetmvc_ui.Models.Repo
 {
-    public interface IToDoRepository
+    public interface IToDoServices
     {
         public IQueryable<ToDoList> ToDoLists { get; }
 

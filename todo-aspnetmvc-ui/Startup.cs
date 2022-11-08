@@ -32,7 +32,7 @@ namespace todo_aspnetmvc_ui
                     Configuration["ConnectionStrings:ToDoListDbConnection"]);
             });
 
-            services.AddScoped<IToDoRepository, EFToDoListRepository>();
+            services.AddScoped<IToDoServices, ToDoEFCoreServices>();
             services.AddDistributedMemoryCache();
             services.AddSession();
         }

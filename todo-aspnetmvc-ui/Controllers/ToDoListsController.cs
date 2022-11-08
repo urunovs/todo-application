@@ -15,10 +15,10 @@ namespace todo_aspnetmvc_ui.Controllers
     public class ToDoListsController : Controller
     {
         private readonly ILogger<ToDoListsController> _logger;
-        private readonly IToDoRepository _toDoRepository;
+        private readonly IToDoServices _toDoRepository;
         public const int PageSize = 3;
 
-        public ToDoListsController(ILogger<ToDoListsController> logger, IToDoRepository repository)
+        public ToDoListsController(ILogger<ToDoListsController> logger, IToDoServices repository)
         {
             _logger = logger;
             _toDoRepository = repository ?? throw new ArgumentNullException(nameof(repository));

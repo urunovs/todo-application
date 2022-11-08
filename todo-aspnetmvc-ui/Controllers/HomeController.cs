@@ -16,11 +16,11 @@ namespace todo_aspnetmvc_ui.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IToDoRepository _toDoRepository;
+        private readonly IToDoServices _toDoRepository;
         private readonly Dictionary<ToDoItemsCategory, Func<ToDoEntry, bool>> _todoItemsSelector;
         public const int PageSize = 6;
 
-        public HomeController(ILogger<HomeController> logger, IToDoRepository repository)
+        public HomeController(ILogger<HomeController> logger, IToDoServices repository)
         {
             _logger = logger;
             _toDoRepository = repository ?? throw new ArgumentNullException(nameof(repository));
