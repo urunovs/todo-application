@@ -1,0 +1,56 @@
+﻿@using todo_aspnetmvc_ui.Infrastructure
+@using System.ComponentModel.DataAnnotations;
+@using Newtonsoft.Json;
+
+@model IEnumerable<ToDoEntry>
+
+@{
+    var orderedToDoItems = Model.OrderBy(entry => entry.OrdinalNumber);
+}
+
+<div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Title</th>
+                <th scope="col">Due date</th>
+                <th scope="col">Status</th>
+                <th scope="col">Description</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var todoItem in orderedToDoItems)
+            {
+                <tr>
+                    <th scope="row">@todoItem.OrdinalNumber</th>
+                    <td>@todoItem.Title</td>
+                    <td>@todoItem.DueDate</td>
+                    <td>@(todoItem.Status.GetAttribute<DisplayAttribute>().Name)</td>
+                    <td>@todoItem.Description</td>
+                    <td>
+                        <button onclick="copyToClipboard(@(JsonConvert.SerializeObject(todoItem, Formatting.Indented, new ToDoStatusJsonConverter())), '@todoItem.ToDoList.MainTitle')"
+                                type="button" class="btn btn-outline-info btn-sm">
+                            Copy
+                        </button>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="copyToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <img src="..." class="rounded me-2" alt="...">
+                <strong class="me-auto">ToDo application</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                ToDo item copied to clipboard.
+            </div>
+        </div>
+    </div>
+</div>

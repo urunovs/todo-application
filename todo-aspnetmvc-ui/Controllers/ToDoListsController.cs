@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using todo_aspnetmvc_ui.Infrastructure;
-using todo_aspnetmvc_ui.Models.Repo;
+using todo_aspnetmvc_ui.Models.Services;
 using todo_aspnetmvc_ui.Models.ViewModels;
 using todo_domain_entities;
 
@@ -15,13 +15,13 @@ namespace todo_aspnetmvc_ui.Controllers
     public class ToDoListsController : Controller
     {
         private readonly ILogger<ToDoListsController> _logger;
-        private readonly IToDoServices _toDoRepository;
+        private readonly IToDoServices _todoServices;
         public const int PageSize = 3;
 
-        public ToDoListsController(ILogger<ToDoListsController> logger, IToDoServices repository)
+        public ToDoListsController(ILogger<ToDoListsController> logger, IToDoServices todoServices)
         {
             _logger = logger;
-            _toDoRepository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _todoServices = todoServices ?? throw new ArgumentNullException(nameof(todoServices));
         }
 
 
@@ -30,7 +30,7 @@ namespace todo_aspnetmvc_ui.Controllers
         {
             return View(new ToDoListsViewModel
             {
-                ToDoLists = _toDoRepository.ToDoLists
+                ToDoLists = _todoServices.ToDoLists
                     .OrderBy(list => list.Id)
                     .Skip((todoListPage - 1) * PageSize)
                     .Take(PageSize),
@@ -38,12 +38,12 @@ namespace todo_aspnetmvc_ui.Controllers
                 {
                     CurrentPage = todoListPage,
                     ItemsPerPage = PageSize,
-                    TotalItems = _toDoRepository.ToDoLists.Count()
+                    TotalItems = _todoServices.ToDoLists.Count()
                 },
-                CompletedToDoListsCount = _toDoRepository.ToDoLists.Count(
+                CompletedToDoListsCount = _todoServices.ToDoLists.Count(
                                             list => list.ToDoEntries.All(
                                                 item => item.Status == ToDoStatus.Completed)),
-                TotalToDoListsCount = _toDoRepository.ToDoLists.Count()
+                TotalToDoListsCount = _todoServices.ToDoLists.Count()
             });
         }
 
@@ -51,7 +51,7 @@ namespace todo_aspnetmvc_ui.Controllers
         [HttpGet]
         public ActionResult CreateToDoList(ToDoList toDoList)
         {
-            return View(_toDoRepository.ToDoLists.FirstOrDefault(list => list.Id == toDoList.Id));
+            return View(_todoServices.ToDoLists.FirstOrDefault(list => list.Id == toDoList.Id));
         }
 
 
@@ -62,7 +62,7 @@ namespace todo_aspnetmvc_ui.Controllers
         {
             try
             {
-                var listId = _toDoRepository.AddToDoList(new ToDoList { MainTitle = newTodoListTitle }).Id;
+                var listId = _todoServices.AddToDoList(new ToDoList { MainTitle = newTodoListTitle }).Id;
 
                 return RedirectToAction(nameof(OpenToDoList), new { toDoListId = listId });
             }
@@ -75,13 +75,14 @@ namespace todo_aspnetmvc_ui.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddToDoItem(ToDoEntry toDoItem)
+        public ActionResult AddToDoItem(ToDoEntry toDoItem, int todoListId)
         {
             try
             {
-                toDoItem = _toDoRepository.AddToDoItemToList(toDoItem, toDoItem.ToDoList);
+                toDoItem.ToDoList = _todoServices.ToDoLists.FirstOrDefault(list => list.Id == todoListId);
+                _todoServices.AddToDoItemToList(toDoItem, toDoItem.ToDoList);
 
-                return RedirectToAction(nameof(OpenToDoList), toDoItem.ToDoList.Id);
+                return RedirectToAction(nameof(OpenToDoList), new { toDoListId = toDoItem.ToDoList.Id });
             }
             catch
             {
@@ -95,7 +96,7 @@ namespace todo_aspnetmvc_ui.Controllers
         {
             try
             {
-                _toDoRepository.RemoveToDoList(_toDoRepository.ToDoLists.FirstOrDefault(
+                _todoServices.RemoveToDoList(_todoServices.ToDoLists.FirstOrDefault(
                                                 list => list.Id == toDoList.Id));
 
                 return RedirectToAction(nameof(Index));
@@ -112,9 +113,9 @@ namespace todo_aspnetmvc_ui.Controllers
         {
             try
             {
-                var listToUpdate = _toDoRepository.ToDoLists.FirstOrDefault(list => list.Id == toDoList.Id);
+                var listToUpdate = _todoServices.ToDoLists.FirstOrDefault(list => list.Id == toDoList.Id);
 
-                _toDoRepository.ModifyToDoList(listToUpdate, toDoList);
+                _todoServices.ModifyToDoList(listToUpdate, toDoList);
 
                 return RedirectToAction(nameof(OpenToDoList), new { toDoListId = toDoList.Id });
             }
@@ -130,10 +131,27 @@ namespace todo_aspnetmvc_ui.Controllers
         {
             try
             {
-                toDoItem.ToDoList = _toDoRepository.ToDoLists.FirstOrDefault(list => list.Id == todoListId);
-                _toDoRepository.ModifyToDoEntry(toDoItem, toDoItem);
+                toDoItem.ToDoList = _todoServices.ToDoLists.FirstOrDefault(list => list.Id == todoListId);
+                _todoServices.ModifyToDoEntry(toDoItem, toDoItem);
 
                 return RedirectToAction(nameof(OpenToDoList), new { toDoListId = toDoItem.ToDoList.Id });
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+
+        [HttpPost]
+        public ActionResult DeleteToDoItem(ToDoEntry toDoItem, int todoListId)
+        {
+            try
+            {
+                var todoList = _todoServices.ToDoLists.FirstOrDefault(list => list.Id == todoListId);
+                _todoServices.RemoveToDoEntry(toDoItem);
+
+                return RedirectToAction(nameof(OpenToDoList), new { toDoListId = todoList.Id });
             }
             catch
             {
@@ -146,7 +164,7 @@ namespace todo_aspnetmvc_ui.Controllers
         {
             try
             {
-                return View(_toDoRepository.ToDoLists.FirstOrDefault(list => list.Id == toDoListId));
+                return View(_todoServices.ToDoLists.FirstOrDefault(list => list.Id == toDoListId));
             }
             catch
             {

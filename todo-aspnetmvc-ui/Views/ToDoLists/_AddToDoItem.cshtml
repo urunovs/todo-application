@@ -1,0 +1,93 @@
+﻿@using todo_aspnetmvc_ui.Infrastructure
+@using System.ComponentModel.DataAnnotations;
+
+@model ToDoEntry
+
+@{
+    var ordinalNumbersList = new List<int>();
+
+    Model.OrdinalNumber = Model.ToDoList.ToDoEntries.Count() + 1;
+
+    if (Model.ToDoList.ToDoEntries.Count() != 0)
+    {
+        ordinalNumbersList = Enumerable.Range(1, Model.OrdinalNumber).ToList();
+    }
+
+    var todoStatuses = Enum.GetValues(typeof(ToDoStatus));
+}
+
+<div class="modal fade" id="addItemModal" tabindex="-1" aria-labelledby="todoListTitleLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="todoListTitleLabel">Add ToDo item</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-auto">
+                            <input type="hidden" asp-for="Id" />
+                            <input type="hidden" name="todoListId" value="@Model.ToDoList.Id" />
+                            <label for="ordinalNumberList" class="form-label">O/n</label>
+                            <select id="ordinalNumberList" asp-for="OrdinalNumber" class="form-control form-select-sm" aria-label="Item order">
+                                @foreach (var option in ordinalNumbersList)
+                                {
+                                    if (option == Model.OrdinalNumber)
+                                    {
+                                        <option value="@option" selected>@option</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@option">@option</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-auto">
+                            <label for="inputTitle" class="form-label">Title</label>
+                            <input id="inputTitle" asp-for="Title" type="text" class="form-control form-select-sm" aria-describedby="titleHelp">
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row g-3 align-items-end">
+                    <div class="col-auto">
+                        <label for="inputDueDate" class="form-label">Due date</label>
+                        <input id="inputDueDate" asp-for="DueDate" type="date" class="form-control form-select-sm" aria-describedby="dueDateHelp">
+                    </div>
+                    <div class="col-auto">
+                        <label for="toDoStatusList" class="form-label">Status</label>
+                        <select id="toDoStatusList" asp-for="Status" class="form-control form-select-sm" aria-label="ToDoStatuses">
+                            @foreach (var status in todoStatuses)
+                            {
+                                if ((ToDoStatus)status == Model.Status)
+                                {
+                                    <option value="@((ToDoStatus)status)" selected>
+                                        @(((ToDoStatus)status).GetAttribute<DisplayAttribute>().Name)
+                                    </option>
+                                }
+                                else
+                                {
+                                    <option value="@((ToDoStatus)status)">
+                                        @(((ToDoStatus)status).GetAttribute<DisplayAttribute>().Name)
+                                    </option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="row g-3 align-items-end">
+                    <div class="col-auto">
+                        <label for="inputDescription" class="form-label">Description</label>
+                        <input id="inputDescription" asp-for="Description" type="text" class="form-control form-select-sm" aria-describedby="DescHelp">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <input asp-action="AddToDoItem" class="btn btn-primary" type="submit" value="Apply">
+            </div>
+        </div>
+    </div>
+</div>

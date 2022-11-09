@@ -5,12 +5,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using todo_domain_entities;
-using todo_aspnetmvc_ui.Models.Repo;
+using todo_aspnetmvc_ui.Models.Services;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using todo_aspnetmvc_ui.Models.Data;
+using todo_aspnetmvc_ui.Infrastructure;
+using Newtonsoft.Json;
 
 namespace todo_aspnetmvc_ui
 {
@@ -33,8 +35,6 @@ namespace todo_aspnetmvc_ui
             });
 
             services.AddScoped<IToDoServices, ToDoEFCoreServices>();
-            services.AddDistributedMemoryCache();
-            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,7 +52,6 @@ namespace todo_aspnetmvc_ui
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseSession();
             app.UseRouting();
             app.UseAuthorization();
 

@@ -2,12 +2,15 @@
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using todo_aspnetmvc_ui.Infrastructure;
 using todo_aspnetmvc_ui.Models;
-using todo_aspnetmvc_ui.Models.Repo;
+using todo_aspnetmvc_ui.Models.Services;
 using todo_aspnetmvc_ui.Models.ViewModels;
 using todo_domain_entities;
 
@@ -16,14 +19,14 @@ namespace todo_aspnetmvc_ui.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IToDoServices _toDoRepository;
+        private readonly IToDoServices _toDoServices;
         private readonly Dictionary<ToDoItemsCategory, Func<ToDoEntry, bool>> _todoItemsSelector;
         public const int PageSize = 6;
 
-        public HomeController(ILogger<HomeController> logger, IToDoServices repository)
+        public HomeController(ILogger<HomeController> logger, IToDoServices toDoServices)
         {
             _logger = logger;
-            _toDoRepository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _toDoServices = toDoServices ?? throw new ArgumentNullException(nameof(toDoServices));
 
             _todoItemsSelector = new Dictionary<ToDoItemsCategory, Func<ToDoEntry, bool>>
             {
@@ -42,26 +45,30 @@ namespace todo_aspnetmvc_ui.Controllers
             };
         }
 
-        public ViewResult Index(string category = "DueDateToday", int todoListPage = 1)
+        public ViewResult Index(string category, int todoItemsPage = 1)
         {
+            if(category == null)
+            {
+                category = ToDoItemsCategory.DueDateToday.GetAttribute<DisplayAttribute>().Name;
+            }
+
             var itemsByCategory = GetToDoItemsBySelectedCategory(category);
 
             return View(new ToDoItemsViewModel
             {
                 ToDoItems = itemsByCategory
                     .OrderBy(list => list.Id)
-                    .Skip((todoListPage - 1) * PageSize)
+                    .Skip((todoItemsPage - 1) * PageSize)
                     .Take(PageSize),
                 PagingInfo = new PagingInfo
                 {
-                    CurrentPage = todoListPage,
+                    CurrentPage = todoItemsPage,
                     ItemsPerPage = PageSize,
                     TotalItems = itemsByCategory.Count()
                 },
                 CurrentCategory = category
             });
         }
-
 
         public IActionResult Privacy()
         {
@@ -76,9 +83,9 @@ namespace todo_aspnetmvc_ui.Controllers
 
         private IEnumerable<ToDoEntry> GetToDoItemsBySelectedCategory(string category)
         {
-            Enum.TryParse(category, out ToDoItemsCategory selectedCategory);
+            var selectedCategory = category.GetValueFromName<ToDoItemsCategory>();
 
-            var todoItemsToView = _toDoRepository.ToDoLists
+            var todoItemsToView = _toDoServices.ToDoLists
                 .SelectMany(list => list.ToDoEntries)
                 .Where(_todoItemsSelector[selectedCategory]);
 

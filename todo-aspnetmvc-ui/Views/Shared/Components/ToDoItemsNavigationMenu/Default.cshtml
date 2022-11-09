@@ -4,7 +4,7 @@
     @foreach (var category in Model)
     {
         <a class="nav-link@(category == ViewBag.SelectedCategory ? " active": "")" id="v-pills-@category-tab" data-toggle="pill" 
-           href="/@category" role="tab" aria-controls="v-pills-@category" 
+           asp-action="Index" asp-controller="Home" role="tab" aria-controls="v-pills-@category" asp-route-category="@category"
            aria-selected="@(category == ViewBag.SelectedCategory ? true : false)">
             @category</a>
     }

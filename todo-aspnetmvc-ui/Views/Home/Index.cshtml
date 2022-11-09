@@ -1,20 +1,43 @@
 ﻿@model ToDoItemsViewModel
 
 @{
+    ViewBag.SelectedCategory = Model.CurrentCategory;
     var groupedToDoItems = Model.ToDoItems.GroupBy(item => item.ToDoList);
 }
 
-@foreach (var list in groupedToDoItems)
-{
-    <h5>@list.Key.MainTitle</h5>
-    <partial name="PartialViews/_ToDoItemsInfo" model="@list" />
-    <br />
-}
 
-@if (Model.PagingInfo.TotalPages > 1)
-{
-    <pagenav page-model="@Model.PagingInfo" page-action="Index" page-classes-enabled="true"
-         page-class="page-link" page-class-normal="page-item" page-class-selected="page-item active"
-         page-url-category="@Model.CurrentCategory" aria-label="...">
-    </pagenav>
-}
+<div class="row m-1 p-1">
+    <div id="categories" class="col-3">
+        <h4>ToDo items by due date</h4>
+        <vc:to-do-items-navigation-menu/>
+    </div>
+    <div class="col-9">
+        @if (groupedToDoItems.Count() != 0)
+        {
+            @foreach (var list in groupedToDoItems)
+            {
+                <a asp-controller="ToDoLists" asp-action="OpenToDoList" asp-route-toDoListId="@list.Key.Id">
+                    <h5>@list.Key.MainTitle</h5>
+                </a>
+                <partial name="_ToDoItems" model="@list" /> 
+                <br />
+            }
+        }
+        else
+        {
+            <p class="fs-4 fw-lighter text-center">
+                No ToDo items
+            </p>
+        }
+
+        @if (Model.PagingInfo.TotalPages > 1)
+        {
+            <pagenav page-model="@Model.PagingInfo" page-action="Index" page-classes-enabled="true"
+                     page-class="page-link" page-class-normal="page-item" page-class-selected="page-item active"
+                     page-url-category="@Model.CurrentCategory">
+            </pagenav>
+        }
+    </div>
+</div>
+
+

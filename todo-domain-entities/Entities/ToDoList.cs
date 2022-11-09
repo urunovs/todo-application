@@ -39,7 +39,7 @@ namespace todo_domain_entities
 
         public override bool Equals(object obj)
         {
-            return ((ToDoList)obj)?.Id == this.Id;
+            return (obj as ToDoList)?.Id == this.Id;
         }
 
         public override int GetHashCode()

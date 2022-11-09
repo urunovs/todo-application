@@ -1,14 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace todo_domain_entities
 {
     public enum ToDoStatus
     {
+        [Display(Name = "Completed")]
         Completed,
+
+        [Display(Name = "In progress")]
         InProgress,
+
+        [Display(Name = "Not started")]
         NotStarted
     }
 
@@ -32,12 +39,12 @@ namespace todo_domain_entities
         [Required]
         public ToDoStatus Status { get; set; } = ToDoStatus.NotStarted;
 
-        [Required]
+        [Required, JsonIgnore, IgnoreDataMember]
         public virtual ToDoList ToDoList { get; set; }
 
         public override bool Equals(object obj)
         {
-            return ((ToDoEntry)obj)?.Id == this.Id;
+            return (obj as ToDoEntry)?.Id == this.Id;
         }
 
         public override int GetHashCode()

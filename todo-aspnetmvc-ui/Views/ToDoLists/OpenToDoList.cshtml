@@ -17,23 +17,23 @@
         <br />
     </div>
     <div class="col-9">
-        <div class="row col-auto align-items-center">
+        <div class="hstack gap-3">
             <div class="col-auto">
                 <h3 for="inputToDoListTitle" class="form-label">ToDo: @Model.MainTitle</h3>
             </div>
             <div class="col-auto">
                 <form asp-controller="ToDoLists" asp-action="EditToDoListTitle" method="post">
                     <input type="hidden" asp-for="Id" />
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edit@(Model.Id)">
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#edit@(Model.Id)">
                         Edit
                     </button>
-                    <partial name="Components/Modals/_EditToDoListTitle" model="@Model" />
+                    <partial name="_EditToDoListTitle" model="@Model" />
                 </form>
             </div>
             <div class="col-auto">
                 <form asp-controller="ToDoLists" asp-action="DeleteToDoList" method="post">
                     <input type="hidden" asp-for="Id" />
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#removeTodoListModal">
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#removeTodoListModal">
                         Remove
                     </button>
                     <dlg id="removeTodoListModal" title="Remove ToDo list">
@@ -41,13 +41,23 @@
                     </dlg>
                 </form>
             </div>
+            <div class="vr" style="opacity: 0.7"></div>
+            <div class="col-auto">
+                <form method="post" asp-controller="ToDoLists">
+                    <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#addItemModal">
+                        Add item
+                    </button>
+                    <partial name="_AddToDoItem" model="@(new ToDoEntry { ToDoList = Model})" />
+                </form>
+            </div>
         </div>
         <hr class="hr" />
         <div class="mb-3 form-check">
-            <partial name="PartialViews/_ToDoItemsInfo" model="@Model.ToDoEntries" />
+            <partial name="_ToDoItemsInfo" model="@Model.ToDoEntries" />
         </div>
-        <hr class="hr" />
-        <partial name="PartialViews/_ToDoEntryCreateForm" model="@newToDoItem" />
+        @*<hr class="hr" />
+            <partial name="PartialViews/_ToDoEntryCreateForm" model="@newToDoItem" />*@
+
         <hr class="hr" />
         <a class="btn btn-primary" href="Index">Finish -></a>
 

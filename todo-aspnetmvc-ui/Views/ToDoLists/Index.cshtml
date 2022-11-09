@@ -46,7 +46,9 @@
                     <div id="name@(todoList.Id)" class="accordion-collapse collapse" aria-labelledby="heading@(todoList.Id)">
                         <div class="accordion-body">
                             <a asp-action="OpenToDoList" asp-route-todoListId="@todoList.Id">Edit</a>
-                            <partial name="PartialViews/_ToDoItemsInfo" model="todoList.ToDoEntries" />
+                            <form method="post" asp-controller="ToDoLists">
+                                <partial name="_ToDoItems" model="todoList.ToDoEntries" />
+                            </form>
                         </div>
                     </div>
                 </div>

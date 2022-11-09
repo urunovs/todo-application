@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using todo_aspnetmvc_ui.Models.Repo;
+using todo_aspnetmvc_ui.Models.Services;
 using todo_domain_entities;
 
 namespace todo_aspnetmvc_ui.Infrastructure
@@ -32,13 +32,22 @@ namespace todo_aspnetmvc_ui.Infrastructure
 
         public IViewComponentResult Invoke()
         {
-            var categories = Enum.GetNames(typeof(ToDoItemsCategory));
-            ViewBag.SelectedCategory = RouteData?.Values["category"];
+            var categories = new List<string>();
+
+            foreach (var value in Enum.GetValues(typeof(ToDoItemsCategory)))
+            {
+                categories.Add(((ToDoItemsCategory)value).GetAttribute<DisplayAttribute>().Name);
+            }
+
+            if(RouteData?.Values["category"] != null)
+            {
+                ViewBag.SelectedCategory = RouteData?.Values["category"];
+            }
 
             if(ViewBag.SelectedCategory == null)
             {
-                ViewBag.SelectedCategory = categories.First();
-            }    
+                ViewBag.SelectedCategory = categories.FirstOrDefault();
+            }
 
             return View(categories);
         }
