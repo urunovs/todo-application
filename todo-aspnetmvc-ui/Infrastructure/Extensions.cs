@@ -37,7 +37,7 @@ namespace todo_aspnetmvc_ui.Infrastructure
                 }
             }
 
-            throw new ArgumentOutOfRangeException(nameof(name));
+            return default;
         }
     }
 }

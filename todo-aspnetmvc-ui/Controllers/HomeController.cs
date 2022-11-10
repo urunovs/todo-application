@@ -21,7 +21,7 @@ namespace todo_aspnetmvc_ui.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IToDoServices _toDoServices;
         private readonly Dictionary<ToDoItemsCategory, Func<ToDoEntry, bool>> _todoItemsSelector;
-        public const int PageSize = 6;
+        public const int PageSize = 2;
 
         public HomeController(ILogger<HomeController> logger, IToDoServices toDoServices)
         {
@@ -45,7 +45,7 @@ namespace todo_aspnetmvc_ui.Controllers
             };
         }
 
-        public ViewResult Index(string category, int todoItemsPage = 1)
+        public ViewResult Index(string category, int page = 1)
         {
             if(category == null)
             {
@@ -56,15 +56,16 @@ namespace todo_aspnetmvc_ui.Controllers
 
             return View(new ToDoItemsViewModel
             {
-                ToDoItems = itemsByCategory
-                    .OrderBy(list => list.Id)
-                    .Skip((todoItemsPage - 1) * PageSize)
+                GroupedToDoItems = itemsByCategory
+                    .OrderBy(list => list.Id)                    
+                    .GroupBy(item => item.ToDoList)
+                    .Skip((page - 1) * PageSize)
                     .Take(PageSize),
                 PagingInfo = new PagingInfo
                 {
-                    CurrentPage = todoItemsPage,
+                    CurrentPage = page,
                     ItemsPerPage = PageSize,
-                    TotalItems = itemsByCategory.Count()
+                    TotalItems = itemsByCategory.GroupBy(item => item.ToDoList).Count()
                 },
                 CurrentCategory = category
             });

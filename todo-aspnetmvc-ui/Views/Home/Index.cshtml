@@ -2,7 +2,6 @@
 
 @{
     ViewBag.SelectedCategory = Model.CurrentCategory;
-    var groupedToDoItems = Model.ToDoItems.GroupBy(item => item.ToDoList);
 }
 
 
@@ -12,9 +11,9 @@
         <vc:to-do-items-navigation-menu/>
     </div>
     <div class="col-9">
-        @if (groupedToDoItems.Count() != 0)
+        @if (Model.GroupedToDoItems.Count() != 0)
         {
-            @foreach (var list in groupedToDoItems)
+            @foreach (var list in Model.GroupedToDoItems)
             {
                 <a asp-controller="ToDoLists" asp-action="OpenToDoList" asp-route-toDoListId="@list.Key.Id">
                     <h5>@list.Key.MainTitle</h5>
@@ -34,7 +33,7 @@
         {
             <pagenav page-model="@Model.PagingInfo" page-action="Index" page-classes-enabled="true"
                      page-class="page-link" page-class-normal="page-item" page-class-selected="page-item active"
-                     page-url-category="@Model.CurrentCategory">
+                     page-url-category="@Model.CurrentCategory" >
             </pagenav>
         }
     </div>

@@ -50,7 +50,7 @@ namespace todo_aspnetmvc_ui.Infrastructure
                 TagBuilder liTag = new TagBuilder("li");
                 TagBuilder innerTag;
 
-                PageUrlValues["todoListPage"] = i;
+                PageUrlValues["page"] = i;
 
                 if (PageClassesEnabled)
                 {

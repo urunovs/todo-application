@@ -26,17 +26,17 @@ namespace todo_aspnetmvc_ui.Controllers
 
 
         // GET: ToDoListsController
-        public ActionResult Index(int selectedToDolistId, int todoListPage = 1)
+        public ActionResult Index(int page = 1)
         {
             return View(new ToDoListsViewModel
             {
                 ToDoLists = _todoServices.ToDoLists
                     .OrderBy(list => list.Id)
-                    .Skip((todoListPage - 1) * PageSize)
+                    .Skip((page - 1) * PageSize)
                     .Take(PageSize),
                 PagingInfo = new PagingInfo
                 {
-                    CurrentPage = todoListPage,
+                    CurrentPage = page,
                     ItemsPerPage = PageSize,
                     TotalItems = _todoServices.ToDoLists.Count()
                 },
@@ -144,6 +144,7 @@ namespace todo_aspnetmvc_ui.Controllers
 
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult DeleteToDoItem(ToDoEntry toDoItem, int todoListId)
         {
             try
@@ -160,46 +161,12 @@ namespace todo_aspnetmvc_ui.Controllers
         }
 
         // GET: ToDoListsController/Edit/5
+        [HttpGet]
         public ActionResult OpenToDoList(int toDoListId)
         {
             try
             {
                 return View(_todoServices.ToDoLists.FirstOrDefault(list => list.Id == toDoListId));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-
-        // POST: ToDoListsController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-
-
-
-
-        // POST: ToDoListsController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
             }
             catch
             {
