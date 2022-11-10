@@ -11,13 +11,13 @@ using ToDoListApplication.Tests;
 namespace todo_domain_entities.Test
 {
     [TestFixture]
-    public class EFToDoListRepositoryTest : IDisposable
+    public class ToDoEFCoreServicesTest : IDisposable
     {
         private readonly DbConnection _connection;
         private readonly DbContextOptions<AppDbContext> _contextOptions;
-        private ToDoEFCoreServices _efToDoListRepository;
+        private ToDoEFCoreServicesProvider _todoEfCoreServicesProvider;
 
-        public EFToDoListRepositoryTest()
+        public ToDoEFCoreServicesTest()
         {
             _connection = new SqliteConnection("Filename=:memory:");
             _connection.Open();
@@ -70,13 +70,13 @@ namespace todo_domain_entities.Test
         public void Init()
         {
             // Base arrange
-            _efToDoListRepository = new ToDoEFCoreServices(new AppDbContext(_contextOptions));
+            _todoEfCoreServicesProvider = new ToDoEFCoreServicesProvider(new AppDbContext(_contextOptions));
         }
 
         [TearDown]
         public void Cleanup()
         {
-            _efToDoListRepository.Dispose();
+            _todoEfCoreServicesProvider.Dispose();
         }
 
 
@@ -84,69 +84,69 @@ namespace todo_domain_entities.Test
         public void AddToDoList_PassedWrongArgs_ThrowsArgumentException(ToDoList toDoList)
         {
             // Act and assert
-            Assert.Throws<ArgumentException>(() => _efToDoListRepository.AddToDoList(toDoList));
+            Assert.Throws<ArgumentException>(() => _todoEfCoreServicesProvider.AddToDoList(toDoList));
         }
 
         [TestCaseSource(typeof(TestCases), nameof(TestCases.AddToDoListPassedValidArgsSuccessfulExecutionTestCases)), Order(2)]
         public void AddToDoList_PassedValidObject_ReturnsInsertedInstance(ToDoList toDoList)
         {
             // Act
-            var resultItem = _efToDoListRepository.AddToDoList(toDoList);
+            var resultItem = _todoEfCoreServicesProvider.AddToDoList(toDoList);
 
             // Assert
-            Assert.IsTrue(_efToDoListRepository.ToDoLists.Contains(resultItem));
+            Assert.IsTrue(_todoEfCoreServicesProvider.ToDoLists.Contains(resultItem));
         }
 
         [TestCaseSource(typeof(TestCases), nameof(TestCases.AddToDoListPassedValidArgsSuccessfulExecutionTestCases)), Order(3)]
         public void AddToDoList_PassedValidArgs_SuccessfulExecution(ToDoList toDoList)
         {
             // Arrange
-            var todoListItemsCount = _efToDoListRepository.ToDoLists.Count();
+            var todoListItemsCount = _todoEfCoreServicesProvider.ToDoLists.Count();
 
             // Act
-            _efToDoListRepository.AddToDoList(toDoList);
+            _todoEfCoreServicesProvider.AddToDoList(toDoList);
 
             // Assert
-            Assert.AreEqual(todoListItemsCount + 1, _efToDoListRepository.ToDoLists.Count());
+            Assert.AreEqual(todoListItemsCount + 1, _todoEfCoreServicesProvider.ToDoLists.Count());
         }
 
         [TestCaseSource(typeof(TestCases), nameof(TestCases.RemoveToDoListPassedInvalidArgsThrowsArgumentExceptionTestCases)), Order(4)]
         public void RemoveToDoList_PassedInvalidArgs_ThrowsArgumentException(ToDoList toDoList)
         {
             // Act and assert
-            Assert.Throws<ArgumentException>(() => _efToDoListRepository.RemoveToDoList(toDoList));
+            Assert.Throws<ArgumentException>(() => _todoEfCoreServicesProvider.RemoveToDoList(toDoList));
         }
 
         [TestCase, Order(5)]
         public void RemoveToDoList_PassedValidObject_SuccessfulExecution()
         {
             // Arrange
-            var existingInstance = _efToDoListRepository.ToDoLists.First(list => list.MainTitle == "Become a superhero");
-            var todoListItemsCount = _efToDoListRepository.ToDoLists.Count();
+            var existingInstance = _todoEfCoreServicesProvider.ToDoLists.First(list => list.MainTitle == "Become a superhero");
+            var todoListItemsCount = _todoEfCoreServicesProvider.ToDoLists.Count();
 
             // Act
-            _efToDoListRepository.RemoveToDoList(existingInstance);
+            _todoEfCoreServicesProvider.RemoveToDoList(existingInstance);
 
             // Assert
-            Assert.AreEqual(todoListItemsCount - 1, _efToDoListRepository.ToDoLists.Count());
+            Assert.AreEqual(todoListItemsCount - 1, _todoEfCoreServicesProvider.ToDoLists.Count());
         }
 
         [TestCaseSource(typeof(TestCases), nameof(TestCases.ModifyToDoListInvalidArgsThrowsArgumentExceptionTestCases)), Order(6)]
         public void ModifyToDoList_InvalidArgs_ThrowsArgumentException(ToDoList listToUpdate, ToDoList updatedListView)
         {
             // Act and assert
-            Assert.Throws<ArgumentException>(() => _efToDoListRepository.ModifyToDoList(listToUpdate, updatedListView));
+            Assert.Throws<ArgumentException>(() => _todoEfCoreServicesProvider.ModifyToDoList(listToUpdate, updatedListView));
         }
 
         [TestCaseSource(typeof(TestCases), nameof(TestCases.ModifyToDoListValidArgsReturnsUpdatedInstanceTestCases)), Order(7)]
         public void ModifyToDoList_ValidArgs_ReturnsUpdatedInstance(int listToUpdateId, ToDoList updatedListView)
         {
             // Arange
-            var listToUpdate = _efToDoListRepository.ToDoLists.First(list => list.Id == listToUpdateId);
+            var listToUpdate = _todoEfCoreServicesProvider.ToDoLists.First(list => list.Id == listToUpdateId);
             updatedListView.ToDoEntries.ForEach(entry => entry.ToDoList = updatedListView);
 
             // Act
-            var updatedInstance = _efToDoListRepository.ModifyToDoList(listToUpdate, updatedListView);
+            var updatedInstance = _todoEfCoreServicesProvider.ModifyToDoList(listToUpdate, updatedListView);
 
             // Assert
             Assert.IsTrue(updatedInstance.IsTheSame(updatedListView));
@@ -156,21 +156,21 @@ namespace todo_domain_entities.Test
         public void AddToDoEntriesToList_InvalidArgs_ThrowsArgumentException(List<ToDoEntry> toDoEntries, int toDoListId)
         {
             // Arrange
-            var toDoList = _efToDoListRepository.ToDoLists.FirstOrDefault(list => list.Id == toDoListId);
+            var toDoList = _todoEfCoreServicesProvider.ToDoLists.FirstOrDefault(list => list.Id == toDoListId);
 
             // Act and assert
-            Assert.Throws<ArgumentException>(() => _efToDoListRepository.AddToDoEntriesToList(toDoEntries, toDoList));
+            Assert.Throws<ArgumentException>(() => _todoEfCoreServicesProvider.AddToDoEntriesToList(toDoEntries, toDoList));
         }
 
         [TestCaseSource(typeof(TestCases), nameof(TestCases.AddToDoEntriesToListValidArgsSuccessfulExecutionTestCases)), Order(9)]
         public void AddToDoEntriesToList_ValidArgs_SuccessfulExecution(List<ToDoEntry> toDoEntries, int toDoListId)
         {
             // Arrange
-            var toDoList = _efToDoListRepository.ToDoLists.First(list => list.Id == toDoListId);
+            var toDoList = _todoEfCoreServicesProvider.ToDoLists.First(list => list.Id == toDoListId);
             toDoEntries.ForEach(entry => entry.ToDoList = toDoList);
 
             // Act
-            _efToDoListRepository.AddToDoEntriesToList(toDoEntries, toDoList);
+            _todoEfCoreServicesProvider.AddToDoEntriesToList(toDoEntries, toDoList);
 
             // Assert
             Assert.IsTrue(toDoList.ToDoEntries.SequenceEqual(toDoEntries));
@@ -180,19 +180,19 @@ namespace todo_domain_entities.Test
         public void ModifyToDoEntry_InvalidArgs_ThrowsArgumentException(ToDoEntry toDoEntryToUpdate, ToDoEntry updatedView)
         {
             // Act and assert
-            Assert.Throws<ArgumentException>(() => _efToDoListRepository.ModifyToDoEntry(toDoEntryToUpdate, updatedView));
+            Assert.Throws<ArgumentException>(() => _todoEfCoreServicesProvider.ModifyToDoEntry(toDoEntryToUpdate, updatedView));
         }
 
         [TestCaseSource(typeof(TestCases), nameof(TestCases.ModifyToDoEntryValidArgsReturnsUpdatedInstanceTestCases)), Order(11)]
         public void ModifyToDoEntry_ValidArgs_ReturnsUpdatedInstance(int toDoEntryToUpdateId, ToDoEntry updatedView)
         {
             // Arrange
-            var toDoEntryToUpdate = _efToDoListRepository.ToDoLists.SelectMany(list => list.ToDoEntries)
+            var toDoEntryToUpdate = _todoEfCoreServicesProvider.ToDoLists.SelectMany(list => list.ToDoEntries)
                                                           .First(entry => entry.Id == toDoEntryToUpdateId);
             updatedView.ToDoList = toDoEntryToUpdate.ToDoList;
 
             // Act
-            var updatedInstance = _efToDoListRepository.ModifyToDoEntry(toDoEntryToUpdate, updatedView);
+            var updatedInstance = _todoEfCoreServicesProvider.ModifyToDoEntry(toDoEntryToUpdate, updatedView);
 
             // Assert
             Assert.IsTrue(updatedInstance.IsTheSame(updatedView));
@@ -202,18 +202,18 @@ namespace todo_domain_entities.Test
         public void RemoveToDoEntry_PassedInvalidArgs_ThrowsArgumentException(ToDoEntry toDoEntry)
         {
             // Act and assert
-            Assert.Throws<ArgumentException>(() => _efToDoListRepository.RemoveToDoEntry(toDoEntry));
+            Assert.Throws<ArgumentException>(() => _todoEfCoreServicesProvider.RemoveToDoEntry(toDoEntry));
         }
 
         [TestCase, Order(13)]
         public void RemoveToDoEntry_PassedValidObject_SuccessfulExecution()
         {
             // Arrange
-            var existingInstance = _efToDoListRepository.ToDoLists.First();
+            var existingInstance = _todoEfCoreServicesProvider.ToDoLists.First();
             var todoListItemsCount = existingInstance.ToDoEntries.Count;
 
             // Act
-            _efToDoListRepository.RemoveToDoEntry(existingInstance.ToDoEntries.Last());
+            _todoEfCoreServicesProvider.RemoveToDoEntry(existingInstance.ToDoEntries.Last());
 
             // Assert
             Assert.AreEqual(todoListItemsCount - 1, existingInstance.ToDoEntries.Count);
@@ -223,18 +223,18 @@ namespace todo_domain_entities.Test
         public void SetToDoEntryStatus_InvalidArgs_ThrowsArgumentException(ToDoEntry toDoEntryToUpdate, ToDoStatus status)
         {
             // Act and assert
-            Assert.Throws<ArgumentException>(() => _efToDoListRepository.SetToDoEntryStatus(toDoEntryToUpdate, status));
+            Assert.Throws<ArgumentException>(() => _todoEfCoreServicesProvider.SetToDoEntryStatus(toDoEntryToUpdate, status));
         }
 
         [TestCaseSource(typeof(TestCases), nameof(TestCases.SetToDoEntryStatusValidArgsReturnsUpdatedInstanceTestCases)), Order(15)]
         public void SetToDoEntryStatus_ValidArgs_ReturnsUpdatedInstance(int todoListId, int toDoEntryToUpdateId, ToDoStatus status)
         {
             // Arrange
-            var todoList = _efToDoListRepository.ToDoLists.Single(list => list.Id == todoListId);
+            var todoList = _todoEfCoreServicesProvider.ToDoLists.Single(list => list.Id == todoListId);
             var toDoEntryToUpdate = todoList.ToDoEntries.Single(entry => entry.Id == toDoEntryToUpdateId);
 
             // Act
-            var updatedInstance = _efToDoListRepository.SetToDoEntryStatus(toDoEntryToUpdate, status);
+            var updatedInstance = _todoEfCoreServicesProvider.SetToDoEntryStatus(toDoEntryToUpdate, status);
 
             // Assert
             Assert.IsTrue(updatedInstance.Status == status);
@@ -244,10 +244,10 @@ namespace todo_domain_entities.Test
         public void ClearToDoList_NoArgs_ReturnsUpdatedToDoListItem()
         {
             // Arrange
-            var toDoList = _efToDoListRepository.ToDoLists.First(list => list.Id == 3);
+            var toDoList = _todoEfCoreServicesProvider.ToDoLists.First(list => list.Id == 3);
 
             // Act
-            var listWithoutToDoItems = _efToDoListRepository.ClearToDoList(toDoList);
+            var listWithoutToDoItems = _todoEfCoreServicesProvider.ClearToDoList(toDoList);
 
             // Assert
             Assert.IsTrue(listWithoutToDoItems.ToDoEntries.Count == 0);
@@ -257,10 +257,10 @@ namespace todo_domain_entities.Test
         public void RemoveAllToDoLists_NoArgs_SuccessfulExecution()
         {
             // Act
-            _efToDoListRepository.RemoveAllToDoLists();
+            _todoEfCoreServicesProvider.RemoveAllToDoLists();
 
             // Assert
-            Assert.IsTrue(_efToDoListRepository.ToDoLists.Count() == 0);
+            Assert.IsTrue(_todoEfCoreServicesProvider.ToDoLists.Count() == 0);
         }
 
         public void Dispose()

@@ -7,8 +7,9 @@
 
 <div class="row m-1 p-1">
     <div id="categories" class="col-3">
-        <h4>ToDo items by due date</h4>
-        <vc:to-do-items-navigation-menu/>
+
+        <h5>ToDo items by due date</h5>
+        <vc:to-do-items-navigation-menu />
     </div>
     <div class="col-9">
         @if (Model.GroupedToDoItems.Count() != 0)
@@ -16,9 +17,9 @@
             @foreach (var list in Model.GroupedToDoItems)
             {
                 <a asp-controller="ToDoLists" asp-action="OpenToDoList" asp-route-toDoListId="@list.Key.Id">
-                    <h5>@list.Key.MainTitle</h5>
+                    <h6>@list.Key.MainTitle</h6>
                 </a>
-                <partial name="_ToDoItems" model="@list" /> 
+                <partial name="_ToDoItems" model="@list" />
                 <br />
             }
         }
@@ -33,7 +34,7 @@
         {
             <pagenav page-model="@Model.PagingInfo" page-action="Index" page-classes-enabled="true"
                      page-class="page-link" page-class-normal="page-item" page-class-selected="page-item active"
-                     page-url-category="@Model.CurrentCategory" >
+                     page-url-category="@Model.CurrentCategory">
             </pagenav>
         }
     </div>

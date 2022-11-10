@@ -34,7 +34,7 @@ namespace todo_aspnetmvc_ui
                     Configuration["ConnectionStrings:ToDoListDbConnection"]);
             });
 
-            services.AddScoped<IToDoServices, ToDoEFCoreServices>();
+            services.AddScoped<IToDoServices, ToDoEFCoreServicesProvider>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

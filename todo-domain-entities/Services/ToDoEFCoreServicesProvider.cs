@@ -9,14 +9,14 @@ namespace todo_domain_entities
     /// <summary>
     /// ToDoEFCoreServices that providing some actions with T0D0 lists in DB.
     /// </summary>
-    public class ToDoEFCoreServices : IToDoServices, IDisposable
+    public class ToDoEFCoreServicesProvider : IToDoServices, IDisposable
     {
         private readonly AppDbContext appDbContext;
 
         public IQueryable<ToDoList> ToDoLists => appDbContext.ToDoLists;
 
 
-        public ToDoEFCoreServices(AppDbContext appDbContext)
+        public ToDoEFCoreServicesProvider(AppDbContext appDbContext)
         {
             this.appDbContext = appDbContext;
         }

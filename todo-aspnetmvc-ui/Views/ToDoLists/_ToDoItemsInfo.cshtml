@@ -45,10 +45,8 @@
                             Remove
                         </button>
                         <form method="post" asp-controller="ToDoLists" asp-action="DeleteToDoItem">
-
                             <input type="hidden" asp-for="@todoItem.Id" />
                             <input type="hidden" name="todoListId" value="@todoItem.ToDoList.Id"/>
-
                             <dlg id="removeItem@(todoItem.Id)" title="Remove ToDo item">
                                 Are you sure to want to completely remove this ToDo item?
                             </dlg>

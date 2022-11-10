@@ -25,22 +25,24 @@
                 <div class="mb-3">
                     <div class="row g-3 align-items-end">
                         <div class="col-auto">
-                            <input type="hidden" asp-for="Id" />
-                            <input type="hidden" name="todoListId" value="@Model.ToDoList.Id" />
-                            <label for="ordinalNumberList" class="form-label">O/n</label>
-                            <select id="ordinalNumberList" asp-for="OrdinalNumber" class="form-control form-select-sm" aria-label="Item order">
-                                @foreach (var option in ordinalNumbersList)
-                                {
-                                    if (option == Model.OrdinalNumber)
+                            <form method="post" asp-controller="ToDoLists" asp-action="EditToDoItem">
+                                <input type="hidden" asp-for="Id" />
+                                <input type="hidden" name="todoListId" value="@Model.ToDoList.Id" />
+                                <label for="ordinalNumberList" class="form-label">O/n</label>
+                                <select id="ordinalNumberList" asp-for="OrdinalNumber" class="form-control form-select-sm" aria-label="Item order">
+                                    @foreach (var option in ordinalNumbersList)
                                     {
-                                        <option value="@option" selected>@option</option>
+                                        if (option == Model.OrdinalNumber)
+                                        {
+                                            <option value="@option" selected>@option</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@option">@option</option>
+                                        }
                                     }
-                                    else
-                                    {
-                                        <option value="@option">@option</option>
-                                    }
-                                }
-                            </select>
+                                </select>
+                            </form>
                         </div>
                         <div class="col-auto">
                             <label for="inputTitle" class="form-label">Title</label>
