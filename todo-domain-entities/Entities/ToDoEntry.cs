@@ -36,8 +36,12 @@ namespace todo_domain_entities
 
         public DateTime? DueDate { get; set; } = null;
 
+        public DateTime CreationDate { get; private set; } = DateTime.Now;
+
         [Required]
         public ToDoStatus Status { get; set; } = ToDoStatus.NotStarted;
+
+        public string Notes { get; set; }
 
         [Required, JsonIgnore, IgnoreDataMember]
         public virtual ToDoList ToDoList { get; set; }
