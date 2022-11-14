@@ -11,14 +11,12 @@ namespace todo_aspnetmvc_ui.Models.Services
         public IQueryable<ToDoList> ToDoLists { get; }
 
         public ToDoList AddToDoList(ToDoList toDoList);
-        public void RemoveToDoList(ToDoList toDoList);
-        public ToDoList ModifyToDoList(ToDoList toDoListToUpdate, ToDoList updatedView);
-        public ToDoEntry AddToDoItemToList(ToDoEntry toDoEntry, ToDoList toDoList);
-        public void AddToDoEntriesToList(List<ToDoEntry> toDoEntries, ToDoList toDoList);
-        public ToDoList ClearToDoList(ToDoList toDoList);
-        public ToDoEntry ModifyToDoEntry(ToDoEntry toDoEntryToUpdate, ToDoEntry updatedView);
-        public void RemoveToDoEntry(ToDoEntry toDoEntry);
-        public ToDoEntry SetToDoEntryStatus(ToDoEntry toDoEntry, ToDoStatus status);
+        public void RemoveToDoList(int toDoListId);
+        public ToDoList ModifyToDoList(int toDoListId, ToDoList updatedView);
+        public ToDoEntry AddToDoItemToList(ToDoEntry toDoEntryToInsert, int toDoListId);
+        public ToDoList ClearToDoList(int toDoListId);
+        public ToDoEntry ModifyToDoEntry(int toDoEntryId, ToDoEntry updatedView);
+        public void RemoveToDoEntry(int toDoEntryId);
         public void RemoveAllToDoLists();
     }
 }

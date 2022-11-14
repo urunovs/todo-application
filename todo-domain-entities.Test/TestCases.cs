@@ -79,8 +79,6 @@ namespace ToDoListApplication.Tests
         {
             get
             {
-                yield return null;
-
                 yield return new TestCaseData(
                     new ToDoList
                     {
@@ -97,8 +95,6 @@ namespace ToDoListApplication.Tests
         {
             get
             {
-                yield return new TestCaseData(null, null);
-
                 yield return new TestCaseData(
                     new ToDoList
                     {
@@ -111,19 +107,6 @@ namespace ToDoListApplication.Tests
                         },
                     },
                     null);
-
-                yield return new TestCaseData(
-                    null,
-                    new ToDoList
-                    {
-                        MainTitle = "Begin new life",
-                        ToDoEntries = new List<ToDoEntry>
-                        {
-                            new ToDoEntry {OrdinalNumber = 1, Title = "Task #1", Description = "Move to CA", DueDate = new DateTime(2022, 2, 1) },
-                            new ToDoEntry {OrdinalNumber = 2, Title = "Task #2", Description = "Find a job", DueDate = new DateTime(2022, 3, 1) },
-                            new ToDoEntry {OrdinalNumber = 3, Title = "Task #3", Description = "Buy a flat", DueDate = new DateTime(2022, 8, 1) }
-                        },
-                    });
 
                 yield return new TestCaseData(
                     new ToDoList
@@ -162,12 +145,6 @@ namespace ToDoListApplication.Tests
                     new ToDoList
                     {
                         MainTitle = "Get skills of development", // Updated data
-                        ToDoEntries = new List<ToDoEntry>
-                        {
-                            new ToDoEntry { OrdinalNumber = 1, Title = "Task #1", Description = "Learn C# Basics", DueDate = new DateTime(2022, 10, 1) },
-                            new ToDoEntry { OrdinalNumber = 2, Title = "Task #2", Description = "Learn C# Advanced", DueDate = new DateTime(2022, 10, 1) },
-                            new ToDoEntry { OrdinalNumber = 3, Title = "Task #3", Description = "Learn ASP.NET Core", DueDate = new DateTime(2022, 11, 9) },
-                        }
                     });
 
                 yield return new TestCaseData(
@@ -175,50 +152,33 @@ namespace ToDoListApplication.Tests
                     new ToDoList
                     {
                         MainTitle = "Get IELTS certificate",
-                        ToDoEntries = new List<ToDoEntry>
-                        {
-                            new ToDoEntry { OrdinalNumber = 1, Title = "Task #1", Description = "Prepare to exam", DueDate = new DateTime(2022, 6, 1) },
-                            new ToDoEntry { OrdinalNumber = 2, Title = "Task #2", Description = "Learn English", DueDate = new DateTime(2022, 8, 1) },
-                            new ToDoEntry { OrdinalNumber = 3, Title = "Final task", Description = "Pass exams", DueDate = new DateTime(2022, 8, 15) }, // Updated data
-                        }
+                        IsVisible = false, // Updated data
                     });
             }
         }
 
         /// <summary>
-        /// Gets test cases for AddToDoEntriesToList_InvalidArgs_ThrowsArgumentException method.
+        /// Gets test cases for AddToDoItemToList_InvalidArgs_ThrowsArgumentException method.
         /// </summary>
-        public static IEnumerable<TestCaseData> AddToDoEntriesToListInvalidArgsThrowsArgumentException
+        public static IEnumerable<TestCaseData> AddToDoItemToListInvalidArgsThrowsArgumentException
         {
             get
             {
-                yield return new TestCaseData(null, 1);
-
                 yield return new TestCaseData(
-                    new List<ToDoEntry>
-                    {
-                        new ToDoEntry { OrdinalNumber = 1, Title = "Task #1", Description = "Move to CA", DueDate = new DateTime(2022, 2, 1) },
-                        new ToDoEntry { OrdinalNumber = 2, Title = "Task #2", Description = "Find a job", DueDate = new DateTime(2022, 3, 1) },
-                        new ToDoEntry { OrdinalNumber = 3, Title = "Task #3", Description = "Buy a flat", DueDate = new DateTime(2022, 8, 1) }
-                    },
+                    new ToDoEntry { OrdinalNumber = 1, Title = "Task #1", Description = "Move to CA", DueDate = new DateTime(2022, 2, 1) },
                     -1);
             }
         }
 
         /// <summary>
-        /// Gets test cases for AddToDoEntriesToList_ValidArgs_SuccessfulExecution method.
+        /// Gets test cases for AddToDoItemToList_ValidArgs_SuccessfulExecution method.
         /// </summary>
-        public static IEnumerable<TestCaseData> AddToDoEntriesToListValidArgsSuccessfulExecutionTestCases
+        public static IEnumerable<TestCaseData> AddToDoItemToListValidArgsSuccessfulExecutionTestCases
         {
             get
             {
                 yield return new TestCaseData(
-                    new List<ToDoEntry>
-                    {
                         new ToDoEntry { OrdinalNumber = 1, Title = "Task #1", Description = "Move to CA", DueDate = new DateTime(2022, 2, 1) },
-                        new ToDoEntry { OrdinalNumber = 2, Title = "Task #2", Description = "Find a job", DueDate = new DateTime(2022, 3, 1) },
-                        new ToDoEntry { OrdinalNumber = 3, Title = "Task #3", Description = "Buy a flat", DueDate = new DateTime(2022, 8, 1) }
-                    },
                     3);
             }
         }
@@ -230,15 +190,9 @@ namespace ToDoListApplication.Tests
         {
             get
             {
-                yield return new TestCaseData(null, null);
-
                 yield return new TestCaseData(
                         new ToDoEntry { Id = 1, OrdinalNumber = 1, Title = "Task #1", Description = "Learn C# Basics", DueDate = new DateTime(2022, 10, 1) },
                         null);
-
-                yield return new TestCaseData(
-                        null,
-                        new ToDoEntry { Id = 1, OrdinalNumber = 1, Title = "Task #1", Description = "Learn C# Basics", DueDate = new DateTime(2022, 9, 1) });
 
                 yield return new TestCaseData(
                         new ToDoEntry { Id = 1, OrdinalNumber = 1, Title = "Task #1", Description = "Learn C# Basics", DueDate = new DateTime(2022, 10, 1) },
@@ -266,8 +220,6 @@ namespace ToDoListApplication.Tests
         {
             get
             {
-                yield return null;
-
                 yield return new TestCaseData(
                     new ToDoEntry
                     {
@@ -276,22 +228,6 @@ namespace ToDoListApplication.Tests
             }
         }
 
-        /// <summary>
-        /// Gets test cases for SetToDoEntryStatus_InvalidArgs_ThrowsArgumentException method.
-        /// </summary>
-        public static IEnumerable<TestCaseData> SetToDoEntryStatusInvalidArgsThrowsArgumentExceptionTestCases
-        {
-            get
-            {
-                yield return new TestCaseData(
-                        new ToDoEntry { Title = "Task #1", Description = "Move to CA", DueDate = new DateTime(2022, 2, 1) },
-                        ToDoStatus.Completed);
-
-                yield return new TestCaseData(
-                        null,
-                        ToDoStatus.Completed);
-            }
-        }
 
         /// <summary>
         /// Gets test cases for SetToDoEntryStatus_ValidArgs_ReturnUpdatedInstance method.

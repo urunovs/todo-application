@@ -25,14 +25,12 @@
             @foreach (var todoItem in orderedToDoItems)
             {
                 <tr>
-
                     <th scope="row">@todoItem.OrdinalNumber</th>
                     <td>@todoItem.Title</td>
                     <td>@todoItem.DueDate</td>
                     <td>@(todoItem.Status.GetAttribute<DisplayAttribute>().Name)</td>
                     <td>@todoItem.Description</td>
                     <td>
-
                         <button onclick="copyToClipboard(@(JsonConvert.SerializeObject(todoItem, Formatting.Indented, new ToDoStatusJsonConverter())), '@todoItem.ToDoList.MainTitle')"
                                 type="button" class="btn btn-outline-info btn-sm">
                             Copy

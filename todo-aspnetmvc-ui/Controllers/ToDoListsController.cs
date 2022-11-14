@@ -79,8 +79,7 @@ namespace todo_aspnetmvc_ui.Controllers
         {
             try
             {
-                toDoItem.ToDoList = _todoServices.ToDoLists.FirstOrDefault(list => list.Id == todoListId);
-                _todoServices.AddToDoItemToList(toDoItem, toDoItem.ToDoList);
+                _todoServices.AddToDoItemToList(toDoItem, todoListId);
 
                 return RedirectToAction(nameof(OpenToDoList), new { toDoListId = toDoItem.ToDoList.Id });
             }
@@ -96,8 +95,7 @@ namespace todo_aspnetmvc_ui.Controllers
         {
             try
             {
-                _todoServices.RemoveToDoList(_todoServices.ToDoLists.FirstOrDefault(
-                                                list => list.Id == toDoList.Id));
+                _todoServices.RemoveToDoList(toDoList.Id);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -113,9 +111,7 @@ namespace todo_aspnetmvc_ui.Controllers
         {
             try
             {
-                var listToUpdate = _todoServices.ToDoLists.FirstOrDefault(list => list.Id == toDoList.Id);
-
-                _todoServices.ModifyToDoList(listToUpdate, toDoList);
+                _todoServices.ModifyToDoList(toDoList.Id, toDoList);
 
                 return RedirectToAction(nameof(OpenToDoList), new { toDoListId = toDoList.Id });
             }
@@ -132,7 +128,7 @@ namespace todo_aspnetmvc_ui.Controllers
             try
             {
                 toDoItem.ToDoList = _todoServices.ToDoLists.FirstOrDefault(list => list.Id == todoListId);
-                _todoServices.ModifyToDoEntry(toDoItem, toDoItem);
+                _todoServices.ModifyToDoEntry(toDoItem.Id, toDoItem);
 
                 return RedirectToAction(nameof(OpenToDoList), new { toDoListId = toDoItem.ToDoList.Id });
             }
@@ -149,10 +145,9 @@ namespace todo_aspnetmvc_ui.Controllers
         {
             try
             {
-                var todoList = _todoServices.ToDoLists.FirstOrDefault(list => list.Id == todoListId);
-                _todoServices.RemoveToDoEntry(toDoItem);
+                _todoServices.RemoveToDoEntry(toDoItem.Id);
 
-                return RedirectToAction(nameof(OpenToDoList), new { toDoListId = todoList.Id });
+                return RedirectToAction(nameof(OpenToDoList), new { toDoListId = todoListId });
             }
             catch
             {

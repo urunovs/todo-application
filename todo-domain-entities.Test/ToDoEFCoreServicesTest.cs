@@ -114,7 +114,7 @@ namespace todo_domain_entities.Test
         public void RemoveToDoList_PassedInvalidArgs_ThrowsArgumentException(ToDoList toDoList)
         {
             // Act and assert
-            Assert.Throws<ArgumentException>(() => _todoEfCoreServicesProvider.RemoveToDoList(toDoList));
+            Assert.Throws<ArgumentException>(() => _todoEfCoreServicesProvider.RemoveToDoList(toDoList.Id));
         }
 
         [TestCase, Order(5)]
@@ -125,7 +125,7 @@ namespace todo_domain_entities.Test
             var todoListItemsCount = _todoEfCoreServicesProvider.ToDoLists.Count();
 
             // Act
-            _todoEfCoreServicesProvider.RemoveToDoList(existingInstance);
+            _todoEfCoreServicesProvider.RemoveToDoList(existingInstance.Id);
 
             // Assert
             Assert.AreEqual(todoListItemsCount - 1, _todoEfCoreServicesProvider.ToDoLists.Count());
@@ -135,7 +135,7 @@ namespace todo_domain_entities.Test
         public void ModifyToDoList_InvalidArgs_ThrowsArgumentException(ToDoList listToUpdate, ToDoList updatedListView)
         {
             // Act and assert
-            Assert.Throws<ArgumentException>(() => _todoEfCoreServicesProvider.ModifyToDoList(listToUpdate, updatedListView));
+            Assert.Throws<ArgumentException>(() => _todoEfCoreServicesProvider.ModifyToDoList(listToUpdate.Id, updatedListView));
         }
 
         [TestCaseSource(typeof(TestCases), nameof(TestCases.ModifyToDoListValidArgsReturnsUpdatedInstanceTestCases)), Order(7)]
@@ -143,44 +143,41 @@ namespace todo_domain_entities.Test
         {
             // Arange
             var listToUpdate = _todoEfCoreServicesProvider.ToDoLists.First(list => list.Id == listToUpdateId);
-            updatedListView.ToDoEntries.ForEach(entry => entry.ToDoList = updatedListView);
+            updatedListView.ToDoEntries = listToUpdate.ToDoEntries;
 
             // Act
-            var updatedInstance = _todoEfCoreServicesProvider.ModifyToDoList(listToUpdate, updatedListView);
+            var updatedInstance = _todoEfCoreServicesProvider.ModifyToDoList(listToUpdate.Id, updatedListView);
 
             // Assert
             Assert.IsTrue(updatedInstance.IsTheSame(updatedListView));
         }
 
-        [TestCaseSource(typeof(TestCases), nameof(TestCases.AddToDoEntriesToListInvalidArgsThrowsArgumentException)), Order(8)]
-        public void AddToDoEntriesToList_InvalidArgs_ThrowsArgumentException(List<ToDoEntry> toDoEntries, int toDoListId)
+        [TestCaseSource(typeof(TestCases), nameof(TestCases.AddToDoItemToListInvalidArgsThrowsArgumentException)), Order(8)]
+        public void AddToDoItemToList_InvalidArgs_ThrowsArgumentException(ToDoEntry toDoEntry, int toDoListId)
         {
-            // Arrange
-            var toDoList = _todoEfCoreServicesProvider.ToDoLists.FirstOrDefault(list => list.Id == toDoListId);
-
             // Act and assert
-            Assert.Throws<ArgumentException>(() => _todoEfCoreServicesProvider.AddToDoEntriesToList(toDoEntries, toDoList));
+            Assert.Throws<ArgumentException>(() => _todoEfCoreServicesProvider.AddToDoItemToList(toDoEntry, toDoListId));
         }
 
-        [TestCaseSource(typeof(TestCases), nameof(TestCases.AddToDoEntriesToListValidArgsSuccessfulExecutionTestCases)), Order(9)]
-        public void AddToDoEntriesToList_ValidArgs_SuccessfulExecution(List<ToDoEntry> toDoEntries, int toDoListId)
+        [TestCaseSource(typeof(TestCases), nameof(TestCases.AddToDoItemToListValidArgsSuccessfulExecutionTestCases)), Order(9)]
+        public void AddToDoItemToList_ValidArgs_SuccessfulExecution(ToDoEntry toDoEntry, int toDoListId)
         {
             // Arrange
             var toDoList = _todoEfCoreServicesProvider.ToDoLists.First(list => list.Id == toDoListId);
-            toDoEntries.ForEach(entry => entry.ToDoList = toDoList);
+            toDoEntry.ToDoList = toDoList;
 
             // Act
-            _todoEfCoreServicesProvider.AddToDoEntriesToList(toDoEntries, toDoList);
+            var returnedItem = _todoEfCoreServicesProvider.AddToDoItemToList(toDoEntry, toDoList.Id);
 
             // Assert
-            Assert.IsTrue(toDoList.ToDoEntries.SequenceEqual(toDoEntries));
+            Assert.AreEqual(returnedItem, toDoEntry);
         }               
 
         [TestCaseSource(typeof(TestCases), nameof(TestCases.ModifyToDoEntryToListInvalidArgsThrowsArgumentExceptionTestCases)), Order(10)]
         public void ModifyToDoEntry_InvalidArgs_ThrowsArgumentException(ToDoEntry toDoEntryToUpdate, ToDoEntry updatedView)
         {
             // Act and assert
-            Assert.Throws<ArgumentException>(() => _todoEfCoreServicesProvider.ModifyToDoEntry(toDoEntryToUpdate, updatedView));
+            Assert.Throws<ArgumentException>(() => _todoEfCoreServicesProvider.ModifyToDoEntry(toDoEntryToUpdate.Id, updatedView));
         }
 
         [TestCaseSource(typeof(TestCases), nameof(TestCases.ModifyToDoEntryValidArgsReturnsUpdatedInstanceTestCases)), Order(11)]
@@ -192,7 +189,7 @@ namespace todo_domain_entities.Test
             updatedView.ToDoList = toDoEntryToUpdate.ToDoList;
 
             // Act
-            var updatedInstance = _todoEfCoreServicesProvider.ModifyToDoEntry(toDoEntryToUpdate, updatedView);
+            var updatedInstance = _todoEfCoreServicesProvider.ModifyToDoEntry(toDoEntryToUpdate.Id, updatedView);
 
             // Assert
             Assert.IsTrue(updatedInstance.IsTheSame(updatedView));
@@ -202,7 +199,7 @@ namespace todo_domain_entities.Test
         public void RemoveToDoEntry_PassedInvalidArgs_ThrowsArgumentException(ToDoEntry toDoEntry)
         {
             // Act and assert
-            Assert.Throws<ArgumentException>(() => _todoEfCoreServicesProvider.RemoveToDoEntry(toDoEntry));
+            Assert.Throws<ArgumentException>(() => _todoEfCoreServicesProvider.RemoveToDoEntry(toDoEntry.Id));
         }
 
         [TestCase, Order(13)]
@@ -213,32 +210,12 @@ namespace todo_domain_entities.Test
             var todoListItemsCount = existingInstance.ToDoEntries.Count;
 
             // Act
-            _todoEfCoreServicesProvider.RemoveToDoEntry(existingInstance.ToDoEntries.Last());
+            _todoEfCoreServicesProvider.RemoveToDoEntry(existingInstance.ToDoEntries.Last().Id);
 
             // Assert
             Assert.AreEqual(todoListItemsCount - 1, existingInstance.ToDoEntries.Count);
         }
 
-        [TestCaseSource(typeof(TestCases), nameof(TestCases.SetToDoEntryStatusInvalidArgsThrowsArgumentExceptionTestCases)), Order(14)]
-        public void SetToDoEntryStatus_InvalidArgs_ThrowsArgumentException(ToDoEntry toDoEntryToUpdate, ToDoStatus status)
-        {
-            // Act and assert
-            Assert.Throws<ArgumentException>(() => _todoEfCoreServicesProvider.SetToDoEntryStatus(toDoEntryToUpdate, status));
-        }
-
-        [TestCaseSource(typeof(TestCases), nameof(TestCases.SetToDoEntryStatusValidArgsReturnsUpdatedInstanceTestCases)), Order(15)]
-        public void SetToDoEntryStatus_ValidArgs_ReturnsUpdatedInstance(int todoListId, int toDoEntryToUpdateId, ToDoStatus status)
-        {
-            // Arrange
-            var todoList = _todoEfCoreServicesProvider.ToDoLists.Single(list => list.Id == todoListId);
-            var toDoEntryToUpdate = todoList.ToDoEntries.Single(entry => entry.Id == toDoEntryToUpdateId);
-
-            // Act
-            var updatedInstance = _todoEfCoreServicesProvider.SetToDoEntryStatus(toDoEntryToUpdate, status);
-
-            // Assert
-            Assert.IsTrue(updatedInstance.Status == status);
-        }
 
         [TestCase, Order(16)]
         public void ClearToDoList_NoArgs_ReturnsUpdatedToDoListItem()
@@ -247,10 +224,10 @@ namespace todo_domain_entities.Test
             var toDoList = _todoEfCoreServicesProvider.ToDoLists.First(list => list.Id == 3);
 
             // Act
-            var listWithoutToDoItems = _todoEfCoreServicesProvider.ClearToDoList(toDoList);
+            var clearedToDoList = _todoEfCoreServicesProvider.ClearToDoList(toDoList.Id);
 
             // Assert
-            Assert.IsTrue(listWithoutToDoItems.ToDoEntries.Count == 0);
+            Assert.IsTrue(clearedToDoList.ToDoEntries.Count == 0);
         }
 
         [TestCase, Order(17)]
