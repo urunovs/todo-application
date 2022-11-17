@@ -56,15 +56,6 @@ namespace todo_domain_entities
                 errors.Add(new ValidationResult("MainTitle in not set"));
             }
 
-            for(var i = 0; i < ToDoEntries.Count-1; ++i)
-            {
-                if(ToDoEntries[i].OrdinalNumber == ToDoEntries[i+1].OrdinalNumber)
-                {
-                    errors.Add(new ValidationResult("There is a duplicate values of OrdinalNumber in ToDoEntries list"));
-                    break;
-                }
-            }
-
             return errors;
         }
 

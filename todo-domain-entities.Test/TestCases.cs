@@ -23,12 +23,11 @@ namespace ToDoListApplication.Tests
                 yield return new TestCaseData(
                     new ToDoList
                     {
-                        MainTitle = "Learn to cook",
                         ToDoEntries = new List<ToDoEntry> //OrdinalNumber of ToDoEntry items is not initializing
                         {
-                            new ToDoEntry { Title = "Stage #1", Description = "Buy ingrtdients", DueDate = new DateTime(2022, 2, 1) },
-                            new ToDoEntry { Title = "Stage #2", Description = "Cook anything", DueDate = new DateTime(2022, 2, 2) },
-                            new ToDoEntry { Title = "Final stage #3", Description = "Repeat Stage #1 and Stage #2", DueDate = new DateTime(2022, 2, 3) }
+                            new ToDoEntry { OrdinalNumber = 1, Title = "Stage #1", Description = "Buy ingrtdients", DueDate = new DateTime(2022, 2, 1) },
+                            new ToDoEntry { OrdinalNumber = 2, Title = "Stage #2", Description = "Cook anything", DueDate = new DateTime(2022, 2, 2) },
+                            new ToDoEntry { OrdinalNumber = 3, Title = "Final stage #3", Description = "Repeat Stage #1 and Stage #2", DueDate = new DateTime(2022, 2, 3) }
                         }
                     });
             }
@@ -122,7 +121,6 @@ namespace ToDoListApplication.Tests
                     },
                     new ToDoList
                     {
-                        MainTitle = "Begin new life",
                         ToDoEntries = new List<ToDoEntry>
                         {
                             new ToDoEntry { Title = "Task #1", Description = "Move to CA", DueDate = new DateTime(2022, 2, 1) },
