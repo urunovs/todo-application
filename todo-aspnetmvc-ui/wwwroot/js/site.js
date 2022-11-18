@@ -3,17 +3,21 @@
 
 // Write your JavaScript code.
 
-function copyToClipboard(todoItem, todoListTitle) {
-    const itemData = [
-        `Item from '${todoListTitle}'`,
-        `Ordinal number: ${todoItem.OrdinalNumber}`,
-        `Title: ${todoItem.Title}`,
-        `Due date: ${todoItem.DueDate}`,
-        `Status: ${todoItem.Status}`,
-        `Description: ${todoItem.Description}`,
-    ].join("\n");
+function copyToClipboard(todoList) {
+    const todoItems = todoList.ToDoEntries;
+    todoItems.sort((a, b) => { return a.OrdinalNumber - b.OrdinalNumber });
 
-    navigator.clipboard.writeText(itemData);
+    let listData = `ToDo list title: '${todoList.MainTitle}'\n`;
+
+    for (let i = 0; i < todoItems.length; i++) {
+        listData = listData.concat("\n", `
+            ${todoItems[i].OrdinalNumber}. ${todoItems[i].Title}\n
+            Due date: ${todoItems[i].DueDate}\n
+            Status: ${todoItems[i].Status}\n
+            Description: ${todoItems[i].Description}\n`);
+    }
+
+    navigator.clipboard.writeText(listData);
 
     const toastElem = document.getElementById('copyToast')
     const toast = new bootstrap.Toast(toastElem)

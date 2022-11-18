@@ -1,6 +1,5 @@
 ﻿@using todo_aspnetmvc_ui.Infrastructure
 @using System.ComponentModel.DataAnnotations;
-@using Newtonsoft.Json;
 
 @model IEnumerable<ToDoEntry>
 
@@ -17,6 +16,7 @@
                 <th scope="col">Due date</th>
                 <th scope="col">Status</th>
                 <th scope="col">Description</th>
+                <th scope="col">Notes</th>
                 <th></th>
             </tr>
         </thead>
@@ -24,20 +24,14 @@
         <tbody>
             @foreach (var todoItem in orderedToDoItems)
             {
-                <tr>
-                    <th scope="row">@todoItem.OrdinalNumber</th>
-                    <td>@todoItem.Title</td>
-                    <td>@todoItem.DueDate</td>
-                    <td>@(todoItem.Status.GetAttribute<DisplayAttribute>().Name)</td>
-                    <td>@todoItem.Description</td>
-                    <td>
-                        <button onclick="copyToClipboard(@(JsonConvert.SerializeObject(todoItem, Formatting.Indented, new ToDoStatusJsonConverter())), '@todoItem.ToDoList.MainTitle')"
-                                type="button" class="btn btn-outline-info btn-sm">
-                            Copy
-                        </button>
-
-                    </td>
-                </tr>
+            <tr>
+                <th scope="row">@todoItem.OrdinalNumber</th>
+                <td>@todoItem.Title</td>
+                <td>@todoItem.DueDate</td>
+                <td>@(todoItem.Status.GetAttribute<DisplayAttribute>().Name)</td>
+                <td>@todoItem.Description</td>
+                <td>@todoItem.Notes</td>
+            </tr>
             }
         </tbody>
     </table>

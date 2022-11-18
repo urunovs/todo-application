@@ -74,7 +74,6 @@ namespace todo_aspnetmvc_ui.Controllers
 
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult AddToDoItem(ToDoEntry toDoItem, int todoListId)
         {
             try

@@ -70,11 +70,6 @@ namespace todo_domain_entities
                 errors.Add(new ValidationResult("Title is not set"));
             }
 
-            if (ToDoList == null)
-            {
-                errors.Add(new ValidationResult("ToDoList is not set"));
-            }
-
             return errors;
         }
 

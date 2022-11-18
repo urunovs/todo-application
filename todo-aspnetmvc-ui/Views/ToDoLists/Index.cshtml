@@ -2,6 +2,9 @@
     Layout = "_ToDoListsLayout";
 }
 
+@using Newtonsoft.Json;
+@using todo_aspnetmvc_ui.Infrastructure
+
 @model ToDoListsViewModel
 
 <div class="row m-1 p-1">
@@ -45,9 +48,14 @@
                     </h2>
                     <div id="name@(todoList.Id)" class="accordion-collapse collapse" aria-labelledby="heading@(todoList.Id)">
                         <div class="accordion-body">
-                            <a asp-action="OpenToDoList" asp-route-todoListId="@todoList.Id">Edit</a>
+                            <a class="btn btn-outline-primary btn-sm" asp-action="OpenToDoList" asp-route-todoListId="@todoList.Id">Edit</a>
+
+                            <button onclick="copyToClipboard(@(JsonConvert.SerializeObject(todoList, Formatting.Indented, new ToDoStatusJsonConverter())))"
+                                    type="button" class="btn btn-outline-info btn-sm">
+                                Copy
+                            </button>
                             <form method="post" asp-controller="ToDoLists">
-                                <partial name="_ToDoItems" model="todoList.ToDoEntries" />
+                                <partial name="_ToDoItems" model="todoList.ToDoEntries.OrderBy(item => item.OrdinalNumber)" />
                             </form>
                         </div>
                     </div>
@@ -58,8 +66,8 @@
         @if (Model.PagingInfo.TotalPages > 1)
         {
             <pagenav page-model="@Model.PagingInfo" page-action="Index" page-classes-enabled="true"
-                 page-class="page-link" page-class-normal="page-item" page-class-selected="page-item active"
-                 aria-label="...">
+                     page-class="page-link" page-class-normal="page-item" page-class-selected="page-item active"
+                     aria-label="...">
             </pagenav>
         }
     </div>

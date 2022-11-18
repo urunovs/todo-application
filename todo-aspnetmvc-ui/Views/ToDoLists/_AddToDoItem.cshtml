@@ -8,10 +8,7 @@
 
     Model.OrdinalNumber = Model.ToDoList.ToDoEntries.Count() + 1;
 
-    if (Model.ToDoList.ToDoEntries.Count() != 0)
-    {
-        ordinalNumbersList = Enumerable.Range(1, Model.OrdinalNumber).ToList();
-    }
+    ordinalNumbersList = Enumerable.Range(1, Model.OrdinalNumber).ToList();
 
     var todoStatuses = Enum.GetValues(typeof(ToDoStatus));
 }
