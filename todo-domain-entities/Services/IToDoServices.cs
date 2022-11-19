@@ -8,7 +8,7 @@ namespace todo_aspnetmvc_ui.Models.Services
 {
     public interface IToDoServices
     {
-        public IQueryable<ToDoList> ToDoLists { get; }
+        public IEnumerable<ToDoList> ToDoLists { get; }
 
         public ToDoList AddToDoList(ToDoList toDoList);
         public void RemoveToDoList(int toDoListId);

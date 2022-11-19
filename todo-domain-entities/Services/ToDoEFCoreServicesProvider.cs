@@ -14,11 +14,11 @@ namespace todo_domain_entities
     /// </summary>
     public class ToDoEFCoreServicesProvider : IToDoServices, IDisposable
     {
-        private readonly AppDbContext appDbContext;
-        public IQueryable<ToDoList> ToDoLists => appDbContext.ToDoLists;
+        private readonly DbContext appDbContext;
+        public IEnumerable<ToDoList> ToDoLists => appDbContext.Set<ToDoList>().AsEnumerable();
 
 
-        public ToDoEFCoreServicesProvider(AppDbContext appDbContext)
+        public ToDoEFCoreServicesProvider(DbContext appDbContext)
         {
             this.appDbContext = appDbContext;
         }
@@ -38,7 +38,7 @@ namespace todo_domain_entities
         {
             ValidateItem(toDoList);
 
-            toDoList = appDbContext.ToDoLists.Add(toDoList).Entity;
+            toDoList = appDbContext.Set<ToDoList>().Add(toDoList).Entity;
             appDbContext.SaveChanges();
 
             return toDoList;
@@ -46,15 +46,15 @@ namespace todo_domain_entities
 
         public void RemoveToDoList(int toDoListId)
         {
-            var toDoList = appDbContext.ToDoLists.Find(toDoListId);
+            var toDoList = appDbContext.Set<ToDoList>().Find(toDoListId);
 
             if (toDoList == null)
             {
                 throw new ArgumentException("No such ToDoList instance with a given Id", nameof(toDoListId));
             }
 
-            appDbContext.ToDoEntries.RemoveRange(toDoList.ToDoEntries);
-            appDbContext.ToDoLists.Remove(toDoList);
+            appDbContext.Set<ToDoEntry>().RemoveRange(toDoList.ToDoEntries);
+            appDbContext.Set<ToDoList>().Remove(toDoList);
             appDbContext.SaveChanges();
         }
 
@@ -62,7 +62,7 @@ namespace todo_domain_entities
         {
             ValidateItem(updatedView);
 
-            var toDoListToUpdate = appDbContext.ToDoLists.Find(toDoListId);
+            var toDoListToUpdate = appDbContext.Set<ToDoList>().Find(toDoListId);
 
             if (toDoListToUpdate == null)
             {
@@ -93,7 +93,7 @@ namespace todo_domain_entities
 
             ValidateItem(toDoEntryToInsert);
 
-            var toDoList = appDbContext.ToDoLists.Find(toDoListId);
+            var toDoList = appDbContext.Set<ToDoList>().Find(toDoListId);
 
             if (toDoList == null)
             {
@@ -101,7 +101,7 @@ namespace todo_domain_entities
             }
 
             toDoEntryToInsert.ToDoList = toDoList;
-            appDbContext.ToDoEntries.Add(toDoEntryToInsert);
+            appDbContext.Set<ToDoEntry>().Add(toDoEntryToInsert);
 
             if (toDoList.ToDoEntries.Any(item => item.OrdinalNumber == toDoEntryToInsert.OrdinalNumber))
             {
@@ -118,7 +118,7 @@ namespace todo_domain_entities
         {
             ValidateItem(updatedView);
 
-            var toDoEntryToUpdate = appDbContext.ToDoEntries.Find(toDoEntryId);
+            var toDoEntryToUpdate = appDbContext.Set<ToDoEntry>().Find(toDoEntryId);
 
             if (toDoEntryToUpdate == null)
             {
@@ -143,21 +143,21 @@ namespace todo_domain_entities
 
         public void RemoveAllToDoLists()
         {
-            appDbContext.ToDoEntries.RemoveRange(appDbContext.ToDoEntries);
-            appDbContext.ToDoLists.RemoveRange(appDbContext.ToDoLists);
+            appDbContext.Set<ToDoEntry>().RemoveRange(appDbContext.Set<ToDoEntry>());
+            appDbContext.Set<ToDoList>().RemoveRange(appDbContext.Set<ToDoList>());
             appDbContext.SaveChanges();
         }
 
         public ToDoList ClearToDoList(int toDoListId)
         {
-            var toDoList = appDbContext.ToDoLists.Find(toDoListId);
+            var toDoList = appDbContext.Set<ToDoList>().Find(toDoListId);
 
             if (toDoList == null)
             {
                 throw new ArgumentException("No such ToDoList wtih a given Id", nameof(toDoListId));
             }
 
-            appDbContext.ToDoEntries.RemoveRange(toDoList.ToDoEntries);
+            appDbContext.Set<ToDoEntry>().RemoveRange(toDoList.ToDoEntries);
             toDoList.ToDoEntries.Clear();
             appDbContext.SaveChanges();
 
@@ -166,7 +166,7 @@ namespace todo_domain_entities
 
         public void RemoveToDoEntry(int toDoEntryId)
         {
-            var toDoEntry = appDbContext.ToDoEntries.Find(toDoEntryId);
+            var toDoEntry = appDbContext.Set<ToDoEntry>().Find(toDoEntryId);
 
             if (toDoEntry == null)
             {
@@ -174,7 +174,7 @@ namespace todo_domain_entities
             }
 
             toDoEntry.ToDoList.ToDoEntries.Remove(toDoEntry);
-            appDbContext.ToDoEntries.Remove(toDoEntry);
+            appDbContext.Set<ToDoEntry>().Remove(toDoEntry);
             ReorderItems();
             appDbContext.SaveChanges();
         }
@@ -197,7 +197,7 @@ namespace todo_domain_entities
 
         private void ReorderItems(ToDoEntry originalItem = null)
         {
-            var orderedItems = appDbContext.ToDoEntries.AsEnumerable().OrderBy(item => item.OrdinalNumber);
+            var orderedItems = appDbContext.Set<ToDoEntry>().AsEnumerable().OrderBy(item => item.OrdinalNumber);
 
             for (var i = 1; i <= orderedItems.Count(); ++i)
             {
@@ -209,8 +209,8 @@ namespace todo_domain_entities
 
             if (originalItem != null && orderedItems.Count(item => item.OrdinalNumber == originalItem.OrdinalNumber) == 2)
             {
-                orderedItems.Where(item => item.OrdinalNumber == originalItem.OrdinalNumber)
-                            .First().OrdinalNumber = originalItem.OrdinalNumber + 1;
+                orderedItems.First(item => item.OrdinalNumber == originalItem.OrdinalNumber)
+                                .OrdinalNumber = originalItem.OrdinalNumber + 1;
             }
         }
     }
