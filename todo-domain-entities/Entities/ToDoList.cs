@@ -28,9 +28,13 @@ namespace todo_domain_entities
                 {
                     return ToDoStatus.Completed;
                 }
+                else if(ToDoEntries != null && ToDoEntries.Any(list => list.Status == ToDoStatus.InProgress))
+                {
+                    return ToDoStatus.InProgress; 
+                }
                 else
                 {
-                    return ToDoStatus.NotStarted; 
+                    return ToDoStatus.NotStarted;
                 }
             }
         }

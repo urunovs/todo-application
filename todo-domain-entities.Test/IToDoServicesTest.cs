@@ -4,7 +4,8 @@ using System.Text;
 
 namespace todo_domain_entities.Test
 {
-    class IToDoServicesTest
+    [Tes]
+    public class IToDoServicesTest
     {
     }
 }

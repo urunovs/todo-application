@@ -53,7 +53,6 @@ namespace todo_domain_entities
                 throw new ArgumentException("No such ToDoList instance with a given Id", nameof(toDoListId));
             }
 
-            appDbContext.Set<ToDoEntry>().RemoveRange(toDoList.ToDoEntries);
             appDbContext.Set<ToDoList>().Remove(toDoList);
             appDbContext.SaveChanges();
         }
@@ -69,15 +68,8 @@ namespace todo_domain_entities
                 throw new ArgumentException("No such ToDoList instance with a given Id", nameof(toDoListId));
             }
 
-            if (toDoListToUpdate.MainTitle != updatedView.MainTitle)
-            {
-                toDoListToUpdate.MainTitle = updatedView.MainTitle;
-            }
-
-            if (toDoListToUpdate.IsVisible != updatedView.IsVisible)
-            {
-                toDoListToUpdate.IsVisible = updatedView.IsVisible;
-            }
+            toDoListToUpdate.MainTitle = updatedView.MainTitle;
+            toDoListToUpdate.IsVisible = updatedView.IsVisible;
 
             appDbContext.SaveChanges();
 
@@ -143,7 +135,6 @@ namespace todo_domain_entities
 
         public void RemoveAllToDoLists()
         {
-            appDbContext.Set<ToDoEntry>().RemoveRange(appDbContext.Set<ToDoEntry>());
             appDbContext.Set<ToDoList>().RemoveRange(appDbContext.Set<ToDoList>());
             appDbContext.SaveChanges();
         }
@@ -157,7 +148,6 @@ namespace todo_domain_entities
                 throw new ArgumentException("No such ToDoList wtih a given Id", nameof(toDoListId));
             }
 
-            appDbContext.Set<ToDoEntry>().RemoveRange(toDoList.ToDoEntries);
             toDoList.ToDoEntries.Clear();
             appDbContext.SaveChanges();
 

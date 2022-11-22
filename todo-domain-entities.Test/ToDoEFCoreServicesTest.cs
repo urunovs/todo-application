@@ -11,6 +11,33 @@ using ToDoListApplication.Tests;
 
 namespace todo_domain_entities.Test
 {
+    static class InMemoryAppDbContextOptions
+    {
+        private static DbConnection _connection;
+        private static DbContextOptions<AppDbContext> _contextOptions;
+
+        public static DbContextOptions<AppDbContext> Options
+        {
+            get
+            {
+                if(_connection == null)
+                {
+                    _connection = new SqliteConnection("Filename=:memory:");
+                    _connection.Open();
+                }
+                
+                if(_contextOptions == null)
+                {
+                    _contextOptions = new DbContextOptionsBuilder<AppDbContext>()
+                    .UseSqlite(_connection)
+                    .Options;
+                }
+
+                return _contextOptions;
+            }
+        }
+    }
+
     [TestFixture]
     public class ToDoEFCoreServicesTest : IDisposable
     {

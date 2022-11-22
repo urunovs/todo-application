@@ -53,10 +53,19 @@ using Entity Framework Core's `DbContext` class to access to the database.
 
 Class `AppDbContext` derives `DbContext` which is the primary class that is responsible for interacting with the database. 
 `AppDbContext` class contains `DbSet<ToDoList>` and `DbSet<ToDoEntry>` properties which represents the collection of entities in the context, 
-or that can be queried from the database.
+or that can be queried from the database. Also it accepts context configuration options passed through constructor.
+
 
 ### Presentation logic layer
 
-## Test coverage
+#### Configuration and Startup
 
-## Workflow demo
+#### Controllers
+
+#### Views
+
+#### Models
+
+#### Infrastructure
+
+## Test coverage
