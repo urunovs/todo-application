@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -14,23 +15,28 @@ namespace todo_aspnetmvc_ui.Controllers
 {
     public class ToDoListsController : Controller
     {
-        private readonly ILogger<ToDoListsController> _logger;
+        private readonly IConfiguration _configuration;
         private readonly IToDoServices _todoServices;
         public const int PageSize = 3;
 
-        public ToDoListsController(ILogger<ToDoListsController> logger, IToDoServices todoServices)
+        public ToDoListsController(IConfiguration configuration, IToDoServices todoServices)
         {
-            _logger = logger;
+            _configuration = configuration;
             _todoServices = todoServices ?? throw new ArgumentNullException(nameof(todoServices));
         }
 
 
         // GET: ToDoListsController
+        [HttpGet]
         public ActionResult Index(int page = 1)
         {
+            var todoLists = bool.Parse(_configuration["ShowHiddenToDoLists"])
+                ? _todoServices.ToDoLists.ToList()
+                : _todoServices.VisibleToDoLists.ToList();
+
             return View(new ToDoListsViewModel
             {
-                ToDoLists = _todoServices.ToDoLists
+                ToDoLists = todoLists
                     .OrderBy(list => list.Id)
                     .Skip((page - 1) * PageSize)
                     .Take(PageSize),
@@ -38,13 +44,20 @@ namespace todo_aspnetmvc_ui.Controllers
                 {
                     CurrentPage = page,
                     ItemsPerPage = PageSize,
-                    TotalItems = _todoServices.ToDoLists.Count()
+                    TotalItems = todoLists.Count
                 },
-                CompletedToDoListsCount = _todoServices.ToDoLists.Count(
-                                            list => list.ToDoEntries.All(
-                                                item => item.Status == ToDoStatus.Completed)),
-                TotalToDoListsCount = _todoServices.ToDoLists.Count()
+                CompletedToDoListsCount = _todoServices.CompletedToDoLists.Count(),
+                TotalToDoListsCount = _todoServices.ToDoLists.Count(),
+                ShowHiddenToDoLists = bool.Parse(_configuration["ShowHiddenToDoLists"])
             });
+        }
+
+        [HttpPost]
+        public ActionResult UpdateList(bool showHiddenLists)
+        {
+            _configuration["ShowHiddenToDoLists"] = showHiddenLists.ToString();
+            
+            return RedirectToAction(nameof(Index));
         }
 
 
@@ -57,7 +70,6 @@ namespace todo_aspnetmvc_ui.Controllers
 
         // POST: ToDoListsController/CreateToDoList
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult CreateToDoList(string newTodoListTitle)
         {
             try
@@ -120,6 +132,18 @@ namespace todo_aspnetmvc_ui.Controllers
             }
         }
 
+        [HttpPost]
+        public void ChangeVisiblityState(int todoListId)
+        {
+            _todoServices.ChangeVisiblityOfToDoList(todoListId);
+        }
+
+        [HttpPost]
+        public string ChangeToDoStatus(int todoItemId)
+        {
+            return _todoServices.ChangeToDoStatus(todoItemId);
+        }
+
         // POST: ToDoListsController/EditToDoListTitle/obj
         [HttpPost]
         public ActionResult EditToDoItem(ToDoEntry toDoItem, int todoListId)
@@ -139,7 +163,6 @@ namespace todo_aspnetmvc_ui.Controllers
 
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult DeleteToDoItem(ToDoEntry toDoItem, int todoListId)
         {
             try

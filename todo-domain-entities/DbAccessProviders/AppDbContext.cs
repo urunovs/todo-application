@@ -13,7 +13,7 @@ namespace todo_domain_entities
         public DbSet<ToDoList> ToDoLists { get; set; }
         public DbSet<ToDoEntry> ToDoEntries { get; set; }
 
-        public AppDbContext(DbContextOptions<DbContext> options) : base(options)
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
             Database.EnsureCreated();
         }

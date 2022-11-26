@@ -14,11 +14,18 @@ namespace todo_domain_entities
     /// </summary>
     public class ToDoEFCoreServicesProvider : IToDoServices, IDisposable
     {
-        private readonly DbContext appDbContext;
+        private readonly AppDbContext appDbContext;
         public IEnumerable<ToDoList> ToDoLists => appDbContext.Set<ToDoList>().AsEnumerable();
 
+        public IEnumerable<ToDoList> VisibleToDoLists =>
+            appDbContext.Set<ToDoList>().Where(list => list.IsVisible).AsEnumerable();
 
-        public ToDoEFCoreServicesProvider(DbContext appDbContext)
+        public IEnumerable<ToDoList> CompletedToDoLists =>
+            appDbContext.Set<ToDoList>().Where(list => list.ToDoEntries
+                                            .All(item => item.Status == ToDoStatus.Completed));
+
+
+        public ToDoEFCoreServicesProvider(AppDbContext appDbContext)
         {
             this.appDbContext = appDbContext;
         }
@@ -76,6 +83,22 @@ namespace todo_domain_entities
             return toDoListToUpdate;
         }
 
+        public ToDoList ChangeVisiblityOfToDoList(int toDoListId)
+        {
+            var toDoListToUpdate = appDbContext.Set<ToDoList>().Find(toDoListId);
+
+            if (toDoListToUpdate == null)
+            {
+                throw new ArgumentException("No such ToDoList instance with a given Id", nameof(toDoListId));
+            }
+
+            toDoListToUpdate.IsVisible = !toDoListToUpdate.IsVisible;
+
+            appDbContext.SaveChanges();
+
+            return toDoListToUpdate;
+        }
+
         public ToDoEntry AddToDoItemToList(ToDoEntry toDoEntryToInsert, int toDoListId)
         {
             if (toDoEntryToInsert == null)
@@ -97,7 +120,7 @@ namespace todo_domain_entities
 
             if (toDoList.ToDoEntries.Any(item => item.OrdinalNumber == toDoEntryToInsert.OrdinalNumber))
             {
-                ReorderItems(toDoEntryToInsert);
+                ReorderItems(toDoEntryToInsert.ToDoList, toDoEntryToInsert);
             }
 
             appDbContext.SaveChanges();
@@ -125,7 +148,7 @@ namespace todo_domain_entities
 
             if (toDoEntryToUpdate.ToDoList.ToDoEntries.Count(item => item.OrdinalNumber == updatedView.OrdinalNumber) > 1)
             {
-                ReorderItems(toDoEntryToUpdate);
+                ReorderItems(toDoEntryToUpdate.ToDoList, toDoEntryToUpdate);
             }
 
             appDbContext.SaveChanges();
@@ -154,6 +177,28 @@ namespace todo_domain_entities
             return toDoList;
         }
 
+        public string ChangeToDoStatus(int toDoItemId)
+        {
+            var toDoEntry = appDbContext.Set<ToDoEntry>().Find(toDoItemId);
+
+            if (toDoEntry == null)
+            {
+                throw new ArgumentException("No such ToDoEntry instance with a given Id", nameof(toDoItemId));
+            }
+
+            if(toDoEntry.Status == ToDoStatus.NotStarted)
+            {
+                toDoEntry.Status = ToDoStatus.InProgress;
+            }
+            else
+            {
+                toDoEntry.Status = ToDoStatus.Completed;
+            }
+
+            appDbContext.SaveChanges();
+            return toDoEntry.Status.ToString();
+        }
+
         public void RemoveToDoEntry(int toDoEntryId)
         {
             var toDoEntry = appDbContext.Set<ToDoEntry>().Find(toDoEntryId);
@@ -165,7 +210,7 @@ namespace todo_domain_entities
 
             toDoEntry.ToDoList.ToDoEntries.Remove(toDoEntry);
             appDbContext.Set<ToDoEntry>().Remove(toDoEntry);
-            ReorderItems();
+            ReorderItems(toDoEntry.ToDoList);
             appDbContext.SaveChanges();
         }
 
@@ -185,9 +230,12 @@ namespace todo_domain_entities
             }
         }
 
-        private void ReorderItems(ToDoEntry originalItem = null)
+        private void ReorderItems(ToDoList toDoList, ToDoEntry originalItem = null)
         {
-            var orderedItems = appDbContext.Set<ToDoEntry>().AsEnumerable().OrderBy(item => item.OrdinalNumber);
+            var orderedItems = appDbContext.Set<ToDoList>()
+                                           .Find(toDoList.Id).ToDoEntries
+                                           .AsEnumerable()
+                                           .OrderBy(item => item.OrdinalNumber);
 
             for (var i = 1; i <= orderedItems.Count(); ++i)
             {

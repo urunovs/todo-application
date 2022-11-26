@@ -2,6 +2,9 @@
     Layout = "_ToDoListsLayout";
 }
 
+@using Newtonsoft.Json;
+@using todo_aspnetmvc_ui.Infrastructure
+
 @model ToDoList
 
 @{
@@ -10,10 +13,7 @@
 
 <div class="row m-1 p-1">
     <div id="todolistCreation" class="col-3">
-
-        <div class="nav flex-column nav-pills" id="v-pills-tab" role="textbox" aria-orientation="vertical">
-            <span>Here some useful text</span>
-        </div>
+        <partial name="_ToDoListSummary" model="@Model" />
         <br />
     </div>
     <div class="col-9">
@@ -25,7 +25,7 @@
                 <form asp-controller="ToDoLists" asp-action="EditToDoListTitle" method="post">
                     <input type="hidden" asp-for="Id" />
                     <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#edit@(Model.Id)">
-                        Edit
+                        Rename list
                     </button>
                     <partial name="_EditToDoListTitle" model="@Model" />
                 </form>
@@ -34,34 +34,60 @@
                 <form asp-controller="ToDoLists" asp-action="DeleteToDoList" method="post">
                     <input type="hidden" asp-for="Id" />
                     <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#removeTodoListModal">
-                        Remove
+                        Delete list
                     </button>
                     <dlg id="removeTodoListModal" title="Remove ToDo list">
                         Are you sure to want to completely remove this ToDo list?
                     </dlg>
                 </form>
             </div>
-            <div class="vr" style="opacity: 0.7"></div>
+            <div class="col-auto">
+                <button onclick="copyToClipboard(@(JsonConvert.SerializeObject(Model, Formatting.Indented, new ToDoStatusJsonConverter())))"
+                        type="button" class="btn btn-info btn-sm form-control">
+                    Copy list
+                </button>
+            </div>
+        </div>
+        <hr class="hr" />
+        @if (Model.ToDoEntries.Count != 0)
+        {
             <div class="col-auto">
                 <form method="post" asp-controller="ToDoLists">
                     <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#addItemModal">
-                        Add item
+                        Add task
                     </button>
                     <partial name="_AddToDoItem" model="@(new ToDoEntry { ToDoList = Model})" />
                 </form>
             </div>
+            <div class="mb-3 form-check">
+                <partial name="_ToDoItemsInfo" model="@Model.ToDoEntries" />
+            </div>
+        }
+        else
+        {
+    <div class="d-flex justify-content-center flex-column">
+        <p class="fs-4 fw-lighter text-center">
+            No tasks yet
+        </p>
+        <div class="container">
+            <div class="row">
+                <div class="col text-center">
+                    <form method="post" asp-controller="ToDoLists">
+                        <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#addItemModal">
+                            Add task
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
-        <hr class="hr" />
-        <div class="mb-3 form-check">
-            <partial name="_ToDoItemsInfo" model="@Model.ToDoEntries" />
-        </div>
-        @*<hr class="hr" />
-            <partial name="PartialViews/_ToDoEntryCreateForm" model="@newToDoItem" />*@
+        <partial name="_AddToDoItem" model="@(new ToDoEntry { ToDoList = Model})" />
+    </div>
+        }
 
         <hr class="hr" />
         <a class="btn btn-primary" href="Index">Finish -></a>
-
     </div>
+    <partial name="_CopyListToastForm" />
 </div>
 
 

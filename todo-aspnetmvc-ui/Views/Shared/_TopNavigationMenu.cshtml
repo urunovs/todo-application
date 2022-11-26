@@ -4,7 +4,7 @@
             
             <a class="navbar-brand" asp-controller="Home" asp-action="Index">
                 <div class="h-25 w-25 d-inline" >
-                    @*<img src="~/img/icons/logo.jpg" class="img-fluid">*@
+                    <img src="~/img/icons/logo.jpg" class="img-fluid" width="50">
                     <span>TODO APPLICATION</span>
                 </div>
             </a>
@@ -12,14 +12,14 @@
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex">
+            <div class="navbar-collapse collapse d-sm-inline-flex" >
                 <ul class="navbar-nav flex-grow-2">
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="ToDoLists" asp-action="Index">TODO Lists</a>
                     </li>
-                    <li class="nav-item">
+                    @*<li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                    </li>
+                    </li>*@
                 </ul>
             </div>
         </div>

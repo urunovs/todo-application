@@ -42,7 +42,7 @@ namespace todo_domain_entities.Test
     public class ToDoEFCoreServicesTest : IDisposable
     {
         private readonly DbConnection _connection;
-        private readonly DbContextOptions<DbContext> _contextOptions;
+        private readonly DbContextOptions<AppDbContext> _contextOptions;
         private IToDoServices _todoServicesProvider;
 
         public ToDoEFCoreServicesTest()
@@ -50,7 +50,7 @@ namespace todo_domain_entities.Test
             _connection = new SqliteConnection("Filename=:memory:");
             _connection.Open();
 
-            _contextOptions = new DbContextOptionsBuilder<DbContext>()
+            _contextOptions = new DbContextOptionsBuilder<AppDbContext>()
                 .UseSqlite(_connection)
                 .Options;
 

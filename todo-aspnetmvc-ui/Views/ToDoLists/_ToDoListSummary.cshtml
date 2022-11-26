@@ -1,0 +1,55 @@
+﻿@model ToDoList
+
+@{
+    var totalTasksCount = Model.ToDoEntries.Count();
+    var completedTasksCount = @Model.ToDoEntries.Count(entry => entry.Status == ToDoStatus.Completed);
+    var tasksInProgressCount = @Model.ToDoEntries.Count(entry => entry.Status == ToDoStatus.InProgress);
+    var notStartedTasksCount = @Model.ToDoEntries.Count(entry => entry.Status == ToDoStatus.NotStarted);
+    var completionPercentage = totalTasksCount == 0 ? 0 : (int)((float)completedTasksCount / totalTasksCount * 100);
+}
+
+<div class="nav flex-column nav-pills" id="v-pills-tab" role="textbox" aria-orientation="vertical">
+    <h2>Summary of list</h2>
+    <span>Completion</span>
+    <div class="progress">
+        <div class="progress-bar" role="progressbar" style="width: @completionPercentage%;"
+             aria-valuemin="0" aria-valuemax="100">@completionPercentage %</div>
+        </div>
+        <br />
+        <h3>Tasks count: @totalTasksCount</h3>
+        @if (completedTasksCount != 0)
+        {
+            <div class="row">
+                <div class="col-auto">
+                    <img width="20" src="~/img/icons/status-completed.png">
+                </div>
+                <div class="col-auto gx-sm-0">
+                    <span>Completed: @completedTasksCount</span>
+                </div>
+            </div>
+        }
+
+        @if (tasksInProgressCount != 0)
+        {
+            <div class="row">
+                <div class="col-auto">
+                    <img width="20" src="~/img/icons/status-in-progress.png">
+                </div>
+                <div class="col-auto gx-sm-0">
+                    <span>In progress: @tasksInProgressCount</span>
+                </div>
+            </div>
+        }
+
+        @if (notStartedTasksCount != 0)
+        {
+            <div class="row">
+                <div class="col-auto">
+                    <img width="20" src="~/img/icons/status-not-started.png">
+                </div>
+                <div class="col-auto gx-sm-0">
+                    <span>Not started: @notStartedTasksCount</span>
+                </div>
+            </div>
+        }
+    </div>

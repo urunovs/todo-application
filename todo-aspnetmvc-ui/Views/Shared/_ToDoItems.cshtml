@@ -17,34 +17,52 @@
                 <th scope="col">Status</th>
                 <th scope="col">Description</th>
                 <th scope="col">Notes</th>
-                <th></th>
+                <th> </th>
             </tr>
         </thead>
 
         <tbody>
             @foreach (var todoItem in orderedToDoItems)
             {
-            <tr>
-                <th scope="row">@todoItem.OrdinalNumber</th>
-                <td>@todoItem.Title</td>
-                <td>@todoItem.DueDate</td>
-                <td>@(todoItem.Status.GetAttribute<DisplayAttribute>().Name)</td>
-                <td>@todoItem.Description</td>
-                <td>@todoItem.Notes</td>
-            </tr>
+                <tr>
+                    <th>@todoItem.OrdinalNumber</th>
+                    <td>@todoItem.Title</td>
+                    <td>@todoItem.DueDate</td>
+                    <td>
+                        @if (todoItem.Status == ToDoStatus.NotStarted)
+                        {
+                            <img id="statusImg@(todoItem.Id)" width="20" src="~/img/icons/status-not-started.png">
+                        }
+                        else if (todoItem.Status == ToDoStatus.InProgress)
+                        {
+                            <img id="statusImg@(todoItem.Id)" width="20" src="~/img/icons/status-in-progress.png">
+                        }
+                        else
+                        {
+                            <img id="statusImg@(todoItem.Id)" width="20" src="~/img/icons/status-completed.png">
+                        }
+                        <span id="statusSpan@(todoItem.Id)">
+                            @(todoItem.Status.GetAttribute<DisplayAttribute>().Name)
+                        </span>
+                    </td>
+                    <td>@todoItem.Description</td>
+                    <td>@(string.IsNullOrEmpty(todoItem.Notes) ? "-" : todoItem.Notes)</td>
+
+                    <td>
+                        @if (todoItem.Status == ToDoStatus.NotStarted)
+                        {
+                            <input id="statusBtn@(todoItem.Id)" type="button" value="Start" class="btn btn-outline-success btn-sm"
+                                   onclick="processState(@todoItem.Id, '@Url.Action("ChangeToDoStatus", "ToDoLists")')" />
+
+                        }
+                        else if (todoItem.Status == ToDoStatus.InProgress)
+                        {
+                            <input id="statusBtn@(todoItem.Id)" type="button" value="Complete" class="btn btn-outline-success btn-sm"
+                                   onclick="processState(@todoItem.Id, '@Url.Action("ChangeToDoStatus", "ToDoLists")')" />
+                        }
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
-    <div class="toast-container position-fixed bottom-0 end-0 p-3">
-        <div id="copyToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header">
-                <img src="~/img/icons/status-completed.png" class="rounded me-2" alt="...">
-                <strong class="me-auto">ToDo application</strong>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <div class="toast-body">
-                ToDo item copied to clipboard.
-            </div>
-        </div>
-    </div>
 </div>

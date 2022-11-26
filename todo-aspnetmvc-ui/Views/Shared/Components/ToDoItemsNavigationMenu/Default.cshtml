@@ -3,8 +3,9 @@
 <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
     @foreach (var category in Model)
     {
-        <a class="nav-link@(category == ViewBag.SelectedCategory ? " active": "")" id="v-pills-@category-tab" data-toggle="pill" 
-           asp-action="Index" asp-controller="Home" role="tab" aria-controls="v-pills-@category" asp-route-category="@category"
+        <a class="nav-link@(category == ViewBag.SelectedCategory ? " active": "")" id="v-pills-@category-tab" 
+           data-toggle="pill" asp-action="Index" asp-controller="Home" role="tab" 
+           aria-controls="v-pills-@category" asp-route-category="@category" asp-route-page="1"
            aria-selected="@(category == ViewBag.SelectedCategory ? true : false)">
             @category</a>
     }

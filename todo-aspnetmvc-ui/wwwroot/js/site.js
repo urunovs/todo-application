@@ -24,3 +24,45 @@ function copyToClipboard(todoList) {
 
     toast.show()
 }
+
+function updateList() {
+    const updateForm = document.getElementById('listsUpdateForm');
+    updateForm.submit();
+}
+
+function updateToDoListsVisiblityState(todoListId, url_action) {
+    $.ajax({
+        type: "POST",
+        url: url_action,
+        data: {
+            todoListId
+        }
+    })
+}
+
+function processState(todoItemId, url_action) {
+    $.ajax({
+        type: "POST",
+        url: url_action,
+        data: {
+            todoItemId
+        },
+        dataType: "text",
+        success: function (value) {
+            const button = document.getElementById(`statusBtn${todoItemId}`);
+            const statusSpan = document.getElementById(`statusSpan${todoItemId}`);
+            const statusImg = document.getElementById(`statusImg${todoItemId}`);
+
+            if (value == 'InProgress') {
+                button.value = "Complete"
+                statusSpan.textContent = "In progress"
+                statusImg.src = "/img/icons/status-in-progress.png"
+            }
+            else {
+                button.style.display = "none"
+                statusSpan.textContent = "Completed"
+                statusImg.src = "/img/icons/status-completed.png"
+            }
+        }
+    })
+}

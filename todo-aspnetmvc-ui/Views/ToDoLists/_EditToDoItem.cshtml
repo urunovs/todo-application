@@ -17,15 +17,15 @@
 <div class="modal fade" id="editItem@(Model.Id)" tabindex="-1" aria-labelledby="todoListTitleLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="todoListTitleLabel">Edit ToDo item</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <div class="row g-3 align-items-end">
-                        <div class="col-auto">
-                            <form method="post" asp-controller="ToDoLists" asp-action="EditToDoItem">
+            <form asp-controller="ToDoLists" asp-action="EditToDoItem">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="todoListTitleLabel">Edit ToDo item</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <div class="row g-3 align-items-end">
+                            <div class="col-auto">
                                 <input type="hidden" asp-for="Id" />
                                 <input type="hidden" name="todoListId" value="@Model.ToDoList.Id" />
                                 <label for="ordinalNumberList" class="form-label">O/n</label>
@@ -42,56 +42,57 @@
                                         }
                                     }
                                 </select>
-                            </form>
+                            </div>
+                            <div class="col-auto">
+                                <label for="inputTitle" class="form-label">Title</label>
+                                <input id="inputTitle" asp-for="Title" type="text" class="form-control form-select-sm" aria-describedby="titleHelp">
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row g-3 align-items-end">
+                        <div class="col-auto">
+                            <label for="inputDueDate" class="form-label">Due date</label>
+                            <input id="inputDueDate" asp-for="DueDate" type="date" class="form-control form-select-sm" aria-describedby="dueDateHelp">
                         </div>
                         <div class="col-auto">
-                            <label for="inputTitle" class="form-label">Title</label>
-                            <input id="inputTitle" asp-for="Title" type="text" class="form-control form-select-sm" aria-describedby="titleHelp">
+                            <label for="toDoStatusList" class="form-label">Status</label>
+                            <select id="toDoStatusList" asp-for="Status" class="form-control form-select-sm" aria-label="ToDoStatuses">
+                                @foreach (var status in todoStatuses)
+                                {
+                                    if ((ToDoStatus)status == Model.Status)
+                                    {
+                                        <option value="@((ToDoStatus)status)" selected>
+                                            @(((ToDoStatus)status).GetAttribute<DisplayAttribute>().Name)
+                                        </option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@((ToDoStatus)status)">
+                                            @(((ToDoStatus)status).GetAttribute<DisplayAttribute>().Name)
+                                        </option>
+                                    }
+                                }
+                            </select>
                         </div>
-
+                    </div>
+                    <div class="row g-3 align-items-end">
+                        <div class="col-auto">
+                            <label for="inputDescription" class="form-label">Description</label>
+                            <input id="inputDescription" asp-for="Description" type="text" class="form-control form-select-sm" aria-describedby="DescHelp">
+                        </div>
+                        <div class="col-auto">
+                            <label for="inputNotes" class="form-label">Notes</label>
+                            <input id="inputNotes" asp-for="Notes" type="text" class="form-control form-select-sm" aria-describedby="NotesHelp">
+                        </div>
                     </div>
                 </div>
-                <div class="row g-3 align-items-end">
-                    <div class="col-auto">
-                        <label for="inputDueDate" class="form-label">Due date</label>
-                        <input id="inputDueDate" asp-for="DueDate" type="date" class="form-control form-select-sm" aria-describedby="dueDateHelp">
-                    </div>
-                    <div class="col-auto">
-                        <label for="toDoStatusList" class="form-label">Status</label>
-                        <select id="toDoStatusList" asp-for="Status" class="form-control form-select-sm" aria-label="ToDoStatuses">
-                            @foreach (var status in todoStatuses)
-                            {
-                                if ((ToDoStatus)status == Model.Status)
-                                {
-                                    <option value="@((ToDoStatus)status)" selected>
-                                        @(((ToDoStatus)status).GetAttribute<DisplayAttribute>().Name)
-                                    </option>
-                                }
-                                else
-                                {
-                                    <option value="@((ToDoStatus)status)">
-                                        @(((ToDoStatus)status).GetAttribute<DisplayAttribute>().Name)
-                                    </option>
-                                }
-                            }
-                        </select>
-                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <input class="btn btn-primary" type="submit" value="Apply">
                 </div>
-                <div class="row g-3 align-items-end">
-                    <div class="col-auto">
-                        <label for="inputDescription" class="form-label">Description</label>
-                        <input id="inputDescription" asp-for="Description" type="text" class="form-control form-select-sm" aria-describedby="DescHelp">
-                    </div>
-                    <div class="col-auto">
-                        <label for="inputNotes" class="form-label">Notes</label>
-                        <input id="inputNotes" asp-for="Notes" type="text" class="form-control form-select-sm" aria-describedby="NotesHelp">
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <input asp-action="EditToDoItem" class="btn btn-primary" type="submit" value="Apply">
-            </div>
+            </form>
         </div>
+
     </div>
 </div>

@@ -31,7 +31,7 @@
                 <td>@todoItem.DueDate</td>
                 <td>@(todoItem.Status.GetAttribute<DisplayAttribute>().Name)</td>
                 <td>@todoItem.Description</td>
-                <td>@todoItem.Notes</td>
+                <td>@(string.IsNullOrEmpty(todoItem.Notes) ? "-" : todoItem.Notes)</td>
                 <td>
                     <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editItem@(todoItem.Id)">
                         Edit
@@ -51,17 +51,5 @@
             </tr>
             }
         </tbody>
-    </table>
-    <div class="toast-container position-fixed bottom-0 end-0 p-3">
-        <div id="copyToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header">
-                <img src="..." class="rounded me-2" alt="...">
-                <strong class="me-auto">ToDo application</strong>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <div class="toast-body">
-                ToDo item copied to clipboard.
-            </div>
-        </div>
-    </div>
+    </table>    
 </div>

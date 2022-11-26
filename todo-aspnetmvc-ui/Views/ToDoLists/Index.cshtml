@@ -4,22 +4,18 @@
 
 @using Newtonsoft.Json;
 @using todo_aspnetmvc_ui.Infrastructure
+@using System.ComponentModel.DataAnnotations;
 
 @model ToDoListsViewModel
 
-<div class="row m-1 p-1">
+<div class="row m-1 p-1" style="background: whitesmoke">
     <div id="todosummary" class="col-3">
-        @{
-            var completionPercentage = Model.CompletedToDoListsCount != 0
-                                       ? Model.CompletedToDoListsCount / Model.ToDoLists.Count() * 100
-                                       : 0;
-        }
 
         <div class="nav flex-column nav-pills" id="v-pills-tab" role="textbox" aria-orientation="vertical">
-            <h1>Summary of ToDo lists</h1>
-            <span>Total completion: @completionPercentage %</span>
+            <h3>Summary of ToDo lists</h3>
+            <span>Total completion: @Model.CompletionPercentage %</span>
             <br />
-            <h2>Total ToDo lists count: @Model.TotalToDoListsCount</h2>
+            <h4>Total ToDo lists count: @Model.TotalToDoListsCount</h4>
             @if (Model.CompletedToDoListsCount != 0)
             {
                 <span>Completed: @Model.CompletedToDoListsCount</span>
@@ -31,8 +27,15 @@
         <div class="col-3 col-md-5">
             <form method="post" asp-action="CreateToDoList" asp-controller="ToDoLists">
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" name="newTodoListTitle" placeholder="ToDo list title" aria-label="ToDo list title">
-                    <input type="submit" class="btn btn-success" value="Create" />
+                    <input type="text" class="form-control" name="newTodoListTitle" placeholder="ToDo list title" aria-label="ToDo list title" required>
+                    <input type="submit" class="btn btn-success" value="Create list" />
+                </div>
+            </form>
+            <form asp-controller="ToDoLists" asp-action="UpdateList" id="listsUpdateForm">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="showHidedListsChecked" asp-for="@Model.ShowHiddenToDoLists"
+                           onclick="updateList()" name="showHidedLists">
+                    <label class="form-check-label" for="showHidedListsChecked">Show hidden lists</label>
                 </div>
             </form>
         </div>
@@ -40,20 +43,43 @@
         <div class="accordion mb-0" id="todoListsPaging">
             @foreach (var todoList in Model.ToDoLists)
             {
-                <div class="accordion-item">
+                <div class="accordion-item" style="background:azure">
                     <h2 class="accordion-header" id="heading@(todoList.Id)">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#name@(todoList.Id)" aria-expanded="false" aria-controls="name@(todoList.Id)">
-                            @todoList.MainTitle | @todoList.Status
+                        <button class="accordion-button collapsed" type="button" style="font-weight: bold" data-bs-toggle="collapse" data-bs-target="#name@(todoList.Id)" aria-expanded="false" aria-controls="name@(todoList.Id)">
+                            @todoList.MainTitle | @(todoList.Status.GetAttribute<DisplayAttribute>().Name)
                         </button>
                     </h2>
                     <div id="name@(todoList.Id)" class="accordion-collapse collapse" aria-labelledby="heading@(todoList.Id)">
                         <div class="accordion-body">
-                            <a class="btn btn-outline-primary btn-sm" asp-action="OpenToDoList" asp-route-todoListId="@todoList.Id">Edit</a>
-
-                            <button onclick="copyToClipboard(@(JsonConvert.SerializeObject(todoList, Formatting.Indented, new ToDoStatusJsonConverter())))"
-                                    type="button" class="btn btn-outline-info btn-sm">
-                                Copy
-                            </button>
+                            <div class="row gy-2 gx-3 align-items-center">
+                                <div class="col-auto">
+                                    <a class="btn btn-outline-primary btn-sm form-control" asp-action="OpenToDoList" asp-route-todoListId="@todoList.Id">
+                                        Edit list
+                                    </a>
+                                </div>
+                                <div class="col-auto">
+                                    <button onclick="copyToClipboard(@(JsonConvert.SerializeObject(todoList, Formatting.Indented, new ToDoStatusJsonConverter())))"
+                                            type="button" class="btn btn-outline-info btn-sm form-control">
+                                        Copy list
+                                    </button>
+                                </div>
+                                <div class="col-auto">
+                                    <form method="post" asp-controller="ToDoLists">
+                                        <button type="button" class="btn btn-success btn-sm form-control" data-bs-toggle="modal" data-bs-target="#addItemModal">
+                                            Add task
+                                        </button>
+                                        <partial name="_AddToDoItem" model="@(new ToDoEntry { ToDoList = todoList})" />
+                                    </form>
+                                </div>
+                                <div class="col d-flex flex-row-reverse">
+                                    <div class="p-2 form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="hideListChecked"
+                                               onclick="updateToDoListsVisiblityState(@todoList.Id, '@Url.Action("ChangeVisiblityState", "ToDoLists")')" checked="@todoList.IsVisible">
+                                        <label class="form-check-label" for="hideListChecked">List is visible</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
                             <form method="post" asp-controller="ToDoLists">
                                 <partial name="_ToDoItems" model="todoList.ToDoEntries.OrderBy(item => item.OrdinalNumber)" />
                             </form>
@@ -70,6 +96,7 @@
                      aria-label="...">
             </pagenav>
         }
+        <partial name="_CopyListToastForm" />
     </div>
 </div>
 

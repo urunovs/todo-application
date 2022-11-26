@@ -8,17 +8,22 @@
 <div class="row m-1 p-1">
     <div id="categories" class="col-3">
 
-        <h5>ToDo items by due date</h5>
+        <h5>View tasks by due date</h5>
         <vc:to-do-items-navigation-menu />
     </div>
-    <div class="col-9">
+    <div class="col-9" style="background-color:azure">
         @if (Model.GroupedToDoItems.Count() != 0)
         {
             @foreach (var list in Model.GroupedToDoItems)
             {
-                <a asp-controller="ToDoLists" asp-action="OpenToDoList" asp-route-toDoListId="@list.Key.Id">
-                    <h6>@list.Key.MainTitle</h6>
-                </a>
+
+                <h6>
+                    ToDo list:
+                    <a asp-controller="ToDoLists" asp-action="OpenToDoList" asp-route-toDoListId="@list.Key.Id">
+                        @list.Key.MainTitle
+                    </a>
+                </h6>
+
                 <partial name="_ToDoItems" model="@list" />
                 <br />
             }
@@ -26,7 +31,7 @@
         else
         {
             <p class="fs-4 fw-lighter text-center">
-                No ToDo items
+                No uncompleted tasks
             </p>
         }
 

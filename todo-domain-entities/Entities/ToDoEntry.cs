@@ -34,7 +34,7 @@ namespace todo_domain_entities
 
         public string Description { get; set; }
 
-        public DateTime? DueDate { get; set; } = null;
+        public DateTime? DueDate { get; set; } = DateTime.Now;
 
         public DateTime CreationDate { get; private set; } = DateTime.Now;
 
