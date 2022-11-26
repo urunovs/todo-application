@@ -16,5 +16,6 @@ namespace todo_aspnetmvc_ui.Models.ViewModels
                                        ? (int)((double)CompletedToDoListsCount / TotalToDoListsCount * 100)
                                        : 0;
         public bool ShowHiddenToDoLists { get; set; } = true;
+        public bool ShowCompletedTasks { get; set; } = true;
     }
 }

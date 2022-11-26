@@ -48,15 +48,17 @@ namespace todo_aspnetmvc_ui.Controllers
                 },
                 CompletedToDoListsCount = _todoServices.CompletedToDoLists.Count(),
                 TotalToDoListsCount = _todoServices.ToDoLists.Count(),
-                ShowHiddenToDoLists = bool.Parse(_configuration["ShowHiddenToDoLists"])
+                ShowHiddenToDoLists = bool.Parse(_configuration["ShowHiddenToDoLists"]),
+                ShowCompletedTasks = bool.Parse(_configuration["ShowCompletedTasks"])
             });
         }
 
         [HttpPost]
-        public ActionResult UpdateList(bool showHiddenLists)
+        public ActionResult UpdateList(bool showHiddenLists, bool showCompletedTasks)
         {
             _configuration["ShowHiddenToDoLists"] = showHiddenLists.ToString();
-            
+            _configuration["ShowCompletedTasks"] = showCompletedTasks.ToString();
+
             return RedirectToAction(nameof(Index));
         }
 
