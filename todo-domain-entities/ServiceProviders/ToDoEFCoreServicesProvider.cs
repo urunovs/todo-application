@@ -177,7 +177,7 @@ namespace todo_domain_entities
             return toDoList;
         }
 
-        public string ChangeToDoStatus(int toDoItemId)
+        public string ChangeToDoItemsStatus(int toDoItemId)
         {
             var toDoEntry = appDbContext.Set<ToDoEntry>().Find(toDoItemId);
 

@@ -70,44 +70,6 @@ namespace ToDoListApplication.Tests
         }
 
         /// <summary>
-        /// Gets test cases for RemoveToDoList_PassedInvalidArgs_ThrowsArgumentException method.
-        /// </summary>
-        public static IEnumerable<TestCaseData> RemoveToDoListPassedInvalidArgsThrowsArgumentExceptionTestCases
-        {
-            get
-            {
-                yield return new TestCaseData(
-                    new ToDoList
-                    {
-                        Id = -1,
-                        MainTitle = "Get IELTS certificate"
-                    });
-            }
-        }
-
-        /// <summary>
-        /// Gets test cases for ModifyToDoList_PassedNull_ThrowsArgumentNullException method.
-        /// </summary>
-        public static IEnumerable<TestCaseData> ModifyToDoListNullThrowsArgumentNullExceptionTestCases
-        {
-            get
-            {
-                yield return new TestCaseData(
-                    new ToDoList
-                    {
-                        MainTitle = "Begin new life",
-                        ToDoEntries = new List<ToDoEntry>
-                        {
-                            new ToDoEntry {OrdinalNumber = 1, Title = "Task #1", Description = "Move to CA", DueDate = new DateTime(2022, 2, 1) },
-                            new ToDoEntry {OrdinalNumber = 2, Title = "Task #2", Description = "Find a job", DueDate = new DateTime(2022, 3, 1) },
-                            new ToDoEntry {OrdinalNumber = 3, Title = "Task #3", Description = "Buy a flat", DueDate = new DateTime(2022, 8, 1) }
-                        },
-                    },
-                    null);
-            }
-        }
-
-        /// <summary>
         /// Gets test cases for ModifyToDoList_InvalidArgs_ThrowsArgumentException method.
         /// </summary>
         public static IEnumerable<TestCaseData> ModifyToDoListInvalidArgsThrowsArgumentExceptionTestCases
@@ -117,17 +79,11 @@ namespace ToDoListApplication.Tests
                 yield return new TestCaseData(
                     new ToDoList
                     {
-                        Id = 3,
-                        MainTitle = "Begin new life",
-                        ToDoEntries = new List<ToDoEntry>
-                        {
-                            new ToDoEntry {OrdinalNumber = 1, Title = "Task #1", Description = "Move to CA", DueDate = new DateTime(2022, 2, 1) },
-                            new ToDoEntry {OrdinalNumber = 2, Title = "Task #2", Description = "Find a job", DueDate = new DateTime(2022, 3, 1) },
-                            new ToDoEntry {OrdinalNumber = 3, Title = "Task #3", Description = "Buy a flat", DueDate = new DateTime(2022, 8, 1) }
-                        }
+                        Id = 3
                     },
                     new ToDoList
                     {
+                        //MainTitle is empty string
                         ToDoEntries = new List<ToDoEntry>
                         {
                             new ToDoEntry { Title = "Task #1", Description = "Move to CA", DueDate = new DateTime(2022, 2, 1) },
@@ -163,82 +119,15 @@ namespace ToDoListApplication.Tests
         }
 
         /// <summary>
-        /// Gets test cases for AddToDoItemToList_InvalidArgs_ThrowsArgumentException method.
+        /// Gets test cases for AddToDoItemToList_ValidArgs_ReturnsAddedInstance method.
         /// </summary>
-        public static IEnumerable<TestCaseData> AddToDoItemToListInvalidArgsThrowsArgumentException
+        public static IEnumerable<TestCaseData> AddToDoItemToListValidArgsReturnsAddedInstanceTestCases
         {
             get
             {
                 yield return new TestCaseData(
-                    new ToDoEntry { OrdinalNumber = 1, Title = "Task #1", Description = "Move to CA", DueDate = new DateTime(2022, 2, 1) },
-                    -1);
-            }
-        }
-
-        /// <summary>
-        /// Gets test cases for AddToDoItemToList_ValidArgs_SuccessfulExecution method.
-        /// </summary>
-        public static IEnumerable<TestCaseData> AddToDoItemToListValidArgsSuccessfulExecutionTestCases
-        {
-            get
-            {
-                yield return new TestCaseData(
-                        new ToDoEntry { OrdinalNumber = 1, Title = "Task #1", Description = "Move to CA", DueDate = new DateTime(2022, 2, 1) },
-                    3);
-            }
-        }
-
-        /// <summary>
-        /// Gets test cases for ModifyToDoEntry_PassedNull_ThrowsArgumentNullException method.
-        /// </summary>
-        public static IEnumerable<TestCaseData> ModifyToDoEntryToListPassedNullThrowsArgumentNullExceptionTestCases
-        {
-            get
-            {
-                yield return new TestCaseData(
-                        new ToDoEntry { Id = 1, OrdinalNumber = 1, Title = "Task #1", Description = "Learn C# Basics", DueDate = new DateTime(2022, 10, 1) },
-                        null);
-            }
-        }
-
-        /// <summary>
-        /// Gets test cases for ModifyToDoEntry_InvalidArgs_ThrowsArgumentException method.
-        /// </summary>
-        public static IEnumerable<TestCaseData> ModifyToDoEntryToListInvalidArgsThrowsArgumentExceptionTestCases
-        {
-            get
-            {
-                yield return new TestCaseData(
-                        new ToDoEntry { Id = 1, OrdinalNumber = 1, Title = "Task #1", Description = "Learn C# Basics", DueDate = new DateTime(2022, 10, 1) },
-                        new ToDoEntry { Title = "Task #1", Description = "Move to NY", DueDate = new DateTime(2022, 2, 1) });
-            }
-        }
-
-        /// <summary>
-        /// Gets test cases for ModifyToDoEntry_ValidArgs_ReturnsUpdatedInstance method.
-        /// </summary>
-        public static IEnumerable<TestCaseData> ModifyToDoEntryValidArgsReturnsUpdatedInstanceTestCases
-        {
-            get
-            {
-                yield return new TestCaseData(
-                        1,
-                        new ToDoEntry { OrdinalNumber = 1, Title = "Task #1", Description = "Learn IT Fundamentals", DueDate = new DateTime(2022, 10, 1) });
-            }
-        }
-
-        /// <summary>
-        /// Gets test cases for RemoveToDoEntry_PassedInvalidArgs_ThrowsArgumentException method.
-        /// </summary>
-        public static IEnumerable<TestCaseData> RemoveToDoEntryPassedInvalidArgsThrowsArgumentExceptionTestCases
-        {
-            get
-            {
-                yield return new TestCaseData(
-                    new ToDoEntry
-                    {
-                        Id = -1
-                    });
+                        new ToDoEntry { OrdinalNumber = 4, Title = "Task #4", Description = "Move to success", DueDate = new DateTime(2022, 2, 1) },
+                        3);
             }
         }
 

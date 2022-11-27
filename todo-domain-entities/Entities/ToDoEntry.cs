@@ -62,7 +62,7 @@ namespace todo_domain_entities
 
             if(OrdinalNumber == 0)
             {
-                errors.Add(new ValidationResult("OrdinalNumber is not set"));
+                errors.Add(new ValidationResult("OrdinalNumber can't be 0"));
             }
 
             if(string.IsNullOrEmpty(Title))

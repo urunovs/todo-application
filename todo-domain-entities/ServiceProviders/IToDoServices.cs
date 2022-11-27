@@ -18,7 +18,7 @@ namespace todo_aspnetmvc_ui.Models.Services
         public ToDoEntry AddToDoItemToList(ToDoEntry toDoEntryToInsert, int toDoListId);
         public ToDoList ClearToDoList(int toDoListId);
         public ToDoList ChangeVisiblityOfToDoList(int toDoListId);
-        public string ChangeToDoStatus(int toDoItemId);
+        public string ChangeToDoItemsStatus(int toDoItemId);
         public ToDoEntry ModifyToDoEntry(int toDoEntryId, ToDoEntry updatedView);
         public void RemoveToDoEntry(int toDoEntryId);
         public void RemoveAllToDoLists();

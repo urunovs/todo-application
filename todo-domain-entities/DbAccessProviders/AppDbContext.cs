@@ -10,14 +10,13 @@ namespace todo_domain_entities
     /// </summary>
     public class AppDbContext : DbContext
     {
-        public DbSet<ToDoList> ToDoLists { get; set; }
-        public DbSet<ToDoEntry> ToDoEntries { get; set; }
+        public virtual DbSet<ToDoList> ToDoLists { get; set; }
+        public virtual DbSet<ToDoEntry> ToDoEntries { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
             Database.EnsureCreated();
         }
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder.UseLazyLoadingProxies();
     }

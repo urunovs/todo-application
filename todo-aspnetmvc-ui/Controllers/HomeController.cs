@@ -18,14 +18,12 @@ namespace todo_aspnetmvc_ui.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly IToDoServices _toDoServices;
         private readonly Dictionary<ToDoItemsCategory, Func<ToDoEntry, bool>> _todoItemsSelector;
         public const int PageSize = 2;
 
-        public HomeController(ILogger<HomeController> logger, IToDoServices toDoServices)
+        public HomeController(IToDoServices toDoServices)
         {
-            _logger = logger;
             _toDoServices = toDoServices ?? throw new ArgumentNullException(nameof(toDoServices));
 
             _todoItemsSelector = new Dictionary<ToDoItemsCategory, Func<ToDoEntry, bool>>
@@ -69,11 +67,6 @@ namespace todo_aspnetmvc_ui.Controllers
                 },
                 CurrentCategory = category
             });
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

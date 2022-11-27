@@ -26,7 +26,6 @@ namespace todo_aspnetmvc_ui.Controllers
         }
 
 
-        // GET: ToDoListsController
         [HttpGet]
         public ActionResult Index(int page = 1)
         {
@@ -54,7 +53,7 @@ namespace todo_aspnetmvc_ui.Controllers
         }
 
         [HttpPost]
-        public ActionResult UpdateList(bool showHiddenLists, bool showCompletedTasks)
+        public ActionResult UpdateGeneralList(bool showHiddenLists, bool showCompletedTasks)
         {
             _configuration["ShowHiddenToDoLists"] = showHiddenLists.ToString();
             _configuration["ShowCompletedTasks"] = showCompletedTasks.ToString();
@@ -62,76 +61,34 @@ namespace todo_aspnetmvc_ui.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
         [HttpGet]
-        public ActionResult CreateToDoList(ToDoList toDoList)
+        public ActionResult OpenToDoList(int toDoListId)
         {
-            return View(_todoServices.ToDoLists.FirstOrDefault(list => list.Id == toDoList.Id));
+            return View(_todoServices.ToDoLists.FirstOrDefault(list => list.Id == toDoListId));
         }
 
-
-        // POST: ToDoListsController/CreateToDoList
         [HttpPost]
         public ActionResult CreateToDoList(string newTodoListTitle)
         {
-            try
-            {
-                var listId = _todoServices.AddToDoList(new ToDoList { MainTitle = newTodoListTitle }).Id;
+            var listId = _todoServices.AddToDoList(new ToDoList { MainTitle = newTodoListTitle }).Id;
 
-                return RedirectToAction(nameof(OpenToDoList), new { toDoListId = listId });
-            }
-            catch
-            {
-                return View();
-            }
+            return RedirectToAction(nameof(OpenToDoList), new { toDoListId = listId });
         }
 
-
-        [HttpPost]
-        public ActionResult AddToDoItem(ToDoEntry toDoItem, int todoListId)
-        {
-            try
-            {
-                _todoServices.AddToDoItemToList(toDoItem, todoListId);
-
-                return RedirectToAction(nameof(OpenToDoList), new { toDoListId = toDoItem.ToDoList.Id });
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // POST: ToDoListsController/DeleteToDoList/5
         [HttpPost]
         public ActionResult DeleteToDoList(ToDoList toDoList)
         {
-            try
-            {
-                _todoServices.RemoveToDoList(toDoList.Id);
+            _todoServices.RemoveToDoList(toDoList.Id);
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            return RedirectToAction(nameof(Index));
         }
 
-        // POST: ToDoListsController/EditToDoListTitle/obj
         [HttpPost]
         public ActionResult EditToDoListTitle(ToDoList toDoList)
         {
-            try
-            {
-                _todoServices.ModifyToDoList(toDoList.Id, toDoList);
+            _todoServices.ModifyToDoList(toDoList.Id, toDoList);
 
-                return RedirectToAction(nameof(OpenToDoList), new { toDoListId = toDoList.Id });
-            }
-            catch
-            {
-                return View();
-            }
+            return RedirectToAction(nameof(OpenToDoList), new { toDoListId = toDoList.Id });
         }
 
         [HttpPost]
@@ -143,54 +100,32 @@ namespace todo_aspnetmvc_ui.Controllers
         [HttpPost]
         public string ChangeToDoStatus(int todoItemId)
         {
-            return _todoServices.ChangeToDoStatus(todoItemId);
+            return _todoServices.ChangeToDoItemsStatus(todoItemId);
         }
 
-        // POST: ToDoListsController/EditToDoListTitle/obj
+        [HttpPost]
+        public ActionResult AddToDoItem(ToDoEntry toDoItem, int todoListId)
+        {
+            _todoServices.AddToDoItemToList(toDoItem, todoListId);
+
+            return RedirectToAction(nameof(OpenToDoList), new { toDoListId = toDoItem.ToDoList.Id });
+        }
+
         [HttpPost]
         public ActionResult EditToDoItem(ToDoEntry toDoItem, int todoListId)
         {
-            try
-            {
-                toDoItem.ToDoList = _todoServices.ToDoLists.FirstOrDefault(list => list.Id == todoListId);
-                _todoServices.ModifyToDoEntry(toDoItem.Id, toDoItem);
+            toDoItem.ToDoList = _todoServices.ToDoLists.FirstOrDefault(list => list.Id == todoListId);
+            _todoServices.ModifyToDoEntry(toDoItem.Id, toDoItem);
 
-                return RedirectToAction(nameof(OpenToDoList), new { toDoListId = toDoItem.ToDoList.Id });
-            }
-            catch
-            {
-                return View();
-            }
+            return RedirectToAction(nameof(OpenToDoList), new { toDoListId = toDoItem.ToDoList.Id });
         }
-
 
         [HttpPost]
         public ActionResult DeleteToDoItem(ToDoEntry toDoItem, int todoListId)
         {
-            try
-            {
-                _todoServices.RemoveToDoEntry(toDoItem.Id);
+            _todoServices.RemoveToDoEntry(toDoItem.Id);
 
-                return RedirectToAction(nameof(OpenToDoList), new { toDoListId = todoListId });
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: ToDoListsController/Edit/5
-        [HttpGet]
-        public ActionResult OpenToDoList(int toDoListId)
-        {
-            try
-            {
-                return View(_todoServices.ToDoLists.FirstOrDefault(list => list.Id == toDoListId));
-            }
-            catch
-            {
-                return View();
-            }
+            return RedirectToAction(nameof(OpenToDoList), new { toDoListId = todoListId });
         }
     }
 }
