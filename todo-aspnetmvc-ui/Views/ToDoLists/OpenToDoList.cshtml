@@ -33,7 +33,7 @@
             <div class="col-auto">
                 <form asp-controller="ToDoLists" asp-action="DeleteToDoList" method="post">
                     <input type="hidden" asp-for="Id" />
-                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#removeTodoListModal">
+                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#removeTodoListModal">
                         Delete list
                     </button>
                     <dlg id="removeTodoListModal" title="Remove ToDo list">

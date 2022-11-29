@@ -30,8 +30,8 @@ namespace todo_aspnetmvc_ui.Controllers
         public ActionResult Index(int page = 1)
         {
             var todoLists = bool.Parse(_configuration["ShowHiddenToDoLists"])
-                ? _todoServices.ToDoLists.ToList()
-                : _todoServices.VisibleToDoLists.ToList();
+                ? _todoServices.ToDoLists
+                : _todoServices.VisibleToDoLists;
 
             return View(new ToDoListsViewModel
             {
@@ -43,7 +43,7 @@ namespace todo_aspnetmvc_ui.Controllers
                 {
                     CurrentPage = page,
                     ItemsPerPage = PageSize,
-                    TotalItems = todoLists.Count
+                    TotalItems = todoLists.Count()
                 },
                 CompletedToDoListsCount = _todoServices.CompletedToDoLists.Count(),
                 TotalToDoListsCount = _todoServices.ToDoLists.Count(),

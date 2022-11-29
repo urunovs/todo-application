@@ -9,47 +9,28 @@ using todo_domain_entities;
 
 namespace todo_aspnetmvc_ui.Infrastructure
 {
-    public enum ToDoItemsCategory
-    {
-        [Display(Name = "Today")]
-        DueDateToday,
-
-        [Display(Name = "Tomorrow")]
-        DueDateTomorrow,
-
-        [Display(Name = "Overdue")]
-        DueDateOverdue,
-
-        [Display(Name = "This month")]
-        DueDateThisMonth
-    }
-
     public class ToDoItemsNavigationMenuViewComponent: ViewComponent
     {        
-        public ToDoItemsNavigationMenuViewComponent()
-        {
-        }
-
         public IViewComponentResult Invoke()
         {
-            var categories = new List<string>();
+            var dueDateTypes = new List<string>();
 
-            foreach (var value in Enum.GetValues(typeof(ToDoItemsCategory)))
+            foreach (var value in Enum.GetValues(typeof(ToDoItemsDueDate)))
             {
-                categories.Add(((ToDoItemsCategory)value).GetAttribute<DisplayAttribute>().Name);
+                dueDateTypes.Add(((ToDoItemsDueDate)value).GetAttribute<DisplayAttribute>().Name);
             }
 
-            if(RouteData?.Values["category"] != null)
+            if(RouteData?.Values["duedate"] != null)
             {
-                ViewBag.SelectedCategory = RouteData?.Values["category"];
+                ViewBag.SelectedDueDate = RouteData?.Values["duedate"];
             }
 
-            if(ViewBag.SelectedCategory == null)
+            if(ViewBag.SelectedDueDate == null)
             {
-                ViewBag.SelectedCategory = categories.FirstOrDefault();
+                ViewBag.SelectedDueDate = dueDateTypes.FirstOrDefault();
             }
 
-            return View(categories);
+            return View(dueDateTypes);
         }
     }
 }

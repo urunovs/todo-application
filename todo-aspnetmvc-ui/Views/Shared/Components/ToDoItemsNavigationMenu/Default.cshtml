@@ -1,22 +1,12 @@
 ﻿@model IEnumerable<string>
 
 <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-    @foreach (var category in Model)
+    @foreach (var dueDate in Model)
     {
-        <a class="nav-link@(category == ViewBag.SelectedCategory ? " active": "")" id="v-pills-@category-tab" 
+        <a class="nav-link@(dueDate == ViewBag.SelectedDueDate ? " active": "")" id="v-pills-@dueDate-tab" 
            data-toggle="pill" asp-action="Index" asp-controller="Home" role="tab" 
-           aria-controls="v-pills-@category" asp-route-category="@category" asp-route-page="1"
-           aria-selected="@(category == ViewBag.SelectedCategory ? true : false)">
-            @category</a>
+           aria-controls="v-pills-@dueDate" asp-route-duedate="@dueDate" asp-route-page="1"
+           aria-selected="@(dueDate == ViewBag.SelectedDueDate ? true : false)">
+            @dueDate</a>
     }
 </div>
-
-@*<div class="tab-content" id="v-pills-tabContent">
-    @foreach (var category in Model)
-    {
-        <div class="tab-pane fade@(category == ViewBag.SelectedCategory ? " show active": "")" id="@category"
-             role="tabpanel" aria-labelledby="v-pills-@category-tab" asp-action="Index" asp-controller="Home"
-             asp-route-category="@category"
-             asp-route-todoListPage="1"></div>
-    }
-</div>*@

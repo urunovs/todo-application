@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
+using todo_aspnetmvc_ui.Models.Services;
 using todo_domain_entities;
 
 namespace ToDoListApplication.Tests
@@ -128,26 +129,6 @@ namespace ToDoListApplication.Tests
                 yield return new TestCaseData(
                         new ToDoEntry { OrdinalNumber = 4, Title = "Task #4", Description = "Move to success", DueDate = new DateTime(2022, 2, 1) },
                         3);
-            }
-        }
-
-
-        /// <summary>
-        /// Gets test cases for SetToDoEntryStatus_ValidArgs_ReturnUpdatedInstance method.
-        /// </summary>
-        public static IEnumerable<TestCaseData> SetToDoEntryStatusValidArgsReturnsUpdatedInstanceTestCases
-        {
-            get
-            {
-                yield return new TestCaseData(
-                        1,
-                        1,
-                        ToDoStatus.Completed);
-
-                yield return new TestCaseData(
-                        1,
-                        1,
-                        ToDoStatus.InProgress);
             }
         }
     }

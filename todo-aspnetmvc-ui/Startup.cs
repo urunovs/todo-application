@@ -57,12 +57,12 @@ namespace todo_aspnetmvc_ui
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute("catpage",
-                    "{category}/Page{page:int}",
+                endpoints.MapControllerRoute("itemsPage",
+                    "{duedate}/Page{page:int}",
                     new { Controller = "Home", action = "Index" });
 
-                endpoints.MapControllerRoute("category", 
-                    "{category}",
+                endpoints.MapControllerRoute("duedate", 
+                    "{duedate}",
                     new { Controller = "Home", action = "Index", page = 1 });
 
                 endpoints.MapControllerRoute("todolist",

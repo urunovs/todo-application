@@ -1,7 +1,7 @@
 ﻿@model ToDoItemsViewModel
 
 @{
-    ViewBag.SelectedCategory = Model.CurrentCategory;
+    ViewBag.SelectedCategory = Model.SelectedDueDate;
 }
 
 
@@ -39,7 +39,7 @@
         {
             <pagenav page-model="@Model.PagingInfo" page-action="Index" page-classes-enabled="true"
                      page-class="page-link" page-class-normal="page-item" page-class-selected="page-item active"
-                     page-url-category="@Model.CurrentCategory">
+                     page-url-duedate="@Model.SelectedDueDate">
             </pagenav>
         }
     </div>

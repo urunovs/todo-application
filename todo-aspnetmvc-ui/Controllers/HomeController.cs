@@ -19,53 +19,35 @@ namespace todo_aspnetmvc_ui.Controllers
     public class HomeController : Controller
     {
         private readonly IToDoServices _toDoServices;
-        private readonly Dictionary<ToDoItemsCategory, Func<ToDoEntry, bool>> _todoItemsSelector;
-        public const int PageSize = 2;
+        public const int PageSize = 10;
 
         public HomeController(IToDoServices toDoServices)
         {
             _toDoServices = toDoServices ?? throw new ArgumentNullException(nameof(toDoServices));
-
-            _todoItemsSelector = new Dictionary<ToDoItemsCategory, Func<ToDoEntry, bool>>
-            {
-                { ToDoItemsCategory.DueDateToday, (entry) => entry.Status != ToDoStatus.Completed
-                                                          && entry.DueDate.Value.Date == DateTime.Today },
-
-                { ToDoItemsCategory.DueDateTomorrow, (entry) => entry.Status != ToDoStatus.Completed
-                                                            &&  entry.DueDate.Value.Date == DateTime.Today.AddDays(1) },
-
-                { ToDoItemsCategory.DueDateOverdue, (entry) => entry.Status != ToDoStatus.Completed
-                                                            && entry.DueDate.Value.Date < DateTime.Today },
-
-                { ToDoItemsCategory.DueDateThisMonth, (entry) => entry.Status != ToDoStatus.Completed
-                                                              && entry.DueDate.Value.Date.Month == DateTime.Today.Month
-                                                              && entry.DueDate.Value.Date.Year == DateTime.Today.Year }
-            };
         }
 
-        public ViewResult Index(string category, int page = 1)
+        public ViewResult Index(string duedate, int page = 1)
         {
-            if(category == null)
+            if (duedate == null)
             {
-                category = ToDoItemsCategory.DueDateToday.GetAttribute<DisplayAttribute>().Name;
+                duedate = ToDoItemsDueDate.DueDateToday.GetAttribute<DisplayAttribute>().Name;
             }
 
-            var itemsByCategory = GetToDoItemsBySelectedCategory(category);
+            var (selectedItems, count) = _toDoServices.GetGroupedToDoItemsByDueDate(
+                duedate.GetValueFromName<ToDoItemsDueDate>(),
+                PageSize,
+                page);
 
             return View(new ToDoItemsViewModel
             {
-                GroupedToDoItems = itemsByCategory
-                    .OrderBy(list => list.Id)                    
-                    .GroupBy(item => item.ToDoList)
-                    .Skip((page - 1) * PageSize)
-                    .Take(PageSize),
+                GroupedToDoItems = selectedItems,
                 PagingInfo = new PagingInfo
                 {
                     CurrentPage = page,
                     ItemsPerPage = PageSize,
-                    TotalItems = itemsByCategory.GroupBy(item => item.ToDoList).Count()
+                    TotalItems = count
                 },
-                CurrentCategory = category
+                SelectedDueDate = duedate
             });
         }
 
@@ -73,17 +55,6 @@ namespace todo_aspnetmvc_ui.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-
-        private IEnumerable<ToDoEntry> GetToDoItemsBySelectedCategory(string category)
-        {
-            var selectedCategory = category.GetValueFromName<ToDoItemsCategory>();
-
-            var todoItemsToView = _toDoServices.ToDoLists
-                .SelectMany(list => list.ToDoEntries)
-                .Where(_todoItemsSelector[selectedCategory]);
-
-            return todoItemsToView;
         }
     }
 }

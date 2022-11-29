@@ -10,6 +10,6 @@ namespace todo_aspnetmvc_ui.Models.ViewModels
     {
         public IEnumerable<IGrouping<ToDoList, ToDoEntry>> GroupedToDoItems { get; set; }
         public PagingInfo PagingInfo { get; set; }
-        public string CurrentCategory { get; set; }
+        public string SelectedDueDate { get; set; }
     }
 }

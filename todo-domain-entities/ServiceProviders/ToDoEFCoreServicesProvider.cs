@@ -186,7 +186,7 @@ namespace todo_domain_entities
                 throw new ArgumentException("No such ToDoEntry instance with a given Id", nameof(toDoItemId));
             }
 
-            if(toDoEntry.Status == ToDoStatus.NotStarted)
+            if (toDoEntry.Status == ToDoStatus.NotStarted)
             {
                 toDoEntry.Status = ToDoStatus.InProgress;
             }
@@ -212,6 +212,52 @@ namespace todo_domain_entities
             appDbContext.Set<ToDoEntry>().Remove(toDoEntry);
             ReorderItems(toDoEntry.ToDoList);
             appDbContext.SaveChanges();
+        }
+
+        public (IEnumerable<IGrouping<ToDoList, ToDoEntry>>, int) GetGroupedToDoItemsByDueDate(
+            ToDoItemsDueDate itemsDueDate,
+            int pageSize,
+            int page)
+        {
+            IQueryable<ToDoEntry> filteredItems;
+
+            switch (itemsDueDate)
+            {
+
+                case ToDoItemsDueDate.DueDateTomorrow:
+                    filteredItems = appDbContext.ToDoEntries
+                                    .Where((entry) => entry.Status != ToDoStatus.Completed
+                                                               && entry.DueDate.Value.Date == DateTime.Today.AddDays(1));
+                    break;
+
+                case ToDoItemsDueDate.DueDateOverdue:
+                    filteredItems = appDbContext.ToDoEntries
+                                    .Where((entry) => entry.Status != ToDoStatus.Completed
+                                                   && entry.DueDate.Value.Date < DateTime.Today);
+                    break;
+
+                case ToDoItemsDueDate.DueDateThisMonth:
+                    filteredItems = appDbContext.ToDoEntries
+                                    .Where((entry) => entry.Status != ToDoStatus.Completed
+                                                   && entry.DueDate.Value.Date.Month == DateTime.Today.Month
+                                                   && entry.DueDate.Value.Date.Year == DateTime.Today.Year);
+                    break;
+
+                default:
+                    filteredItems = appDbContext.ToDoEntries
+                                                .Where((entry) => entry.Status != ToDoStatus.Completed
+                                                               && entry.DueDate.Value.Date == DateTime.Today);
+                    break;
+            }
+
+
+            var groupedItems = filteredItems.OrderBy(item => item.Id)
+                                            .Skip((page - 1) * pageSize)
+                                            .Take(pageSize)
+                                            .AsEnumerable()
+                                            .GroupBy(item => item.ToDoList);
+
+            return (groupedItems, filteredItems.Count());
         }
 
         private void ValidateItem(IValidatableObject item)

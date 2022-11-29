@@ -8,6 +8,7 @@ using System.Data.Common;
 using System.Linq;
 using todo_aspnetmvc_ui.Models.Services;
 using ToDoListApplication.Tests;
+using System.Linq.Expressions;
 
 namespace todo_domain_entities.Test
 {
@@ -70,7 +71,7 @@ namespace todo_domain_entities.Test
         public void VisibleToDoLists_ReturnsOnlyVisibleLists()
         {
             // Arrange
-            var visibleListTitles = new string[] { "Finish EPAM courses", "Get IELTS certificate"};
+            var visibleListTitles = new string[] { "Finish EPAM courses", "Get IELTS certificate" };
             var i = 0;
 
             // Act and assert
@@ -266,6 +267,58 @@ namespace todo_domain_entities.Test
             Assert.IsFalse(toDoList.ToDoEntries.Contains(lastToDoItem));
         }
 
+        [TestCase(ToDoItemsDueDate.DueDateToday)]
+        [TestCase(ToDoItemsDueDate.DueDateTomorrow)]
+        [TestCase(ToDoItemsDueDate.DueDateOverdue)]
+        [TestCase(ToDoItemsDueDate.DueDateThisMonth)]
+        public void GetGroupedToDoItemsByDueDate_PassedDueDateType_ReturnsGroupedItems(ToDoItemsDueDate dueDate)
+        {
+            // Act
+            var (groupedItems, count) = _todoServicesProvider.GetGroupedToDoItemsByDueDate(dueDate, 10, 1);
+
+            // Assert
+            switch(dueDate)
+            {
+                case ToDoItemsDueDate.DueDateTomorrow:
+                    foreach (var items in groupedItems)
+                    {
+                        Assert.IsTrue(items.All(item => item.Status != ToDoStatus.Completed
+                                                     && item.DueDate.Value.Date == DateTime.Today.AddDays(1)));
+                    }
+
+                    
+                    break;
+
+                case ToDoItemsDueDate.DueDateOverdue:
+                    foreach (var items in groupedItems)
+                    {
+                        Assert.IsTrue(items.All(item => item.Status != ToDoStatus.Completed
+                                                     && item.DueDate.Value.Date < DateTime.Today));
+                    }
+                    break;
+
+                case ToDoItemsDueDate.DueDateThisMonth:
+                    foreach (var items in groupedItems)
+                    {
+                        Assert.IsTrue(items.All(item => item.Status != ToDoStatus.Completed
+                                                     && item.DueDate.Value.Date.Month == DateTime.Today.Month
+                                                     && item.DueDate.Value.Date.Year == DateTime.Today.Year));
+                    }
+                    break;
+
+                default:
+                    foreach (var items in groupedItems)
+                    {
+                        Assert.IsTrue(items.All(item => item.Status != ToDoStatus.Completed
+                                                     && item.DueDate.Value.Date == DateTime.Today));
+                    }
+                    break;
+            }
+
+            var expectedItemsCount = groupedItems.Sum(items => items.Count());
+            Assert.AreEqual(expectedItemsCount, count);
+        }
+
         [Test]
         public void ClearToDoList_PassedWrongListId_ThrowsArgumentException()
         {
@@ -352,7 +405,7 @@ namespace todo_domain_entities.Test
                     {
                         new ToDoEntry {OrdinalNumber = 1, Title = "Task #1", Description = "Learn C# Basics", DueDate = new DateTime(2022, 10, 1) },
                         new ToDoEntry {OrdinalNumber = 2,  Title = "Task #2", Description = "Learn C# Advanced", DueDate = new DateTime(2022, 10, 1) },
-                        new ToDoEntry {OrdinalNumber = 3,  Title = "Task #3", Description = "Learn ASP.NET Core", DueDate = new DateTime(2022, 11, 9) },
+                        new ToDoEntry {OrdinalNumber = 3,  Title = "Task #3", Description = "Learn ASP.NET Core", DueDate = new DateTime(2022, 11, 30) },
                     },
                     IsVisible = true
                 },
@@ -362,9 +415,9 @@ namespace todo_domain_entities.Test
                     MainTitle = "Get IELTS certificate",
                     ToDoEntries = new List<ToDoEntry>
                     {
-                            new ToDoEntry {OrdinalNumber = 1, Title = "Task #1", Description = "Prepare to exam", DueDate = new DateTime(2022, 6, 1), Status = ToDoStatus.Completed },
-                            new ToDoEntry {OrdinalNumber = 2, Title = "Task #2", Description = "Learn English", DueDate = new DateTime(2022, 8, 1), Status = ToDoStatus.Completed },
-                            new ToDoEntry {OrdinalNumber = 3, Title = "Task #3", Description = "Pass exam", DueDate = new DateTime(2022, 8, 2), Status = ToDoStatus.Completed },
+                            new ToDoEntry {OrdinalNumber = 1, Title = "Task #1", Description = "Prepare to exam", DueDate = new DateTime(2022, 10, 1), Status = ToDoStatus.Completed },
+                            new ToDoEntry {OrdinalNumber = 2, Title = "Task #2", Description = "Learn English", DueDate = new DateTime(2022, 11, 28), Status = ToDoStatus.Completed },
+                            new ToDoEntry {OrdinalNumber = 3, Title = "Task #3", Description = "Pass exam", DueDate = new DateTime(2022, 12, 20), Status = ToDoStatus.Completed },
                     },
                     IsVisible = true
                 },
@@ -374,9 +427,9 @@ namespace todo_domain_entities.Test
                     MainTitle = "Begin new life",
                     ToDoEntries = new List<ToDoEntry>
                     {
-                            new ToDoEntry {OrdinalNumber = 1, Title = "Task #1", Description = "Move to CA", DueDate = new DateTime(2022, 2, 1) },
-                            new ToDoEntry {OrdinalNumber = 2, Title = "Task #2", Description = "Find a job", DueDate = new DateTime(2022, 3, 1) },
-                            new ToDoEntry {OrdinalNumber = 3, Title = "Task #3", Description = "Buy a flat", DueDate = new DateTime(2022, 8, 1) },
+                            new ToDoEntry {OrdinalNumber = 1, Title = "Task #1", Description = "Move to CA", DueDate = new DateTime(2022, 11, 20) },
+                            new ToDoEntry {OrdinalNumber = 2, Title = "Task #2", Description = "Find a job", DueDate = new DateTime(2022, 11, 29) },
+                            new ToDoEntry {OrdinalNumber = 3, Title = "Task #3", Description = "Buy a flat", DueDate = new DateTime(2022, 11, 30) },
                     },
                     IsVisible = false
                 });
