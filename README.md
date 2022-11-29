@@ -57,15 +57,19 @@ or that can be queried from the database. Also it accepts context configuration 
 
 
 ### Presentation logic layer
+The UI part of application is located in ASP.NET Core MVC framework based [todo-aspnetmvc-ui](./todo-aspnetmvc-ui/) project and using domain model through reference to model project.
 
 #### Configuration and Startup
+In `Startup` class configuring services to work with Controllers/Views and loading database access settings from [appsettings.json](./todo-aspnetmvc-ui/appsettings.json) file. Also in `Startup` class adding middleware components and mapping routing templates, populating the database with initial data.
 
 #### Controllers
+There are 2 controller classes with corresponding action methods:
+- `HomeController` - generating response of application home page.
+- `ToDoListsController` - generating responses of actions on ToDoList and ToDoEntry objects.
+These controllers performing interaction logic between UI and domain services.
 
 #### Views
-
-#### Models
-
-#### Infrastructure
+Views is a razor page based files with implementaion of ToDo list ojbects presentation. There are 2 main folders corresponding to controller names and common folder with shared view files. As UI styled forms template used bootstrap library.
 
 ## Test coverage
+To cover domain model with unit tests used NUnit unit-testing framework and created 32 test cases for `IToDoServices` interface implementation methods of `ToDoEFCoreServicesProvider` class. As a testing strategy used [SQLite with in-memory feature](https://learn.microsoft.com/en-us/ef/core/testing/choosing-a-testing-strategy#sqlite-as-a-database-fake) as a database fake approach because of Entity Framework Core 5 which provides database access [does not supports proper mocking functionality](https://learn.microsoft.com/en-us/ef/core/testing/choosing-a-testing-strategy#mocking-or-stubbing-dbcontext-and-dbset) of `DbSet` classes.
