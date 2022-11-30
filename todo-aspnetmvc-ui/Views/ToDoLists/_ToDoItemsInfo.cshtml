@@ -18,6 +18,7 @@
                 <th scope="col">Status</th>
                 <th scope="col">Description</th>
                 <th scope="col">Notes</th>
+                <th scope="col">Created at</th>
                 <th scope="auto">Actions</th>
             </tr>
         </thead>
@@ -25,46 +26,47 @@
         <tbody>
             @foreach (var todoItem in orderedToDoItems)
             {
-                <tr>
-                    <th scope="row">@todoItem.OrdinalNumber</th>
-                    <td>@todoItem.Title</td>
-                    <td>@todoItem.DueDate</td>
-                    <td>
-                        @if (todoItem.Status == ToDoStatus.NotStarted)
-                        {
-                            <img id="statusImg@(todoItem.Id)" width="20" src="~/img/icons/status-not-started.png">
-                        }
-                        else if (todoItem.Status == ToDoStatus.InProgress)
-                        {
-                            <img id="statusImg@(todoItem.Id)" width="20" src="~/img/icons/status-in-progress.png">
-                        }
-                        else
-                        {
-                            <img id="statusImg@(todoItem.Id)" width="20" src="~/img/icons/status-completed.png">
-                        }
-                        <span id="statusSpan@(todoItem.Id)">
-                            @(todoItem.Status.GetAttribute<DisplayAttribute>().Name)
-                        </span>
-                    </td>
-                    <td>@todoItem.Description</td>
-                    <td>@(string.IsNullOrEmpty(todoItem.Notes) ? "-" : todoItem.Notes)</td>
-                    <td>
-                        <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editItem@(todoItem.Id)">
-                            Edit
-                        </button>
-                        <partial name="_EditToDoItem" model="@todoItem" />
-                        <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#removeItem@(todoItem.Id)">
-                            Remove
-                        </button>
-                        <form method="post" asp-controller="ToDoLists" asp-action="DeleteToDoItem">
-                            <input type="hidden" asp-for="@todoItem.Id" />
-                            <input type="hidden" name="todoListId" value="@todoItem.ToDoList.Id" />
-                            <dlg id="removeItem@(todoItem.Id)" title="Remove ToDo item">
-                                Are you sure to want to completely remove this ToDo item?
-                            </dlg>
-                        </form>
-                    </td>
-                </tr>
+            <tr>
+                <th scope="row">@todoItem.OrdinalNumber</th>
+                <td>@todoItem.Title</td>
+                <td>@todoItem.DueDate.Value.ToShortDateString()</td>
+                <td>
+                    @if (todoItem.Status == ToDoStatus.NotStarted)
+                    {
+                        <img id="statusImg@(todoItem.Id)" width="20" src="~/img/icons/status-not-started.png">
+                    }
+                    else if (todoItem.Status == ToDoStatus.InProgress)
+                    {
+                        <img id="statusImg@(todoItem.Id)" width="20" src="~/img/icons/status-in-progress.png">
+                    }
+                    else
+                    {
+                        <img id="statusImg@(todoItem.Id)" width="20" src="~/img/icons/status-completed.png">
+                    }
+                    <span id="statusSpan@(todoItem.Id)">
+                        @(todoItem.Status.GetAttribute<DisplayAttribute>().Name)
+                    </span>
+                </td>
+                <td>@todoItem.Description</td>
+                <td>@(string.IsNullOrEmpty(todoItem.Notes) ? "-" : todoItem.Notes)</td>
+                <td>@todoItem.CreationDate</td>
+                <td>
+                    <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editItem@(todoItem.Id)">
+                        Edit
+                    </button>
+                    <partial name="_EditToDoItem" model="@todoItem" />
+                    <button type="button" class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#removeItem@(todoItem.Id)">
+                        Remove
+                    </button>
+                    <form method="post" asp-controller="ToDoLists" asp-action="DeleteToDoItem">
+                        <input type="hidden" asp-for="@todoItem.Id" />
+                        <input type="hidden" name="todoListId" value="@todoItem.ToDoList.Id" />
+                        <dlg id="removeItem@(todoItem.Id)" title="Remove ToDo item">
+                            Are you sure to want to completely remove this ToDo item?
+                        </dlg>
+                    </form>
+                </td>
+            </tr>
             }
         </tbody>
     </table>

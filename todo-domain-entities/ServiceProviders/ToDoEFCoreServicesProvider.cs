@@ -145,6 +145,7 @@ namespace todo_domain_entities
             toDoEntryToUpdate.DueDate = updatedView.DueDate;
             toDoEntryToUpdate.Status = updatedView.Status;
             toDoEntryToUpdate.OrdinalNumber = updatedView.OrdinalNumber;
+            toDoEntryToUpdate.Notes = updatedView.Notes;
 
             if (toDoEntryToUpdate.ToDoList.ToDoEntries.Count(item => item.OrdinalNumber == updatedView.OrdinalNumber) > 1)
             {

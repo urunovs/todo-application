@@ -27,7 +27,7 @@
                 <tr>
                     <th>@todoItem.OrdinalNumber</th>
                     <td>@todoItem.Title</td>
-                    <td>@todoItem.DueDate</td>
+                    <td>@todoItem.DueDate.Value.ToShortDateString()</td>
                     <td>
                         @if (todoItem.Status == ToDoStatus.NotStarted)
                         {
