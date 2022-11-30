@@ -76,11 +76,12 @@
                         <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#addItemModal">
                             Add task
                         </button>
+                        <partial name="_AddToDoItem" model="@(new ToDoEntry { ToDoList = Model})" />
                     </form>
                 </div>
             </div>
         </div>
-        <partial name="_AddToDoItem" model="@(new ToDoEntry { ToDoList = Model})" />
+        
     </div>
         }
 
