@@ -24,7 +24,7 @@ namespace todo_aspnetmvc_ui.Models.Services
 
     public interface IToDoServices
     {
-        public IEnumerable<ToDoList> ToDoLists { get; }
+        public IQueryable<ToDoList> ToDoLists { get; }
         public IEnumerable<ToDoList> VisibleToDoLists { get; }
         public IEnumerable<ToDoList> CompletedToDoLists { get; }
 
@@ -39,5 +39,6 @@ namespace todo_aspnetmvc_ui.Models.Services
         public (IEnumerable<IGrouping<ToDoList, ToDoEntry>>, int) GetGroupedToDoItemsByDueDate(ToDoItemsDueDate itemsDueDate, int pageSize, int page);
         public void RemoveToDoEntry(int toDoEntryId);
         public void RemoveAllToDoLists();
+        public SummaryOfToDoLists GetSummaryOfToDoLists();
     }
 }

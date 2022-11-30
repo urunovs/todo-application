@@ -7,6 +7,14 @@ using System.Text;
 
 namespace todo_domain_entities
 {
+    public struct SummaryOfToDoLists
+    {
+        public int TotalListsCount { get; set; }
+        public int NotStartedListsCount { get; set; }
+        public int InProgressListsCount { get; set; }
+        public int CompletedListsCount { get; set; }
+    }
+
     /// <summary>
     /// ToDoList class that represents list of T0D0 entries
     /// </summary>

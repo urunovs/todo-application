@@ -45,11 +45,10 @@ namespace todo_aspnetmvc_ui.Controllers
                     ItemsPerPage = PageSize,
                     TotalItems = todoLists.Count()
                 },
-                CompletedToDoListsCount = _todoServices.CompletedToDoLists.Count(),
-                TotalToDoListsCount = _todoServices.ToDoLists.Count(),
+                SummaryOfToDoLists = _todoServices.GetSummaryOfToDoLists(),
                 ShowHiddenToDoLists = bool.Parse(_configuration["ShowHiddenToDoLists"]),
                 ShowCompletedTasks = bool.Parse(_configuration["ShowCompletedTasks"])
-            });
+            }) ;
         }
 
         [HttpPost]

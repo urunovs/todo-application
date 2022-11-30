@@ -14,20 +14,20 @@ namespace todo_domain_entities
     /// </summary>
     public class ToDoEFCoreServicesProvider : IToDoServices, IDisposable
     {
-        private readonly AppDbContext appDbContext;
-        public IEnumerable<ToDoList> ToDoLists => appDbContext.Set<ToDoList>().AsEnumerable();
+        private readonly AppDbContext _appDbContext;
+        public IQueryable<ToDoList> ToDoLists => _appDbContext.Set<ToDoList>();
 
         public IEnumerable<ToDoList> VisibleToDoLists =>
-            appDbContext.Set<ToDoList>().Where(list => list.IsVisible).AsEnumerable();
+            _appDbContext.Set<ToDoList>().Where(list => list.IsVisible).AsEnumerable();
 
         public IEnumerable<ToDoList> CompletedToDoLists =>
-            appDbContext.Set<ToDoList>().Where(list => list.ToDoEntries
+            _appDbContext.Set<ToDoList>().Where(list => list.ToDoEntries
                                             .All(item => item.Status == ToDoStatus.Completed));
 
 
         public ToDoEFCoreServicesProvider(AppDbContext appDbContext)
         {
-            this.appDbContext = appDbContext;
+            this._appDbContext = appDbContext;
         }
 
         public void Dispose()
@@ -38,37 +38,37 @@ namespace todo_domain_entities
 
         protected virtual void Dispose(bool disposing)
         {
-            appDbContext.Dispose();
+            _appDbContext.Dispose();
         }
 
         public ToDoList AddToDoList(ToDoList toDoList)
         {
             ValidateItem(toDoList);
 
-            toDoList = appDbContext.Set<ToDoList>().Add(toDoList).Entity;
-            appDbContext.SaveChanges();
+            toDoList = _appDbContext.Set<ToDoList>().Add(toDoList).Entity;
+            _appDbContext.SaveChanges();
 
             return toDoList;
         }
 
         public void RemoveToDoList(int toDoListId)
         {
-            var toDoList = appDbContext.Set<ToDoList>().Find(toDoListId);
+            var toDoList = _appDbContext.Set<ToDoList>().Find(toDoListId);
 
             if (toDoList == null)
             {
                 throw new ArgumentException("No such ToDoList instance with a given Id", nameof(toDoListId));
             }
 
-            appDbContext.Set<ToDoList>().Remove(toDoList);
-            appDbContext.SaveChanges();
+            _appDbContext.Set<ToDoList>().Remove(toDoList);
+            _appDbContext.SaveChanges();
         }
 
         public ToDoList ModifyToDoList(int toDoListId, ToDoList updatedView)
         {
             ValidateItem(updatedView);
 
-            var toDoListToUpdate = appDbContext.Set<ToDoList>().Find(toDoListId);
+            var toDoListToUpdate = _appDbContext.Set<ToDoList>().Find(toDoListId);
 
             if (toDoListToUpdate == null)
             {
@@ -78,14 +78,14 @@ namespace todo_domain_entities
             toDoListToUpdate.MainTitle = updatedView.MainTitle;
             toDoListToUpdate.IsVisible = updatedView.IsVisible;
 
-            appDbContext.SaveChanges();
+            _appDbContext.SaveChanges();
 
             return toDoListToUpdate;
         }
 
         public ToDoList ChangeVisiblityOfToDoList(int toDoListId)
         {
-            var toDoListToUpdate = appDbContext.Set<ToDoList>().Find(toDoListId);
+            var toDoListToUpdate = _appDbContext.Set<ToDoList>().Find(toDoListId);
 
             if (toDoListToUpdate == null)
             {
@@ -94,7 +94,7 @@ namespace todo_domain_entities
 
             toDoListToUpdate.IsVisible = !toDoListToUpdate.IsVisible;
 
-            appDbContext.SaveChanges();
+            _appDbContext.SaveChanges();
 
             return toDoListToUpdate;
         }
@@ -108,7 +108,7 @@ namespace todo_domain_entities
 
             ValidateItem(toDoEntryToInsert);
 
-            var toDoList = appDbContext.Set<ToDoList>().Find(toDoListId);
+            var toDoList = _appDbContext.Set<ToDoList>().Find(toDoListId);
 
             if (toDoList == null)
             {
@@ -116,14 +116,14 @@ namespace todo_domain_entities
             }
 
             toDoEntryToInsert.ToDoList = toDoList;
-            appDbContext.Set<ToDoEntry>().Add(toDoEntryToInsert);
+            _appDbContext.Set<ToDoEntry>().Add(toDoEntryToInsert);
 
             if (toDoList.ToDoEntries.Any(item => item.OrdinalNumber == toDoEntryToInsert.OrdinalNumber))
             {
                 ReorderItems(toDoEntryToInsert.ToDoList, toDoEntryToInsert);
             }
 
-            appDbContext.SaveChanges();
+            _appDbContext.SaveChanges();
             toDoList.ToDoEntries.Add(toDoEntryToInsert);
 
             return toDoEntryToInsert;
@@ -133,7 +133,7 @@ namespace todo_domain_entities
         {
             ValidateItem(updatedView);
 
-            var toDoEntryToUpdate = appDbContext.Set<ToDoEntry>().Find(toDoEntryId);
+            var toDoEntryToUpdate = _appDbContext.Set<ToDoEntry>().Find(toDoEntryId);
 
             if (toDoEntryToUpdate == null)
             {
@@ -152,20 +152,20 @@ namespace todo_domain_entities
                 ReorderItems(toDoEntryToUpdate.ToDoList, toDoEntryToUpdate);
             }
 
-            appDbContext.SaveChanges();
+            _appDbContext.SaveChanges();
 
             return toDoEntryToUpdate;
         }
 
         public void RemoveAllToDoLists()
         {
-            appDbContext.Set<ToDoList>().RemoveRange(appDbContext.Set<ToDoList>());
-            appDbContext.SaveChanges();
+            _appDbContext.Set<ToDoList>().RemoveRange(_appDbContext.Set<ToDoList>());
+            _appDbContext.SaveChanges();
         }
 
         public ToDoList ClearToDoList(int toDoListId)
         {
-            var toDoList = appDbContext.Set<ToDoList>().Find(toDoListId);
+            var toDoList = _appDbContext.Set<ToDoList>().Find(toDoListId);
 
             if (toDoList == null)
             {
@@ -173,14 +173,14 @@ namespace todo_domain_entities
             }
 
             toDoList.ToDoEntries.Clear();
-            appDbContext.SaveChanges();
+            _appDbContext.SaveChanges();
 
             return toDoList;
         }
 
         public string ChangeToDoItemsStatus(int toDoItemId)
         {
-            var toDoEntry = appDbContext.Set<ToDoEntry>().Find(toDoItemId);
+            var toDoEntry = _appDbContext.Set<ToDoEntry>().Find(toDoItemId);
 
             if (toDoEntry == null)
             {
@@ -196,13 +196,13 @@ namespace todo_domain_entities
                 toDoEntry.Status = ToDoStatus.Completed;
             }
 
-            appDbContext.SaveChanges();
+            _appDbContext.SaveChanges();
             return toDoEntry.Status.ToString();
         }
 
         public void RemoveToDoEntry(int toDoEntryId)
         {
-            var toDoEntry = appDbContext.Set<ToDoEntry>().Find(toDoEntryId);
+            var toDoEntry = _appDbContext.Set<ToDoEntry>().Find(toDoEntryId);
 
             if (toDoEntry == null)
             {
@@ -210,9 +210,9 @@ namespace todo_domain_entities
             }
 
             toDoEntry.ToDoList.ToDoEntries.Remove(toDoEntry);
-            appDbContext.Set<ToDoEntry>().Remove(toDoEntry);
+            _appDbContext.Set<ToDoEntry>().Remove(toDoEntry);
             ReorderItems(toDoEntry.ToDoList);
-            appDbContext.SaveChanges();
+            _appDbContext.SaveChanges();
         }
 
         public (IEnumerable<IGrouping<ToDoList, ToDoEntry>>, int) GetGroupedToDoItemsByDueDate(
@@ -226,26 +226,26 @@ namespace todo_domain_entities
             {
 
                 case ToDoItemsDueDate.DueDateTomorrow:
-                    filteredItems = appDbContext.ToDoEntries
+                    filteredItems = _appDbContext.ToDoEntries
                                     .Where((entry) => entry.Status != ToDoStatus.Completed
                                                                && entry.DueDate.Value.Date == DateTime.Today.AddDays(1));
                     break;
 
                 case ToDoItemsDueDate.DueDateOverdue:
-                    filteredItems = appDbContext.ToDoEntries
+                    filteredItems = _appDbContext.ToDoEntries
                                     .Where((entry) => entry.Status != ToDoStatus.Completed
                                                    && entry.DueDate.Value.Date < DateTime.Today);
                     break;
 
                 case ToDoItemsDueDate.DueDateThisMonth:
-                    filteredItems = appDbContext.ToDoEntries
+                    filteredItems = _appDbContext.ToDoEntries
                                     .Where((entry) => entry.Status != ToDoStatus.Completed
                                                    && entry.DueDate.Value.Date.Month == DateTime.Today.Month
                                                    && entry.DueDate.Value.Date.Year == DateTime.Today.Year);
                     break;
 
                 default:
-                    filteredItems = appDbContext.ToDoEntries
+                    filteredItems = _appDbContext.ToDoEntries
                                                 .Where((entry) => entry.Status != ToDoStatus.Completed
                                                                && entry.DueDate.Value.Date == DateTime.Today);
                     break;
@@ -259,6 +259,17 @@ namespace todo_domain_entities
                                             .GroupBy(item => item.ToDoList);
 
             return (groupedItems, filteredItems.Count());
+        }
+
+        public SummaryOfToDoLists GetSummaryOfToDoLists()
+        {
+            return new SummaryOfToDoLists
+            {
+                TotalListsCount = _appDbContext.ToDoLists.Count(),
+                NotStartedListsCount = _appDbContext.ToDoLists.Count(list => list.ToDoEntries.All(list => list.Status == ToDoStatus.NotStarted)),
+                InProgressListsCount = _appDbContext.ToDoLists.Count(list => list.ToDoEntries.Any(list => list.Status == ToDoStatus.InProgress)),
+                CompletedListsCount = _appDbContext.ToDoLists.Count(list => list.ToDoEntries.All(list => list.Status == ToDoStatus.Completed))
+            };
         }
 
         private void ValidateItem(IValidatableObject item)
@@ -279,7 +290,7 @@ namespace todo_domain_entities
 
         private void ReorderItems(ToDoList toDoList, ToDoEntry originalItem = null)
         {
-            var orderedItems = appDbContext.Set<ToDoList>()
+            var orderedItems = _appDbContext.Set<ToDoList>()
                                            .Find(toDoList.Id).ToDoEntries
                                            .AsEnumerable()
                                            .OrderBy(item => item.OrdinalNumber);

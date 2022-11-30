@@ -26,10 +26,30 @@
         <tbody>
             @foreach (var todoItem in orderedToDoItems)
             {
+                var dueDateInDays = (todoItem.DueDate.Value.Date - DateTime.Now.Date).TotalDays;
+                string dueDateInDaysToView = "today";
+
+                if (dueDateInDays > 0)
+                {
+                    dueDateInDaysToView = $"in {dueDateInDays} " + (dueDateInDays != 1 ? "days" : "day");
+                }
+                else if (dueDateInDays < 0)
+                {
+                    dueDateInDaysToView = $"{dueDateInDays * -1} " + (dueDateInDays != 1 ? "days" : "day") + " overdue";
+                }
             <tr>
                 <th scope="row">@todoItem.OrdinalNumber</th>
                 <td>@todoItem.Title</td>
-                <td>@todoItem.DueDate.Value.ToShortDateString()</td>
+                <td>
+                    <div class="col">
+                        <div class="row">
+                            @todoItem.DueDate.Value.ToShortDateString()
+                        </div>
+                        <div class="row">
+                            (@dueDateInDaysToView)
+                        </div>
+                    </div>
+                </td>
                 <td>
                     @if (todoItem.Status == ToDoStatus.NotStarted)
                     {

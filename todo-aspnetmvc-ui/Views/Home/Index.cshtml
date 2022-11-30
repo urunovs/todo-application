@@ -6,12 +6,12 @@
 
 
 <div class="row m-1 p-1">
-    <div id="categories" class="col-3">
+    <div id="categories" class="col-auto">
 
         <h5>View tasks by due date</h5>
         <vc:to-do-items-navigation-menu />
     </div>
-    <div class="col-9" style="background-color:azure">
+    <div class="col" style="background-color:azure">
         @if (Model.GroupedToDoItems.Count() != 0)
         {
             @foreach (var list in Model.GroupedToDoItems)
@@ -24,7 +24,7 @@
                     </a>
                 </h6>
 
-                <partial name="_ToDoItems" model="@list" />
+                <partial name="_ToDoItems" model="@list.OrderBy(entry => entry.OrdinalNumber)" />
                 <br />
             }
         }

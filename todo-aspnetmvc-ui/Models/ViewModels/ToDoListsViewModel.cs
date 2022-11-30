@@ -10,11 +10,7 @@ namespace todo_aspnetmvc_ui.Models.ViewModels
     {
         public IEnumerable<ToDoList> ToDoLists { get; set; }
         public PagingInfo PagingInfo { get; set; }
-        public int TotalToDoListsCount { get; set; }
-        public int CompletedToDoListsCount { get; set; }
-        public int CompletionPercentage => CompletedToDoListsCount != 0
-                                       ? (int)((double)CompletedToDoListsCount / TotalToDoListsCount * 100)
-                                       : 0;
+        public SummaryOfToDoLists SummaryOfToDoLists { get; set; }
         public bool ShowHiddenToDoLists { get; set; } = true;
         public bool ShowCompletedTasks { get; set; } = true;
     }

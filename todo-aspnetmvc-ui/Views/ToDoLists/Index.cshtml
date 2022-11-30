@@ -9,21 +9,13 @@
 @model ToDoListsViewModel
 
 <div class="row m-1 p-1" style="background: whitesmoke">
-    <div id="todosummary" class="col-3">
-
+    <div id="todosummary" class="col-auto">
         <div class="nav flex-column nav-pills" id="v-pills-tab" role="textbox" aria-orientation="vertical">
-            <h3>Summary of ToDo lists</h3>
-            <span>Total completion: @Model.CompletionPercentage %</span>
-            <br />
-            <h4>Total ToDo lists count: @Model.TotalToDoListsCount</h4>
-            @if (Model.CompletedToDoListsCount != 0)
-            {
-                <span>Completed: @Model.CompletedToDoListsCount</span>
-            }
+            <partial name="_ToDoListsSummary" model="Model" />
         </div>
         <br />
     </div>
-    <div class="col-9">
+    <div class="col">
         <div class="col-3 col-md-5">
             <form method="post" asp-action="CreateToDoList" asp-controller="ToDoLists" autocomplete="off">
                 <div class="input-group mb-3">
@@ -94,7 +86,7 @@
                             <hr />
                             <form method="post" asp-controller="ToDoLists">
                                 <partial name="_ToDoItems" model="@(Model.ShowCompletedTasks
-                                    ? todoList.ToDoEntries
+                                    ? todoList.ToDoEntries.OrderBy(entry => entry.OrdinalNumber)
                                     : todoList.ToDoEntries.Where(list => list.Status != ToDoStatus.Completed))
                                     .OrderBy(item => item.OrdinalNumber)" />
                             </form>

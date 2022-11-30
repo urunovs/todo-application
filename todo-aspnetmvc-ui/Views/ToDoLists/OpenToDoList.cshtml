@@ -12,11 +12,11 @@
 }
 
 <div class="row m-1 p-1">
-    <div id="todolistCreation" class="col-3">
-        <partial name="_ToDoListSummary" model="@Model" />
+    <div id="todolistCreation" class="col-auto">
+        <partial name="_SingleToDoListSummary" model="@Model" />
         <br />
     </div>
-    <div class="col-9">
+    <div class="col" style="background:azure">
         <div class="hstack gap-3">
             <div class="col-auto">
                 <h3 for="inputToDoListTitle" class="form-label">ToDo: @Model.MainTitle</h3>
@@ -65,24 +65,24 @@
         }
         else
         {
-    <div class="d-flex justify-content-center flex-column">
-        <p class="fs-4 fw-lighter text-center">
-            No tasks yet
-        </p>
-        <div class="container">
-            <div class="row">
-                <div class="col text-center">
-                    <form method="post" asp-controller="ToDoLists">
-                        <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#addItemModal">
-                            Add task
-                        </button>
-                        <partial name="_AddToDoItem" model="@(new ToDoEntry { ToDoList = Model})" />
-                    </form>
+            <div class="d-flex justify-content-center flex-column">
+                <p class="fs-4 fw-lighter text-center">
+                    No tasks yet
+                </p>
+                <div class="container">
+                    <div class="row">
+                        <div class="col text-center">
+                            <form method="post" asp-controller="ToDoLists">
+                                <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#addItemModal">
+                                    Add task
+                                </button>
+                                <partial name="_AddToDoItem" model="@(new ToDoEntry { ToDoList = Model})" />
+                            </form>
+                        </div>
+                    </div>
                 </div>
+
             </div>
-        </div>
-        
-    </div>
         }
 
         <hr class="hr" />

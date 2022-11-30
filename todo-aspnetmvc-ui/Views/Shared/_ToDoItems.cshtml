@@ -3,10 +3,6 @@
 
 @model IEnumerable<ToDoEntry>
 
-@{
-    var orderedToDoItems = Model.OrderBy(entry => entry.OrdinalNumber);
-}
-
 <div>
     <table class="table table-hover">
         <thead>
@@ -22,12 +18,33 @@
         </thead>
 
         <tbody>
-            @foreach (var todoItem in orderedToDoItems)
+            @foreach (var todoItem in Model)
             {
+                var dueDateInDays = (todoItem.DueDate.Value.Date - DateTime.Now.Date).TotalDays;
+                string dueDateInDaysToView = "today";
+
+                if(dueDateInDays > 0)
+                {
+                    dueDateInDaysToView = $"in {dueDateInDays} " + (dueDateInDays != 1 ? "days" : "day");
+                }
+                else if(dueDateInDays < 0)
+                {
+                    dueDateInDaysToView = $"{dueDateInDays * -1} " + (dueDateInDays != 1 ? "days" : "day") + " overdue";
+                }
+
                 <tr>
                     <th>@todoItem.OrdinalNumber</th>
                     <td>@todoItem.Title</td>
-                    <td>@todoItem.DueDate.Value.ToShortDateString()</td>
+                    <td>
+                        <div class="col">
+                            <div class="row">
+                                @todoItem.DueDate.Value.ToShortDateString()
+                            </div>
+                            <div class="row">
+                                (@dueDateInDaysToView)
+                            </div>
+                        </div>
+                    </td>
                     <td>
                         @if (todoItem.Status == ToDoStatus.NotStarted)
                         {
