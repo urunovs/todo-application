@@ -52,7 +52,7 @@
         @if (Model.ToDoEntries.Count != 0)
         {
             <div class="col-auto">
-                <form method="post" asp-controller="ToDoLists">
+                <form method="post" asp-controller="ToDoLists" autocomplete="off">
                     <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#addItemModal">
                         Add task
                     </button>
