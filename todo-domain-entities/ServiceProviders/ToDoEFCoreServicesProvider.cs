@@ -335,6 +335,18 @@ namespace todo_domain_entities
                             new ToDoEntry {OrdinalNumber = 3, Title = "Buy a flat", DueDate = new DateTime(2022, 8, 1) },
                             new ToDoEntry {OrdinalNumber = 4, Title = "Buy a car", DueDate = new DateTime(2022, 12, 1) }
                         }
+                    },
+
+                    new ToDoList
+                    {
+                        MainTitle = "Cook a plov",
+                        ToDoEntries = new List<ToDoEntry>
+                        {
+                            new ToDoEntry {OrdinalNumber = 1, Title = "Buy groceries", Description = "A rice, carrot, oil, meat", DueDate = DateTime.Today.AddHours(16) },
+                            new ToDoEntry {OrdinalNumber = 2, Title = "Find the recipe", Description = "Google plov's recipe", DueDate = DateTime.Today.AddHours(16.5) },
+                            new ToDoEntry {OrdinalNumber = 3, Title = "Prepare the ingredients", Description = "Cut up the carrot, wash a rice and meat", DueDate = DateTime.Today.AddHours(17) },
+                            new ToDoEntry {OrdinalNumber = 4, Title = "Cook a plov", Description = "Cook and follow a recipe", DueDate = DateTime.Today.AddHours(19.5) }
+                        }
                     }
                 );
 
