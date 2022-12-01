@@ -9,40 +9,40 @@
 <div class="nav flex-column nav-pills" id="v-pills-tab" role="textbox" aria-orientation="vertical">
     <h2>Summary</h2>
     <hr />
-        <h4>Lists count: @Model.SummaryOfToDoLists.TotalListsCount</h4>
-        @if (completedTasksCount != 0)
-        {
-            <div class="row">
-                <div class="col-auto">
-                    <img width="20" src="~/img/icons/status-completed.png">
-                </div>
-                <div class="col-auto gx-sm-0">
-                    <span>Completed: @completedTasksCount</span>
-                </div>
+    <h4>Lists count: @Model.SummaryOfToDoLists.TotalListsCount</h4>
+    @if (completedTasksCount != 0)
+    {
+        <div class="row">
+            <div class="col-auto">
+                <img width="20" src="~/img/icons/status-completed.png">
             </div>
-        }
+            <div class="col-auto gx-sm-0">
+                <span>Completed: @completedTasksCount</span>
+            </div>
+        </div>
+    }
 
-        @if (tasksInProgressCount != 0)
-        {
-            <div class="row">
-                <div class="col-auto">
-                    <img width="20" src="~/img/icons/status-in-progress.png">
-                </div>
-                <div class="col-auto gx-sm-0">
-                    <span>In progress: @tasksInProgressCount</span>
-                </div>
+    @if (tasksInProgressCount != 0)
+    {
+        <div class="row">
+            <div class="col-auto">
+                <img width="20" src="~/img/icons/status-in-progress.png">
             </div>
-        }
+            <div class="col-auto gx-sm-0">
+                <span>In progress: @tasksInProgressCount</span>
+            </div>
+        </div>
+    }
 
-        @if (notStartedTasksCount != 0)
-        {
-            <div class="row">
-                <div class="col-auto">
-                    <img width="20" src="~/img/icons/status-not-started.png">
-                </div>
-                <div class="col-auto gx-sm-0">
-                    <span>Not started: @notStartedTasksCount</span>
-                </div>
+    @if (notStartedTasksCount != 0)
+    {
+        <div class="row">
+            <div class="col-auto">
+                <img width="20" src="~/img/icons/status-not-started.png">
             </div>
-        }
-    </div>
+            <div class="col-auto gx-sm-0">
+                <span>Not started: @notStartedTasksCount</span>
+            </div>
+        </div>
+    }
+</div>

@@ -10,6 +10,23 @@ and provides functionality that enables users to:
 - track completion progress of ToDo items
 - rank ToDo items by status and due date.
 
+## Deployment requirements
+- Target framework - .NET Core 3.1
+
+## Development requirements
+- Target framework - .NET Core 3.1
+- Packages:
+	- Entity Framework Core 5.0.17.
+	- Entity Framework Core SQL Server 5.0.17.
+	- Entity Framework Core Tools 5.0.17.
+	- Entity Framework Core Proxies 5.0.17.
+	- Entity Framework Core SQLite 5.0.17.
+	- Microsoft jQuery Unobtrusive AJAX 3.2.6.
+	- Moq framework 4.18.2.
+	- NUnit 3.13.1.
+	- NUnit3TestAdapter 3.17.0.
+	- TextCopy 6.2.0
+
 
 ## Application architecture
 The solution is based on Model-View-Controller ([MVC](https://en.wikipedia.org/wiki/Model-view-controller)) software architectural pattern which 

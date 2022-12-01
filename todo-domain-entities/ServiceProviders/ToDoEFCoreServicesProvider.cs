@@ -226,26 +226,26 @@ namespace todo_domain_entities
             {
 
                 case ToDoItemsDueDate.DueDateTomorrow:
-                    filteredItems = _appDbContext.ToDoEntries
+                    filteredItems = _appDbContext.Set<ToDoEntry>()
                                     .Where((entry) => entry.Status != ToDoStatus.Completed
                                                                && entry.DueDate.Value.Date == DateTime.Today.AddDays(1));
                     break;
 
                 case ToDoItemsDueDate.DueDateOverdue:
-                    filteredItems = _appDbContext.ToDoEntries
+                    filteredItems = _appDbContext.Set<ToDoEntry>()
                                     .Where((entry) => entry.Status != ToDoStatus.Completed
                                                    && entry.DueDate.Value.Date < DateTime.Today);
                     break;
 
                 case ToDoItemsDueDate.DueDateThisMonth:
-                    filteredItems = _appDbContext.ToDoEntries
+                    filteredItems = _appDbContext.Set<ToDoEntry>()
                                     .Where((entry) => entry.Status != ToDoStatus.Completed
                                                    && entry.DueDate.Value.Date.Month == DateTime.Today.Month
                                                    && entry.DueDate.Value.Date.Year == DateTime.Today.Year);
                     break;
 
                 default:
-                    filteredItems = _appDbContext.ToDoEntries
+                    filteredItems = _appDbContext.Set<ToDoEntry>()
                                                 .Where((entry) => entry.Status != ToDoStatus.Completed
                                                                && entry.DueDate.Value.Date == DateTime.Today);
                     break;
@@ -266,10 +266,80 @@ namespace todo_domain_entities
             return new SummaryOfToDoLists
             {
                 TotalListsCount = _appDbContext.ToDoLists.Count(),
-                NotStartedListsCount = _appDbContext.ToDoLists.Count(list => list.ToDoEntries.All(list => list.Status == ToDoStatus.NotStarted)),
-                InProgressListsCount = _appDbContext.ToDoLists.Count(list => list.ToDoEntries.Any(list => list.Status == ToDoStatus.InProgress)),
-                CompletedListsCount = _appDbContext.ToDoLists.Count(list => list.ToDoEntries.All(list => list.Status == ToDoStatus.Completed))
+                NotStartedListsCount = _appDbContext.Set<ToDoList>().Count(list => list.ToDoEntries.All(list => list.Status == ToDoStatus.NotStarted)),
+                InProgressListsCount = _appDbContext.Set<ToDoList>().Count(list => list.ToDoEntries.Any(list => list.Status == ToDoStatus.InProgress)),
+                CompletedListsCount = _appDbContext.Set<ToDoList>().Count(list => list.ToDoEntries.All(list => list.Status == ToDoStatus.Completed))
             };
+        }
+
+        public void EnsurePopulateWithDemoData()
+        {
+            if (!_appDbContext.Set<ToDoList>().Any())
+            {
+                _appDbContext.Set<ToDoList>().AddRange(
+                    new ToDoList
+                    {
+                        MainTitle = "Finish EPAM courses",
+                        ToDoEntries = new List<ToDoEntry>
+                        {
+                            new ToDoEntry {OrdinalNumber = 1, Title = "Task #1", Description = "Learn C# Basics", DueDate = new DateTime(2022, 10, 1) },
+                            new ToDoEntry {OrdinalNumber = 2,  Title = "Task #2", Description = "Learn C# Advanced", DueDate = new DateTime(2022, 10, 1) },
+                            new ToDoEntry {OrdinalNumber = 3,  Title = "Task #3", Description = "Learn ASP.NET Core", DueDate = new DateTime(2022, 11, 9) },
+                        }
+                    },
+
+                    new ToDoList
+                    {
+                        MainTitle = "Get IELTS certificate",
+                        ToDoEntries = new List<ToDoEntry>
+                        {
+                            new ToDoEntry {OrdinalNumber = 1, Title = "Prepare to exam", DueDate = new DateTime(2022, 6, 1) },
+                            new ToDoEntry {OrdinalNumber = 2, Title = "Learn English", DueDate = new DateTime(2022, 8, 1) },
+                            new ToDoEntry {OrdinalNumber = 3, Title = "Pass exam", DueDate = new DateTime(2022, 8, 2) }
+                        }
+                    },
+
+                    new ToDoList
+                    {
+                        MainTitle = "Become fullstack web-developer",
+                        ToDoEntries = new List<ToDoEntry>
+                        {
+                            new ToDoEntry {OrdinalNumber = 1, Title = "Examine web-dev principles", DueDate = new DateTime(2022, 2, 1) },
+                            new ToDoEntry {OrdinalNumber = 2, Title = "Learn HTML & CSS", DueDate = new DateTime(2022, 2, 15) },
+                            new ToDoEntry {OrdinalNumber = 3, Title = "Learn JavaScript & jQuery", DueDate = new DateTime(2022, 3, 15) },
+                            new ToDoEntry {OrdinalNumber = 4, Title = "Learn SQL & DBMS", DueDate = new DateTime(2022, 4, 1) }
+                        }
+                    },
+
+                    new ToDoList
+                    {
+                        MainTitle = "Plans for the weekend",
+                        ToDoEntries = new List<ToDoEntry>
+                        {
+                            new ToDoEntry {OrdinalNumber = 1, Title = "Go to shopping mall", DueDate = new DateTime(2022, 12, 11, 10, 0, 0) },
+                            new ToDoEntry {OrdinalNumber = 2, Title = "Go to the cinema", DueDate = new DateTime(2022, 12, 11, 11, 0, 0) },
+                            new ToDoEntry {OrdinalNumber = 3, Title = "Have a lunch", DueDate = new DateTime(2022, 12, 11, 13, 0, 0) },
+                            new ToDoEntry {OrdinalNumber = 4, Title = "Meet with friends", DueDate = new DateTime(2022, 12, 11, 14, 0, 0)},
+                            new ToDoEntry {OrdinalNumber = 5, Title = "Go to the home", DueDate = new DateTime(2022, 12, 11, 17, 0, 0)},
+                            new ToDoEntry {OrdinalNumber = 6, Title = "Spend time with a family", DueDate = new DateTime(2022, 12, 11, 22, 0, 0)}
+                        }
+                    },
+
+                    new ToDoList
+                    {
+                        MainTitle = "Begin new life",
+                        ToDoEntries = new List<ToDoEntry>
+                        {
+                            new ToDoEntry {OrdinalNumber = 1, Title = "Move to CA", DueDate = new DateTime(2022, 2, 1) },
+                            new ToDoEntry {OrdinalNumber = 2, Title = "Find a job", DueDate = new DateTime(2022, 3, 1) },
+                            new ToDoEntry {OrdinalNumber = 3, Title = "Buy a flat", DueDate = new DateTime(2022, 8, 1) },
+                            new ToDoEntry {OrdinalNumber = 4, Title = "Buy a car", DueDate = new DateTime(2022, 12, 1) }
+                        }
+                    }
+                );
+
+                _appDbContext.SaveChanges();
+            }
         }
 
         private void ValidateItem(IValidatableObject item)
