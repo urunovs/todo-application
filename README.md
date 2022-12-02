@@ -1,4 +1,4 @@
-# Casptone project: todo-application
+# Capstone project: todo-application
 This solution is based on ASP.NET Core MVC framework to demonstrate its basic features and show implementation processes on it.
 
 ## Purpose of project
