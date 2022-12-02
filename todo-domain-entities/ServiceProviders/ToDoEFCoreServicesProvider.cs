@@ -256,7 +256,8 @@ namespace todo_domain_entities
                                             .Skip((page - 1) * pageSize)
                                             .Take(pageSize)
                                             .AsEnumerable()
-                                            .GroupBy(item => item.ToDoList);
+                                            .GroupBy(item => item.ToDoList)
+                                            .ToList();
 
             return (groupedItems, filteredItems.Count());
         }
