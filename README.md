@@ -16,7 +16,7 @@ https://capstone-todo.azurewebsites.net
 ## Deployment requirements
 Application's deployment configuration:
 - Target framework - .NET Core 3.1.
-- SQL Server located database.
+- SQL Server.
 
 Application deployment instructions available through [this link.](https://learn.microsoft.com/en-us/azure/app-service/tutorial-dotnetcore-sqldb-app)
 
