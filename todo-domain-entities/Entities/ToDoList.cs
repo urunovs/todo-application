@@ -13,6 +13,7 @@ namespace todo_domain_entities
         public int NotStartedListsCount { get; set; }
         public int InProgressListsCount { get; set; }
         public int CompletedListsCount { get; set; }
+        public int HiddenToDoListsCount { get; set; }
     }
 
     /// <summary>

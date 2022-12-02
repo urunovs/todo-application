@@ -31,7 +31,9 @@
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" id="showHidedListsChecked" asp-for="@Model.ShowHiddenToDoLists"
                                    onclick="updateList()" name="showHiddenLists">
-                            <label class="form-check-label" for="showHidedListsChecked">Show hidden lists</label>
+                            <label class="form-check-label" for="showHidedListsChecked">
+                                Show hidden lists (@Model.SummaryOfToDoLists.HiddenToDoListsCount)
+                            </label>
                         </div>
                     </div>
                     <div class="col-auto">

@@ -262,7 +262,8 @@ namespace todo_domain_entities
                 TotalListsCount = _appDbContext.ToDoLists.Count(),
                 NotStartedListsCount = _appDbContext.Set<ToDoList>().Count(list => list.ToDoEntries.All(list => list.Status == ToDoStatus.NotStarted)),
                 InProgressListsCount = _appDbContext.Set<ToDoList>().Count(list => list.ToDoEntries.Any(list => list.Status == ToDoStatus.InProgress)),
-                CompletedListsCount = _appDbContext.Set<ToDoList>().Count(list => list.ToDoEntries.All(list => list.Status == ToDoStatus.Completed))
+                CompletedListsCount = _appDbContext.Set<ToDoList>().Count(list => list.ToDoEntries.All(list => list.Status == ToDoStatus.Completed)),
+                HiddenToDoListsCount = _appDbContext.Set<ToDoList>().Count(list => !list.IsVisible)
             };
         }
 

@@ -29,9 +29,11 @@ namespace todo_aspnetmvc_ui.Controllers
         [HttpGet]
         public ActionResult Index(int page = 1)
         {
-            var todoLists = bool.Parse(_configuration["ShowHiddenToDoLists"])
-                ? _todoServices.ToDoLists
-                : _todoServices.VisibleToDoLists;
+            var showHiddenToDoLists = bool.Parse(HttpContext.Request.Cookies["ShowHiddenToDoLists"] ?? "True");
+            var showCompletedTasks = bool.Parse(HttpContext.Request.Cookies["ShowCompletedTasks"] ?? "True");
+            var todoLists = showHiddenToDoLists
+                            ? _todoServices.ToDoLists
+                            : _todoServices.VisibleToDoLists;
 
             return View(new ToDoListsViewModel
             {
@@ -46,16 +48,16 @@ namespace todo_aspnetmvc_ui.Controllers
                     TotalItems = todoLists.Count()
                 },
                 SummaryOfToDoLists = _todoServices.GetSummaryOfToDoLists(),
-                ShowHiddenToDoLists = bool.Parse(_configuration["ShowHiddenToDoLists"]),
-                ShowCompletedTasks = bool.Parse(_configuration["ShowCompletedTasks"])
+                ShowHiddenToDoLists = showHiddenToDoLists,
+                ShowCompletedTasks = showCompletedTasks
             }) ;
         }
 
         [HttpPost]
         public ActionResult UpdateGeneralList(bool showHiddenLists, bool showCompletedTasks)
         {
-            _configuration["ShowHiddenToDoLists"] = showHiddenLists.ToString();
-            _configuration["ShowCompletedTasks"] = showCompletedTasks.ToString();
+            HttpContext.Response.Cookies.Append("ShowHiddenToDoLists", showHiddenLists.ToString());
+            HttpContext.Response.Cookies.Append("ShowCompletedTasks", showCompletedTasks.ToString());
 
             return RedirectToAction(nameof(Index));
         }
