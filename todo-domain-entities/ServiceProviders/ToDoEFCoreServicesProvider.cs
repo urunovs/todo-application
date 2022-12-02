@@ -220,48 +220,46 @@ namespace todo_domain_entities
             int pageSize,
             int page)
         {
-            var count = FilterByDueDate(itemsDueDate).Count();
-            var groupedItems = FilterByDueDate(itemsDueDate).OrderBy(item => item.Id)
-                                            .Skip((page - 1) * pageSize)
-                                            .Take(pageSize)
-                                            .AsEnumerable()
-                                            .GroupBy(item => item.ToDoList)
-                                            .ToList();
-
-            return (groupedItems, count);
-        }
-
-        private IQueryable<ToDoEntry> FilterByDueDate(ToDoItemsDueDate itemsDueDate)
-        {
-            var dbset = _appDbContext.Set<ToDoEntry>();
             IQueryable<ToDoEntry> filteredItems;
 
             switch (itemsDueDate)
             {
 
                 case ToDoItemsDueDate.DueDateTomorrow:
-                    filteredItems = dbset.Where((entry) => entry.Status != ToDoStatus.Completed
+                    filteredItems = _appDbContext.Set<ToDoEntry>()
+                                    .Where((entry) => entry.Status != ToDoStatus.Completed
                                                                && entry.DueDate.Value.Date == DateTime.Today.AddDays(1));
                     break;
 
                 case ToDoItemsDueDate.DueDateOverdue:
-                    filteredItems = dbset.Where((entry) => entry.Status != ToDoStatus.Completed
+                    filteredItems = _appDbContext.Set<ToDoEntry>()
+                                    .Where((entry) => entry.Status != ToDoStatus.Completed
                                                    && entry.DueDate.Value.Date < DateTime.Today);
                     break;
 
                 case ToDoItemsDueDate.DueDateThisMonth:
-                    filteredItems = dbset.Where((entry) => entry.Status != ToDoStatus.Completed
+                    filteredItems = _appDbContext.Set<ToDoEntry>()
+                                    .Where((entry) => entry.Status != ToDoStatus.Completed
                                                    && entry.DueDate.Value.Date.Month == DateTime.Today.Month
                                                    && entry.DueDate.Value.Date.Year == DateTime.Today.Year);
                     break;
 
                 default:
-                    filteredItems = dbset.Where((entry) => entry.Status != ToDoStatus.Completed
+                    filteredItems = _appDbContext.Set<ToDoEntry>()
+                                                .Where((entry) => entry.Status != ToDoStatus.Completed
                                                                && entry.DueDate.Value.Date == DateTime.Today);
                     break;
             }
 
-            return filteredItems;
+
+            var groupedItems = filteredItems.OrderBy(item => item.Id)
+                                            .Skip((page - 1) * pageSize)
+                                            .Take(pageSize)
+                                            .AsEnumerable()
+                                            .GroupBy(item => item.ToDoList)
+                                            .ToList();
+
+            return (groupedItems, filteredItems.Count());
         }
 
         public SummaryOfToDoLists GetSummaryOfToDoLists()
