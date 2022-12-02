@@ -1,4 +1,4 @@
-# Casptone project: todo-application
+# Capstone project: todo-application
 This solution is based on ASP.NET Core MVC framework to demonstrate its basic features and show implementation processes on it.
 
 ## Purpose of project
@@ -16,7 +16,7 @@ https://capstone-todo.azurewebsites.net
 ## Deployment requirements
 Application's deployment configuration:
 - Target framework - .NET Core 3.1.
-- SQL Server located database.
+- SQL Server.
 
 Application deployment instructions available through [this link.](https://learn.microsoft.com/en-us/azure/app-service/tutorial-dotnetcore-sqldb-app)
 
@@ -26,7 +26,6 @@ Application deployment instructions available through [this link.](https://learn
 	- Entity Framework Core Tools 5.0.17.
 	- Entity Framework Core Proxies 5.0.17.
 	- Entity Framework Core SQLite 5.0.17.
-	- Microsoft jQuery Unobtrusive AJAX 3.2.6.
 	- Moq framework 4.18.2.
 	- NUnit 3.13.1.
 	- NUnit3TestAdapter 3.17.0.
