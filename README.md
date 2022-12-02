@@ -10,12 +10,17 @@ and provides functionality that enables users to:
 - track completion progress of ToDo items
 - rank ToDo items by status and due date.
 
-## Deployment requirements
-- Target framework - .NET Core 3.1
+Application's demo version is available on Microsoft Azure platform through link:
+https://capstone-todo.azurewebsites.net
 
-## Development requirements
-- Target framework - .NET Core 3.1
-- Packages:
+## Deployment requirements
+Application's deployment configuration:
+- Target framework - .NET Core 3.1.
+- SQL Server located database.
+
+Application deployment instructions available through [this link.](https://learn.microsoft.com/en-us/azure/app-service/tutorial-dotnetcore-sqldb-app)
+
+## Used packages and libraries
 	- Entity Framework Core 5.0.17.
 	- Entity Framework Core SQL Server 5.0.17.
 	- Entity Framework Core Tools 5.0.17.
