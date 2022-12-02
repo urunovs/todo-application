@@ -24,7 +24,7 @@ namespace todo_aspnetmvc_ui
             services.AddControllersWithViews();
             services.AddDbContext<AppDbContext>(opts => {
                 opts.UseSqlServer(
-                    Configuration["ConnectionStrings:AZURE_SQL_CONNECTION"]);
+                    Configuration["ConnectionStrings:AZURE_SQL_CONNECTIONSTRING"]);
             });
 
             services.AddScoped<IToDoServices, ToDoEFCoreServicesProvider>();
