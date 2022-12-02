@@ -26,7 +26,6 @@ Application deployment instructions available through [this link.](https://learn
 	- Entity Framework Core Tools 5.0.17.
 	- Entity Framework Core Proxies 5.0.17.
 	- Entity Framework Core SQLite 5.0.17.
-	- Microsoft jQuery Unobtrusive AJAX 3.2.6.
 	- Moq framework 4.18.2.
 	- NUnit 3.13.1.
 	- NUnit3TestAdapter 3.17.0.
