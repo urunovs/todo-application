@@ -398,6 +398,10 @@ namespace todo_domain_entities
             {
                 page = totalPages;
             }
+            else if(page == 0)
+            {
+                page = 1;
+            }
 
 
             var items = dbSet.OrderBy(list => list.Id)

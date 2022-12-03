@@ -15,13 +15,11 @@ namespace todo_aspnetmvc_ui.Controllers
 {
     public class ToDoListsController : Controller
     {
-        private readonly IConfiguration _configuration;
         private readonly IToDoServices _todoServices;
         public const int PageSize = 3;
 
         public ToDoListsController(IConfiguration configuration, IToDoServices todoServices)
         {
-            _configuration = configuration;
             _todoServices = todoServices ?? throw new ArgumentNullException(nameof(todoServices));
         }
 

@@ -33,7 +33,7 @@ namespace todo_domain_entities.Test
 
             _context = new AppDbContext(_contextOptions);
             _todoServicesProvider = new ToDoEFCoreServicesProvider(_context);
-            PopulateDatabase();
+            PopulateDatabaseFake();
         }
 
         [TearDown]
@@ -52,10 +52,19 @@ namespace todo_domain_entities.Test
             _connection.Close();
         }
 
-        
+        [Test]
+        public void GetToDoLists_ReturnsToDoLists()
+        {
+            // Act
+            var (todoLists, count) = _todoServicesProvider.GetToDoLists(5, 1);
+
+            //Assert
+            Assert.AreEqual(3, count);
+        }
+
 
         [Test]
-        public void VisibleToDoLists_ReturnsOnlyVisibleLists()
+        public void GetVisibleToDoLists_ReturnsOnlyVisibleLists()
         {
             // Arrange
             var visibleListTitles = new string[] { "Finish EPAM courses", "Get IELTS certificate" };
@@ -72,7 +81,7 @@ namespace todo_domain_entities.Test
         }
 
         [Test]
-        public void CompletedToDoLists_ReturnsOnlyCompletedLists()
+        public void GetCompletedToDoLists_ReturnsOnlyCompletedLists()
         {
             // Arrange
             var completedListTitle = "Get IELTS certificate";
@@ -85,6 +94,29 @@ namespace todo_domain_entities.Test
             }
 
             Assert.IsTrue(count == 1);
+        }
+
+        [Test]
+        public void GetToDoListById_ReturnsExpectedObject()
+        {
+            // Arrange
+            var firstList = _context.ToDoLists.First();
+
+            // Act
+            var list = _todoServicesProvider.GetToDoListById(firstList.Id);
+
+            // Assert
+            Assert.AreEqual(firstList, list);
+        }
+
+        [Test]
+        public void GetToDoListById_ReturnsNull()
+        {
+            // Act
+            var list = _todoServicesProvider.GetToDoListById(0);
+
+            // Assert
+            Assert.IsTrue(list == null);
         }
 
         [TestCase(null)]
@@ -369,19 +401,21 @@ namespace todo_domain_entities.Test
             Assert.IsTrue(!_context.ToDoLists.Any());
         }
 
-        public void Dispose()
+        [Test]
+        public void GetSummaryOfToDoLists_ReturnsSummaryObject()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+            // Act
+            var summary = _todoServicesProvider.GetSummaryOfToDoLists();
 
-        protected virtual void Dispose(bool disposing)
-        {
-            _connection.Close();
-            _connection.Dispose();
+            // Assert
+            Assert.AreEqual(3, summary.TotalListsCount);
+            Assert.AreEqual(1, summary.NotStartedListsCount);
+            Assert.AreEqual(1, summary.InProgressListsCount);
+            Assert.AreEqual(1, summary.CompletedListsCount);
+            Assert.AreEqual(1, summary.HiddenToDoListsCount);
         }
-
-        private void PopulateDatabase()
+                
+        private void PopulateDatabaseFake()
         {
             _context.Database.EnsureDeleted();
             _context.AddRange(
@@ -416,12 +450,24 @@ namespace todo_domain_entities.Test
                     {
                             new ToDoEntry {OrdinalNumber = 1, Title = "Task #1", Description = "Move to CA", DueDate = new DateTime(2022, 11, 20) },
                             new ToDoEntry {OrdinalNumber = 2, Title = "Task #2", Description = "Find a job", DueDate = new DateTime(2022, 11, 29) },
-                            new ToDoEntry {OrdinalNumber = 3, Title = "Task #3", Description = "Buy a flat", DueDate = new DateTime(2022, 11, 30) },
+                            new ToDoEntry {OrdinalNumber = 3, Title = "Task #3", Description = "Buy a flat", DueDate = new DateTime(2022, 11, 30), Status = ToDoStatus.InProgress },
                     },
                     IsVisible = false
                 });
             
             _context.SaveChanges();
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            _connection.Close();
+            _connection.Dispose();
         }
     }
 }
