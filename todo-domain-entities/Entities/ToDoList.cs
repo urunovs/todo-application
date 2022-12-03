@@ -33,7 +33,7 @@ namespace todo_domain_entities
         {
             get
             {
-                if (ToDoEntries != null && ToDoEntries.All(list => list.Status == ToDoStatus.Completed))
+                if (ToDoEntries != null && ToDoEntries.Any() && ToDoEntries.All(list => list.Status == ToDoStatus.Completed))
                 {
                     return ToDoStatus.Completed;
                 }

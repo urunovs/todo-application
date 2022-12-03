@@ -109,9 +109,16 @@ namespace todo_aspnetmvc_ui.Controllers
         [HttpPost]
         public ActionResult AddToDoItem(ToDoEntry toDoItem, int todoListId)
         {
-            _todoServices.AddToDoItemToList(toDoItem, todoListId);
+            try
+            {
+                _todoServices.AddToDoItemToList(toDoItem, todoListId);
 
-            return RedirectToAction(nameof(OpenToDoList), new { toDoListId = toDoItem.ToDoList.Id });
+                return RedirectToAction(nameof(OpenToDoList), new { toDoListId = toDoItem.ToDoList.Id });
+            }
+            catch(ArgumentException)
+            {
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         [HttpPost]

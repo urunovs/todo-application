@@ -86,10 +86,36 @@
                             </div>
                             <hr />
                             <form method="post" asp-controller="ToDoLists">
-                                <partial name="_ToDoItems" model="@(Model.ShowCompletedTasks
-                                    ? todoList.ToDoEntries.OrderBy(entry => entry.OrdinalNumber)
-                                    : todoList.ToDoEntries.Where(list => list.Status != ToDoStatus.Completed))
-                                    .OrderBy(item => item.OrdinalNumber)" />
+                                @{
+                                    List<ToDoEntry> tasks;
+                                }
+                                @if (Model.ShowCompletedTasks)
+                                {
+                                    tasks = todoList.ToDoEntries.OrderBy(entry => entry.OrdinalNumber).ToList();
+                                }
+                                else
+                                {
+                                    tasks = todoList.ToDoEntries.Where(list => list.Status != ToDoStatus.Completed)
+                                                                .OrderBy(item => item.OrdinalNumber)
+                                                                .ToList();
+                                }
+
+                                @if (tasks.Count() != 0)
+                                {
+                                    <partial name="_ToDoItems" model="@tasks" />
+                                }
+                                else if (todoList.ToDoEntries.Count() == 0)
+                                {
+                                    <p class="fs-4 fw-lighter text-center">
+                                        No tasks yet
+                                    </p>
+                                }
+                                else
+                                {
+                                    <p class="fs-4 fw-lighter text-center">
+                                        All tasks is completed.
+                                    </p>
+                                }
                             </form>
                         </div>
                     </div>
