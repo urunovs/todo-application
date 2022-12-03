@@ -29,7 +29,7 @@
                 }
                 else if(dueDateInDays < 0)
                 {
-                    dueDateInDaysToView = $"{dueDateInDays * -1} " + (dueDateInDays != 1 ? "days" : "day") + " overdue";
+                    dueDateInDaysToView = $"{dueDateInDays * -1} " + (dueDateInDays != -1 ? "days" : "day") + " overdue";
                 }
 
                 <tr>
@@ -38,7 +38,7 @@
                     <td>
                         <div class="col">
                             <div class="row">
-                                @todoItem.DueDate.Value.ToShortDateString()
+                                @todoItem.DueDate
                             </div>
                             <div class="row">
                                 (@dueDateInDaysToView)

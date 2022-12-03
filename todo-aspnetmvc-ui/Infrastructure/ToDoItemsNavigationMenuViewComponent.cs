@@ -9,8 +9,8 @@ using todo_domain_entities;
 
 namespace todo_aspnetmvc_ui.Infrastructure
 {
-    public class ToDoItemsNavigationMenuViewComponent: ViewComponent
-    {        
+    public class ToDoItemsNavigationMenuViewComponent : ViewComponent
+    {
         public IViewComponentResult Invoke()
         {
             var dueDateTypes = new List<string>();
@@ -20,12 +20,7 @@ namespace todo_aspnetmvc_ui.Infrastructure
                 dueDateTypes.Add(((ToDoItemsDueDate)value).GetAttribute<DisplayAttribute>().Name);
             }
 
-            if(RouteData?.Values["duedate"] != null)
-            {
-                ViewBag.SelectedDueDate = RouteData?.Values["duedate"];
-            }
-
-            if(ViewBag.SelectedDueDate == null)
+            if (ViewBag.SelectedDueDate == null)
             {
                 ViewBag.SelectedDueDate = dueDateTypes.FirstOrDefault();
             }

@@ -15,15 +15,24 @@ namespace todo_domain_entities
     public class ToDoEFCoreServicesProvider : IToDoServices, IDisposable
     {
         private readonly AppDbContext _appDbContext;
-        public IQueryable<ToDoList> ToDoLists => _appDbContext.Set<ToDoList>();
 
-        public IEnumerable<ToDoList> VisibleToDoLists =>
-            _appDbContext.Set<ToDoList>().Where(list => list.IsVisible).AsEnumerable();
+        public (IEnumerable<ToDoList>, int) GetToDoLists(int pageSize, int page)
+        {
+            var dbSet = _appDbContext.Set<ToDoList>();
+            return GetFetchedToDoLists(pageSize, page, dbSet);
+        }
 
-        public IEnumerable<ToDoList> CompletedToDoLists =>
-            _appDbContext.Set<ToDoList>().Where(list => list.ToDoEntries
-                                            .All(item => item.Status == ToDoStatus.Completed));
+        public (IEnumerable<ToDoList>, int) GetVisibleToDoLists(int pageSize, int page)
+        {
+            var dbSet = _appDbContext.Set<ToDoList>().Where(list => list.IsVisible);
+            return GetFetchedToDoLists(pageSize, page, dbSet);
+        }
 
+        public (IEnumerable<ToDoList>, int) GetCompletedToDoLists(int pageSize, int page)
+        {
+            var dbSet = _appDbContext.Set<ToDoList>().Where(list => list.ToDoEntries.All(item => item.Status == ToDoStatus.Completed));
+            return GetFetchedToDoLists(pageSize, page, dbSet);
+        }
 
         public ToDoEFCoreServicesProvider(AppDbContext appDbContext)
         {
@@ -39,6 +48,11 @@ namespace todo_domain_entities
         protected virtual void Dispose(bool disposing)
         {
             _appDbContext.Dispose();
+        }
+
+        public ToDoList GetToDoListById(int id)
+        {
+            return _appDbContext.ToDoLists.Find(id);
         }
 
         public ToDoList AddToDoList(ToDoList toDoList)
@@ -245,29 +259,40 @@ namespace todo_domain_entities
             }
 
 
-            var result = filterQuery.OrderBy(item => item.Id)
-                                            .Skip((page - 1) * pageSize)
-                                            .Take(pageSize)
-                                            .ToList();
-            var grouped = result.GroupBy(item => item.ToDoList);
-            var count = filterQuery.Count();
+            var itemsCount = filterQuery.Count();
+            var totalPages = (int)Math.Ceiling((decimal)itemsCount / pageSize);
 
-            return (grouped, count);
+            if (totalPages != 0 && page > totalPages)
+            {
+                page = totalPages;
+            }
+
+            var result = filterQuery.OrderBy(item => item.Id)
+                                    .Skip((page - 1) * pageSize)
+                                    .Take(pageSize)
+                                    .ToList();
+            var grouped = result.GroupBy(item => item.ToDoList);
+
+
+            return (grouped, itemsCount);
         }
 
         public SummaryOfToDoLists GetSummaryOfToDoLists()
         {
-            return new SummaryOfToDoLists
+            var summary = new SummaryOfToDoLists
             {
                 TotalListsCount = _appDbContext.ToDoLists.Count(),
-                NotStartedListsCount = _appDbContext.Set<ToDoList>().Count(list => list.ToDoEntries.All(list => list.Status == ToDoStatus.NotStarted)),
-                InProgressListsCount = _appDbContext.Set<ToDoList>().Count(list => list.ToDoEntries.Any(list => list.Status == ToDoStatus.InProgress)),
-                CompletedListsCount = _appDbContext.Set<ToDoList>().Count(list => list.ToDoEntries.All(list => list.Status == ToDoStatus.Completed)),
-                HiddenToDoListsCount = _appDbContext.Set<ToDoList>().Count(list => !list.IsVisible)
+                NotStartedListsCount = _appDbContext.ToDoLists.Count(list => list.ToDoEntries.All(list => list.Status == ToDoStatus.NotStarted)),
+                CompletedListsCount = _appDbContext.ToDoLists.Count(list => list.ToDoEntries.Any() && list.ToDoEntries.All(list => list.Status == ToDoStatus.Completed)),
+                HiddenToDoListsCount = _appDbContext.ToDoLists.Count(list => !list.IsVisible)
             };
+
+            summary.InProgressListsCount = summary.TotalListsCount - summary.CompletedListsCount - summary.NotStartedListsCount;
+
+            return summary;
         }
 
-        public void EnsurePopulateWithDemoData()
+        public void EnsurePopulatedWithDemoData()
         {
             if (!_appDbContext.Set<ToDoList>().Any())
             {
@@ -363,6 +388,24 @@ namespace todo_domain_entities
             {
                 throw new ArgumentException(validationResult.First().ErrorMessage, nameof(item));
             }
+        }
+
+        public (IEnumerable<ToDoList>, int) GetFetchedToDoLists(int pageSize, int page, IQueryable<ToDoList> dbSet)
+        {
+            var totalPages = (int)Math.Ceiling((decimal)dbSet.Count() / pageSize);
+
+            if (page > totalPages)
+            {
+                page = totalPages;
+            }
+
+
+            var items = dbSet.OrderBy(list => list.Id)
+                             .Skip((page - 1) * pageSize)
+                             .Take(pageSize)
+                             .ToList();
+            var itemsCount = dbSet.Count();
+            return (items, itemsCount);
         }
 
         private void ReorderItems(ToDoList toDoList, ToDoEntry originalItem = null)

@@ -32,7 +32,7 @@ namespace todo_domain_entities
         [Required]
         public string Title { get; set; }
 
-        public string Description { get; set; }
+        public string Description { get; set; } = "-";
 
         public DateTime? DueDate { get; set; } = DateTime.Now;
 
@@ -41,7 +41,7 @@ namespace todo_domain_entities
         [Required]
         public ToDoStatus Status { get; set; } = ToDoStatus.NotStarted;
 
-        public string Notes { get; set; }
+        public string Notes { get; set; } = "-";
 
         [Required, JsonIgnore, IgnoreDataMember]
         public virtual ToDoList ToDoList { get; set; }

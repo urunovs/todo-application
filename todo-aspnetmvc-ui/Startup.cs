@@ -51,16 +51,12 @@ namespace todo_aspnetmvc_ui
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute("itemsPage",
-                    "{duedate}/Page{page:int}",
-                    new { Controller = "Home", action = "Index" });
-
-                endpoints.MapControllerRoute("duedate", 
+                endpoints.MapControllerRoute("fetchByDuedate", 
                     "{duedate}",
                     new { Controller = "Home", action = "Index", page = 1 });
 
-                endpoints.MapControllerRoute("todolist",
-                    "ToDoLists/{toDoListId:int}",
+                endpoints.MapControllerRoute("openTodolist",
+                    "todolists/{toDoListId:int}",
                     new { Controller = "ToDoLists", action = "OpenToDoList" });
 
                 endpoints.MapDefaultControllerRoute();
@@ -69,7 +65,7 @@ namespace todo_aspnetmvc_ui
             app.ApplicationServices
                 .CreateScope().ServiceProvider
                 .GetRequiredService<IToDoServices>()
-                .EnsurePopulateWithDemoData();
+                .EnsurePopulatedWithDemoData();
         }
     }
 }

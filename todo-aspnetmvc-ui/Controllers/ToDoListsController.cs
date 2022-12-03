@@ -31,26 +31,23 @@ namespace todo_aspnetmvc_ui.Controllers
         {
             var showHiddenToDoLists = bool.Parse(HttpContext.Request.Cookies["ShowHiddenToDoLists"] ?? "True");
             var showCompletedTasks = bool.Parse(HttpContext.Request.Cookies["ShowCompletedTasks"] ?? "True");
-            var todoLists = showHiddenToDoLists
-                            ? _todoServices.ToDoLists
-                            : _todoServices.VisibleToDoLists;
+            var (todoLists, count) = showHiddenToDoLists
+                            ? _todoServices.GetToDoLists(PageSize, page)
+                            : _todoServices.GetVisibleToDoLists(PageSize, page);
 
             return View(new ToDoListsViewModel
             {
-                ToDoLists = todoLists
-                    .OrderBy(list => list.Id)
-                    .Skip((page - 1) * PageSize)
-                    .Take(PageSize),
+                ToDoLists = todoLists,
                 PagingInfo = new PagingInfo
                 {
                     CurrentPage = page,
                     ItemsPerPage = PageSize,
-                    TotalItems = todoLists.Count()
+                    TotalItems = count,
                 },
                 SummaryOfToDoLists = _todoServices.GetSummaryOfToDoLists(),
                 ShowHiddenToDoLists = showHiddenToDoLists,
                 ShowCompletedTasks = showCompletedTasks
-            }) ;
+            });
         }
 
         [HttpPost]
@@ -65,7 +62,14 @@ namespace todo_aspnetmvc_ui.Controllers
         [HttpGet]
         public ActionResult OpenToDoList(int toDoListId)
         {
-            return View(_todoServices.ToDoLists.FirstOrDefault(list => list.Id == toDoListId));
+            var todoList = _todoServices.GetToDoListById(toDoListId);
+
+            if (todoList != null)
+            {
+                return View(todoList);
+            }
+
+            return NotFound();
         }
 
         [HttpPost]
@@ -115,7 +119,7 @@ namespace todo_aspnetmvc_ui.Controllers
         [HttpPost]
         public ActionResult EditToDoItem(ToDoEntry toDoItem, int todoListId)
         {
-            toDoItem.ToDoList = _todoServices.ToDoLists.FirstOrDefault(list => list.Id == todoListId);
+            toDoItem.ToDoList = _todoServices.GetToDoListById(todoListId);
             _todoServices.ModifyToDoEntry(toDoItem.Id, toDoItem);
 
             return RedirectToAction(nameof(OpenToDoList), new { toDoListId = toDoItem.ToDoList.Id });

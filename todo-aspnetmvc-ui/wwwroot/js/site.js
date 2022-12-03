@@ -10,11 +10,12 @@ function copyToClipboard(todoList) {
     let listData = `ToDo list title: '${todoList.MainTitle}'\n`;
 
     for (let i = 0; i < todoItems.length; i++) {
-        listData = listData.concat("\n", `
-            ${todoItems[i].OrdinalNumber}. ${todoItems[i].Title}\n
-            Due date: ${todoItems[i].DueDate}\n
-            Status: ${todoItems[i].Status}\n
-            Description: ${todoItems[i].Description}\n`);
+        listData = listData.concat("\n",
+            `${todoItems[i].OrdinalNumber}. ${todoItems[i].Title}\n` +
+            `Due date: ${todoItems[i].DueDate}\n` +
+            `Status: ${todoItems[i].Status}\n` +
+            `Description: ${todoItems[i].Description}\n`,
+            `Notes: ${todoItems[i].Notes}\n`);
     }
 
     navigator.clipboard.writeText(listData);

@@ -15,6 +15,7 @@ namespace todo_domain_entities.Test
     [TestFixture]
     public class IToDoServicesTest : IDisposable
     {
+        private AppDbContext _context;
         private DbConnection _connection;
         private DbContextOptions<AppDbContext> _contextOptions;
         private IToDoServices _todoServicesProvider;
@@ -30,9 +31,9 @@ namespace todo_domain_entities.Test
                 .UseSqlite(_connection)
                 .Options;
 
+            _context = new AppDbContext(_contextOptions);
+            _todoServicesProvider = new ToDoEFCoreServicesProvider(_context);
             PopulateDatabase();
-
-            _todoServicesProvider = new ToDoEFCoreServicesProvider(new AppDbContext(_contextOptions));
         }
 
         [TearDown]
@@ -51,21 +52,7 @@ namespace todo_domain_entities.Test
             _connection.Close();
         }
 
-        [Test]
-        public void ToDoLists_ReturnsAllToDoListInstances()
-        {
-            // Arrange
-            var listTitles = new string[] { "Finish EPAM courses", "Get IELTS certificate", "Begin new life" };
-            var i = 0;
-
-            // Act and assert
-            foreach (var list in _todoServicesProvider.ToDoLists)
-            {
-                Assert.IsTrue(list.MainTitle == listTitles[i++]);
-            }
-
-            Assert.IsTrue(_todoServicesProvider.ToDoLists.Count() == 3);
-        }
+        
 
         [Test]
         public void VisibleToDoLists_ReturnsOnlyVisibleLists()
@@ -73,14 +60,15 @@ namespace todo_domain_entities.Test
             // Arrange
             var visibleListTitles = new string[] { "Finish EPAM courses", "Get IELTS certificate" };
             var i = 0;
+            var (visibleLists, count) = _todoServicesProvider.GetVisibleToDoLists(5, 0);
 
             // Act and assert
-            foreach (var list in _todoServicesProvider.VisibleToDoLists)
+            foreach (var list in visibleLists)
             {
                 Assert.IsTrue(list.MainTitle == visibleListTitles[i++]);
             }
 
-            Assert.IsTrue(_todoServicesProvider.VisibleToDoLists.Count() == 2);
+            Assert.IsTrue(count == 2);
         }
 
         [Test]
@@ -88,14 +76,15 @@ namespace todo_domain_entities.Test
         {
             // Arrange
             var completedListTitle = "Get IELTS certificate";
+            var (completedLists, count) = _todoServicesProvider.GetCompletedToDoLists(5, 0);
 
             // Act and assert
-            foreach (var list in _todoServicesProvider.CompletedToDoLists)
+            foreach (var list in completedLists)
             {
                 Assert.IsTrue(list.MainTitle == completedListTitle);
             }
 
-            Assert.IsTrue(_todoServicesProvider.CompletedToDoLists.Count() == 1);
+            Assert.IsTrue(count == 1);
         }
 
         [TestCase(null)]
@@ -117,9 +106,9 @@ namespace todo_domain_entities.Test
         {
             // Act
             var resultItem = _todoServicesProvider.AddToDoList(toDoList);
-
+            
             // Assert
-            Assert.IsTrue(_todoServicesProvider.ToDoLists.Contains(resultItem));
+            Assert.IsTrue(_context.ToDoLists.Contains(resultItem));
         }
 
         [TestCase(0)]
@@ -134,15 +123,15 @@ namespace todo_domain_entities.Test
         public void RemoveToDoList_PassedValidObject_RemovesObject()
         {
             // Arrange
-            var existingInstance = _todoServicesProvider.ToDoLists.First();
-            var todoListItemsCount = _todoServicesProvider.ToDoLists.Count();
+            var existingInstance = _context.ToDoLists.First();
+            var todoListItemsCount = _context.ToDoLists.Count();
 
             // Act
             _todoServicesProvider.RemoveToDoList(existingInstance.Id);
 
             // Assert
-            Assert.AreEqual(todoListItemsCount - 1, _todoServicesProvider.ToDoLists.Count());
-            Assert.IsFalse(_todoServicesProvider.ToDoLists.Contains(existingInstance));
+            Assert.AreEqual(todoListItemsCount - 1, _context.ToDoLists.Count());
+            Assert.IsFalse(_context.ToDoLists.Contains(existingInstance));
         }
 
         [TestCase(1, null)]
@@ -163,7 +152,7 @@ namespace todo_domain_entities.Test
         public void ModifyToDoList_ValidArgs_ReturnsUpdatedInstance(int listToUpdateId, ToDoList updatedListView)
         {
             // Arange
-            var listToUpdate = _todoServicesProvider.ToDoLists.First(list => list.Id == listToUpdateId);
+            var listToUpdate = _context.ToDoLists.First(list => list.Id == listToUpdateId);
             updatedListView.ToDoEntries = listToUpdate.ToDoEntries;
 
             // Act
@@ -200,7 +189,7 @@ namespace todo_domain_entities.Test
         public void AddToDoItemToList_ValidArgs_ReturnsAddedInstance(ToDoEntry toDoEntry, int toDoListId)
         {
             // Arrange
-            var toDoList = _todoServicesProvider.ToDoLists.First(list => list.Id == toDoListId);
+            var toDoList = _context.ToDoLists.First(list => list.Id == toDoListId);
             toDoEntry.ToDoList = toDoList;
 
             // Act
@@ -232,7 +221,7 @@ namespace todo_domain_entities.Test
         public void ModifyToDoEntry_ValidArgs_ReturnsUpdatedInstance()
         {
             // Arrange
-            var toDoEntryToUpdate = _todoServicesProvider.ToDoLists.First().ToDoEntries.First();
+            var toDoEntryToUpdate = _context.ToDoLists.First().ToDoEntries.First();
             var newTitle = "New title";
             toDoEntryToUpdate.Title = newTitle;
 
@@ -241,7 +230,7 @@ namespace todo_domain_entities.Test
 
             // Assert
             Assert.AreEqual(newTitle, updatedInstance.Title);
-            Assert.IsTrue(_todoServicesProvider.ToDoLists.First().ToDoEntries.First().Title == newTitle);
+            Assert.IsTrue(_context.ToDoLists.First().ToDoEntries.First().Title == newTitle);
         }
 
         [Test]
@@ -255,7 +244,7 @@ namespace todo_domain_entities.Test
         public void RemoveToDoEntry_PassedValidObject_SuccessfulExecution()
         {
             // Arrange
-            var toDoList = _todoServicesProvider.ToDoLists.First();
+            var toDoList = _context.ToDoLists.First();
             var todoListItemsCount = toDoList.ToDoEntries.Count;
             var lastToDoItem = toDoList.ToDoEntries.Last();
 
@@ -330,14 +319,14 @@ namespace todo_domain_entities.Test
         public void ClearToDoList_PassedFirstListId_ReturnsUpdatedToDoListItem()
         {
             // Arrange
-            var toDoList = _todoServicesProvider.ToDoLists.First();
+            var toDoList = _context.ToDoLists.First();
 
             // Act
             var clearedToDoList = _todoServicesProvider.ClearToDoList(toDoList.Id);
 
             // Assert
             Assert.IsTrue(clearedToDoList.ToDoEntries.Count == 0);
-            Assert.IsTrue(!_todoServicesProvider.ToDoLists.First(list => list.Id == toDoList.Id).ToDoEntries.Any());
+            Assert.IsTrue(!_context.ToDoLists.First(list => list.Id == toDoList.Id).ToDoEntries.Any());
         }
 
         [Test]
@@ -352,7 +341,7 @@ namespace todo_domain_entities.Test
         {
             // Act and assert
             Assert.IsFalse(_todoServicesProvider.ChangeVisiblityOfToDoList(1).IsVisible);
-            Assert.IsFalse(_todoServicesProvider.ToDoLists.First().IsVisible);
+            Assert.IsFalse(_context.ToDoLists.First().IsVisible);
         }
 
         [Test]
@@ -367,7 +356,7 @@ namespace todo_domain_entities.Test
         {
             // Act and assert
             Assert.AreEqual("InProgress", _todoServicesProvider.ChangeToDoItemsStatus(1));
-            Assert.AreEqual("InProgress", _todoServicesProvider.ToDoLists.First().ToDoEntries.First().Status.ToString());
+            Assert.AreEqual("InProgress", _context.ToDoLists.First().ToDoEntries.First().Status.ToString());
         }
 
         [Test]
@@ -377,7 +366,7 @@ namespace todo_domain_entities.Test
             _todoServicesProvider.RemoveAllToDoLists();
 
             // Assert
-            Assert.IsTrue(!_todoServicesProvider.ToDoLists.Any());
+            Assert.IsTrue(!_context.ToDoLists.Any());
         }
 
         public void Dispose()
@@ -394,10 +383,8 @@ namespace todo_domain_entities.Test
 
         private void PopulateDatabase()
         {
-            using var context = new AppDbContext(_contextOptions);
-
-            context.Database.EnsureDeleted();
-            context.AddRange(
+            _context.Database.EnsureDeleted();
+            _context.AddRange(
                 new ToDoList
                 {
                     MainTitle = "Finish EPAM courses",
@@ -434,7 +421,7 @@ namespace todo_domain_entities.Test
                     IsVisible = false
                 });
             
-            context.SaveChanges();
+            _context.SaveChanges();
         }
     }
 }

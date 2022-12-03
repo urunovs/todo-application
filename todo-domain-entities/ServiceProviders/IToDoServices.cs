@@ -24,10 +24,11 @@ namespace todo_aspnetmvc_ui.Models.Services
 
     public interface IToDoServices
     {
-        public IQueryable<ToDoList> ToDoLists { get; }
-        public IEnumerable<ToDoList> VisibleToDoLists { get; }
-        public IEnumerable<ToDoList> CompletedToDoLists { get; }
+        public (IEnumerable<ToDoList>, int) GetToDoLists(int pageSize, int page);
+        public (IEnumerable<ToDoList>, int) GetVisibleToDoLists(int pageSize, int page);
+        public (IEnumerable<ToDoList>, int) GetCompletedToDoLists(int pageSize, int page);
 
+        public ToDoList GetToDoListById(int id);
         public ToDoList AddToDoList(ToDoList toDoList);
         public void RemoveToDoList(int toDoListId);
         public ToDoList ModifyToDoList(int toDoListId, ToDoList updatedView);
@@ -40,6 +41,6 @@ namespace todo_aspnetmvc_ui.Models.Services
         public void RemoveToDoEntry(int toDoEntryId);
         public void RemoveAllToDoLists();
         public SummaryOfToDoLists GetSummaryOfToDoLists();
-        public void EnsurePopulateWithDemoData();
+        public void EnsurePopulatedWithDemoData();
     }
 }

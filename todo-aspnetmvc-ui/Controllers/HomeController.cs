@@ -19,7 +19,7 @@ namespace todo_aspnetmvc_ui.Controllers
     public class HomeController : Controller
     {
         private readonly IToDoServices _toDoServices;
-        public const int PageSize = 10;
+        public const int PageSize = 5;
 
         public HomeController(IToDoServices toDoServices)
         {
@@ -33,8 +33,9 @@ namespace todo_aspnetmvc_ui.Controllers
                 duedate = ToDoItemsDueDate.DueDateToday.GetAttribute<DisplayAttribute>().Name;
             }
 
+            var dueDateAsEnum = duedate.GetValueFromName<ToDoItemsDueDate>();
             var (selectedItems, count) = _toDoServices.GetGroupedToDoItemsByDueDate(
-                duedate.GetValueFromName<ToDoItemsDueDate>(),
+                dueDateAsEnum,
                 PageSize,
                 page);
 
@@ -45,9 +46,9 @@ namespace todo_aspnetmvc_ui.Controllers
                 {
                     CurrentPage = page,
                     ItemsPerPage = PageSize,
-                    TotalItems = count
+                    TotalItems = count,
                 },
-                SelectedDueDate = duedate
+                SelectedDueDate = dueDateAsEnum.GetAttribute<DisplayAttribute>().Name
             });
         }
 
