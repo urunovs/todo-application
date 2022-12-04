@@ -3,9 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Threading.Tasks;
 using todo_aspnetmvc_ui.Models.Services;
-using todo_domain_entities;
 
 namespace todo_aspnetmvc_ui.Infrastructure
 {

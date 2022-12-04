@@ -1,12 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using todo_aspnetmvc_ui.Infrastructure;
 using todo_aspnetmvc_ui.Models.Services;
 using todo_aspnetmvc_ui.Models.ViewModels;
 using todo_domain_entities;

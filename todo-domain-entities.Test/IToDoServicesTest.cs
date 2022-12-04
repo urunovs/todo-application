@@ -1,6 +1,5 @@
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -8,7 +7,6 @@ using System.Data.Common;
 using System.Linq;
 using todo_aspnetmvc_ui.Models.Services;
 using ToDoListApplication.Tests;
-using System.Linq.Expressions;
 
 namespace todo_domain_entities.Test
 {
@@ -56,7 +54,7 @@ namespace todo_domain_entities.Test
         public void GetToDoLists_ReturnsToDoLists()
         {
             // Act
-            var (todoLists, count) = _todoServicesProvider.GetToDoLists(5, 1);
+            var (_, count) = _todoServicesProvider.GetToDoLists(5, 1);
 
             //Assert
             Assert.AreEqual(3, count);
@@ -69,10 +67,10 @@ namespace todo_domain_entities.Test
             // Arrange
             var visibleListTitles = new string[] { "Finish EPAM courses", "Get IELTS certificate" };
             var i = 0;
-            var (visibleLists, count) = _todoServicesProvider.GetVisibleToDoLists(5, 0);
+            var (lists, count) = _todoServicesProvider.GetVisibleToDoLists(5, 0);
 
             // Act and assert
-            foreach (var list in visibleLists)
+            foreach (var list in lists)
             {
                 Assert.IsTrue(list.MainTitle == visibleListTitles[i++]);
             }
@@ -85,10 +83,10 @@ namespace todo_domain_entities.Test
         {
             // Arrange
             var completedListTitle = "Get IELTS certificate";
-            var (completedLists, count) = _todoServicesProvider.GetCompletedToDoLists(5, 0);
+            var (lists, count) = _todoServicesProvider.GetCompletedToDoLists(5, 0);
 
             // Act and assert
-            foreach (var list in completedLists)
+            foreach (var list in lists)
             {
                 Assert.IsTrue(list.MainTitle == completedListTitle);
             }

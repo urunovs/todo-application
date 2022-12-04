@@ -1,10 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using todo_aspnetmvc_ui.Models.Services;
-using static todo_aspnetmvc_ui.Models.Services.IToDoServices;
 
 namespace todo_domain_entities
 {
@@ -37,17 +35,6 @@ namespace todo_domain_entities
         public ToDoEFCoreServicesProvider(AppDbContext appDbContext)
         {
             this._appDbContext = appDbContext;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            _appDbContext.Dispose();
         }
 
         public ToDoList GetToDoListById(int id)
@@ -410,6 +397,17 @@ namespace todo_domain_entities
                              .ToList();
             var itemsCount = dbSet.Count();
             return (items, itemsCount);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            _appDbContext.Dispose();
         }
 
         private void ReorderItems(ToDoList toDoList, ToDoEntry originalItem = null)

@@ -1,18 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using todo_aspnetmvc_ui.Infrastructure;
 using todo_aspnetmvc_ui.Models;
 using todo_aspnetmvc_ui.Models.Services;
 using todo_aspnetmvc_ui.Models.ViewModels;
-using todo_domain_entities;
 
 namespace todo_aspnetmvc_ui.Controllers
 {

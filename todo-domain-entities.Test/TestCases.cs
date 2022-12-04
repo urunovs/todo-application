@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using NUnit.Framework;
-using todo_aspnetmvc_ui.Models.Services;
 using todo_domain_entities;
 
 namespace ToDoListApplication.Tests

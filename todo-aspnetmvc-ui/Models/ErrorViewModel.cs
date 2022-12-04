@@ -1,5 +1,3 @@
-using System;
-
 namespace todo_aspnetmvc_ui.Models
 {
     public class ErrorViewModel
