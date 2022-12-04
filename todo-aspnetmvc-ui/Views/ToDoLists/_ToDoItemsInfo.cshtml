@@ -45,9 +45,12 @@
                             <div class="row">
                                 @todoItem.DueDate.Value.ToString("dd.MM.yyyy H:mm")
                             </div>
-                            <div class="row">
-                                (@dueDateInDaysToView)
-                            </div>
+                            @if (todoItem.Status != ToDoStatus.Completed)
+                            {
+                                <div class="row">
+                                    (@dueDateInDaysToView)
+                                </div>
+                            }
                         </div>
                     </td>
                     <td>
@@ -67,7 +70,7 @@
                             @(todoItem.Status.GetAttribute<DisplayAttribute>().Name)
                         </span>
                     </td>
-                    <td>@todoItem.Description</td>
+                    <td>@(string.IsNullOrEmpty(todoItem.Description) ? "-" : todoItem.Description</td>
                     <td>@(string.IsNullOrEmpty(todoItem.Notes) ? "-" : todoItem.Notes)</td>
                     <td>@todoItem.CreationDate</td>
                     <td>

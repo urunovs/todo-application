@@ -64,7 +64,7 @@
                             @(todoItem.Status.GetAttribute<DisplayAttribute>().Name)
                         </span>
                     </td>
-                    <td>@todoItem.Description</td>
+                    <td>@(string.IsNullOrEmpty(todoItem.Description) ? "-" : todoItem.Description)</td>
                     <td>@(string.IsNullOrEmpty(todoItem.Notes) ? "-" : todoItem.Notes)</td>
 
                     <td>
