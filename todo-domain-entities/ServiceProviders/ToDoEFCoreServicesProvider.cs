@@ -254,8 +254,8 @@ namespace todo_domain_entities
                 page = totalPages;
             }
 
-            var result = filterQuery.OrderBy(item => item.DueDate)
-                                    .OrderBy(item => item.ToDoList)
+            var result = filterQuery.OrderBy(item => item.ToDoList)
+                                    .ThenBy(item => item.DueDate)
                                     .Skip((page - 1) * pageSize)
                                     .Take(pageSize)
                                     .ToList();
