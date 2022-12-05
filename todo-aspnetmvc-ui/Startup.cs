@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using todo_domain_entities;
 using todo_aspnetmvc_ui.Models.Services;
 using Microsoft.EntityFrameworkCore;
+using todo_aspnetmvc_ui.Infrastructure;
 
 namespace todo_aspnetmvc_ui
 {
@@ -62,7 +63,7 @@ namespace todo_aspnetmvc_ui
 
             app.ApplicationServices
                 .CreateScope().ServiceProvider
-                .GetRequiredService<IToDoServices>()
+                .GetRequiredService<AppDbContext>()
                 .EnsurePopulatedWithDemoData();
         }
     }

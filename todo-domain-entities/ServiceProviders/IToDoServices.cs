@@ -41,6 +41,5 @@ namespace todo_aspnetmvc_ui.Models.Services
         public void RemoveToDoEntry(int toDoEntryId);
         public void RemoveAllToDoLists();
         public SummaryOfToDoLists GetSummaryOfToDoLists();
-        public void EnsurePopulatedWithDemoData();
     }
 }
